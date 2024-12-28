@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEncryptedDriveScripts", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "edcli", "edcli\edcli.csproj", "{C8B45469-C1D5-4EED-BA75-BFFBB79283A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEncryptedDriveScripts.Tests", "LibEncryptedDriveScripts.Tests\LibEncryptedDriveScripts.Tests.csproj", "{892D7C29-26DE-4687-8C1D-966D528B9A67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{C8B45469-C1D5-4EED-BA75-BFFBB79283A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8B45469-C1D5-4EED-BA75-BFFBB79283A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8B45469-C1D5-4EED-BA75-BFFBB79283A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{892D7C29-26DE-4687-8C1D-966D528B9A67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{892D7C29-26DE-4687-8C1D-966D528B9A67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{892D7C29-26DE-4687-8C1D-966D528B9A67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{892D7C29-26DE-4687-8C1D-966D528B9A67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
