@@ -14,6 +14,21 @@ public class BCSymmetricAlgorithmTests
 
     [Theory]
     [MemberData(nameof(EncryptAlgorithObjects))]
+    public void Encrypt_ThenOutputSomething(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] inputBytes = new byte[] {0,1,2,3};
+        byte[] iv = new byte[encryptAlgo.LegalIVSize];
+        byte[] key = new byte[encryptAlgo.LegalKeySize];
+        MemoryStream inputStream = new MemoryStream(inputBytes);
+        MemoryStream outputStream = new MemoryStream();
+        var EncryptedStream = encryptAlgo.CreateEncryptStream(inputStream,key,iv);
+        EncryptedStream.CopyTo(outputStream);
+        var encryptedData = outputStream.ToArray();
+        Assert.NotEmpty(encryptedData);
+    }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
     public void EncryptThenDecrypt_BeforeAndAfterIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
         byte[] inputBytes = new byte[] {0,1,2,3};
