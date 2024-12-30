@@ -5,6 +5,11 @@ using LibEncryptedDriveScripts.BouncyCastleAdapter;
 
 public class Adapter_BCHashAlgorithmTests
 {
+    public static IEnumerable<object[]> HashAlgorithObjects()
+    {
+        yield return new object[] { new BouncyCastleAdapter.SHA3() };
+    }
+
     [Fact]
     public void ComputeHashBySHA3_HashLengthIs512bits()
     {
