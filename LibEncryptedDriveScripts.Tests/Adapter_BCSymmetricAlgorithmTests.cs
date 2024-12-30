@@ -3,6 +3,8 @@ namespace LibEncryptedDriveScripts.Tests;
 using Xunit;
 using LibEncryptedDriveScripts.BouncyCastleAdapter;
 
+#pragma warning disable xUnit1026 // Unused arguments
+
 public class BCSymmetricAlgorithmTests
 {
     public static IEnumerable<object[]> EncryptAlgorithObjects()
