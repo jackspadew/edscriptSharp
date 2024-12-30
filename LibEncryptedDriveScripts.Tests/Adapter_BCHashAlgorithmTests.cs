@@ -36,4 +36,16 @@ public class Adapter_BCHashAlgorithmTests
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => new SHA3(value));
     }
+
+    [Theory]
+    [MemberData(nameof(HashAlgorithObjects))]
+    public void ComputeHashAnotherSolt_WillOutAnotherHash(IHashAlgorithmAdapter hashAlgo)
+    {
+        byte[] data = {0,1,2,3,4,5,6,7};
+        byte[] soltOne = {0};
+        byte[] soltTwo = {1};
+        byte[] hashSoltOne = hashAlgo.ComputeHash(data, soltOne);
+        byte[] hashSoltTwo = hashAlgo.ComputeHash(data, soltTwo);
+        Assert.NotEqual(hashSoltOne, hashSoltTwo);
+    }
 }
