@@ -23,7 +23,7 @@ public class SHA3 : IHashAlgorithmAdapter
     }
     public byte[] ComputeHash(byte[] inputBytes, byte[] solt)
     {
-        return ComputeBCSHA3Hash(inputBytes);
+        return ComputeBCSHA3Hash(inputBytes.Concat(solt).ToArray());
     }
     private byte[] ComputeBCSHA3Hash(byte[] inputBytes)
     {
