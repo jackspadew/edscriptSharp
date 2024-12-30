@@ -1,14 +1,14 @@
 namespace LibEncryptedDriveScripts.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.Adapter.BouncyCastle;
+using LibEncryptedDriveScripts.BouncyCastleAdapter;
 
 public class Adapter_BCHashAlgorithmTests
 {
     [Fact]
     public void ComputeHashBySHA3_HashLengthIs512bits()
     {
-        IHashAlgorithmAdapter hashAlgo = new SHA3();
+        IHashAlgorithmAdapter hashAlgo = new BouncyCastleAdapter.SHA3();
         byte[] hash = hashAlgo.ComputeHash(new byte[0], new byte[0]);
         Assert.Equal((512/8), hash.Length);
     }
