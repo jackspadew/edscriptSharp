@@ -7,12 +7,12 @@ public class BCSymmetricAlgorithmTests
 {
     public static IEnumerable<object[]> EncryptAlgorithObjects()
     {
-        yield return new object[] { new BouncyCastleAdapter.AES() };
+        yield return new object[] { new BouncyCastleAdapter.AES(), "BouncyCastleAdapter.AES" };
     }
 
     [Theory]
     [MemberData(nameof(EncryptAlgorithObjects))]
-    public void EncryptThenDecrypt_BeforeAndAfterIsEqual(ISymmetricAlgorithmAdapter encryptAlgo)
+    public void EncryptThenDecrypt_BeforeAndAfterIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
         byte[] inputBytes = new byte[] {0,1,2,3};
         byte[] iv = new byte[encryptAlgo.LegalIVSize];
