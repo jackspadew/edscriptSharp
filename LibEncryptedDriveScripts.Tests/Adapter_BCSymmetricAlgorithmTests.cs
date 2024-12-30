@@ -40,6 +40,6 @@ public class BCSymmetricAlgorithmTests
         var DecryptedStream = encryptAlgo.CreateDecryptStream(EncryptedStream,key,iv);
         DecryptedStream.CopyTo(outputStream);
         byte[] outputBytes = outputStream.ToArray();
-        Assert.Equal(outputBytes, inputBytes);
+        Assert.Equal(inputBytes, outputBytes);
     }
 }
