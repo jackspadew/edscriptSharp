@@ -22,12 +22,8 @@ public class BCSymmetricAlgorithmTests
         byte[] inputBytes = new byte[] {0,1,2,3};
         byte[] iv = new byte[encryptAlgo.LegalIVSize];
         byte[] key = new byte[encryptAlgo.LegalKeySize];
-        MemoryStream inputStream = new MemoryStream(inputBytes);
-        MemoryStream outputStream = new MemoryStream();
-        var EncryptedStream = encryptAlgo.CreateEncryptStream(inputStream,key,iv);
-        EncryptedStream.CopyTo(outputStream);
-        var encryptedData = outputStream.ToArray();
-        Assert.NotEmpty(encryptedData);
+        byte[] outputBytes = encryptAlgo.EncryptBytes(inputBytes,key,iv);
+        Assert.NotEmpty(outputBytes);
     }
 
     [Theory]
@@ -37,12 +33,8 @@ public class BCSymmetricAlgorithmTests
         byte[] inputBytes = new byte[] {0,1,2,3};
         byte[] iv = new byte[encryptAlgo.LegalIVSize];
         byte[] key = new byte[encryptAlgo.LegalKeySize];
-        MemoryStream inputStream = new MemoryStream(inputBytes);
-        MemoryStream outputStream = new MemoryStream();
-        var EncryptedStream = encryptAlgo.CreateEncryptStream(inputStream,key,iv);
-        var DecryptedStream = encryptAlgo.CreateDecryptStream(EncryptedStream,key,iv);
-        DecryptedStream.CopyTo(outputStream);
-        byte[] outputBytes = outputStream.ToArray();
-        Assert.Equal(inputBytes, outputBytes);
+        byte[] encryptedBytes = encryptAlgo.EncryptBytes(inputBytes,key,iv);
+        byte[] decryptedBytes = encryptAlgo.DecryptBytes(encryptedBytes,key,iv);
+        Assert.Equal(inputBytes, decryptedBytes);
     }
 }
