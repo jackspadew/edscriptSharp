@@ -1,8 +1,9 @@
 namespace LibEncryptedDriveScripts.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.BouncyCastleAdapter;
-using LibEncryptedDriveScripts.CryptographyAdapter;
+using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.BouncyCastle;
+using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.SystemCryptography;
 
 #pragma warning disable xUnit1026 // Unused arguments
 
@@ -10,8 +11,8 @@ public class BCSymmetricAlgorithmTests
 {
     public static IEnumerable<object[]> EncryptAlgorithObjects()
     {
-        yield return new object[] { new BouncyCastleAdapter.AES(), "BouncyCastleAdapter.AES" };
-        yield return new object[] { new CryptographyAdapter.AES(), "CryptographyAdapter.AES" };
+        yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.AES(), "BouncyCastleAdapter.AES" };
+        yield return new object[] { new SymmetricAlgorithmAdapter.SystemCryptography.AES(), "CryptographyAdapter.AES" };
     }
 
     [Theory]

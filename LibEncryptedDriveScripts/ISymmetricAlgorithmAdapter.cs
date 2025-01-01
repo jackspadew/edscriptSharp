@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts;
+namespace LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
 
 public interface ISymmetricAlgorithmAdapter
 {
