@@ -7,7 +7,7 @@ using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.SystemCryptography;
 
 #pragma warning disable xUnit1026 // Unused arguments
 
-public class BCSymmetricAlgorithmTests
+public class ISymmetricAlgorithmAdapterCommonTests
 {
     public static IEnumerable<object[]> EncryptAlgorithObjects()
     {
