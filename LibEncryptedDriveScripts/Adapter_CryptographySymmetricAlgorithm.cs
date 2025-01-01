@@ -27,9 +27,9 @@ public class AES : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
         System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
         aes.Key = key;
         aes.IV = iv;
-        using (var decryptStream = new CryptoStream(inputStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+        using (var decryptStream = new CryptoStream(outputStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
         {
-            decryptStream.CopyTo(outputStream);
+            inputStream.CopyTo(decryptStream);
         }
     }
 }
