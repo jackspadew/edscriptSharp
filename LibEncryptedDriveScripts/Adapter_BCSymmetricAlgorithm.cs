@@ -8,27 +8,32 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.IO;
 using Org.BouncyCastle.Crypto.Paddings;
 
-public class AES : ISymmetricAlgorithmAdapter
+public class AES : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
 {
-    public int LegalIVSize {
+    public override int LegalIVSize {
         get { return (new AesEngine()).GetBlockSize(); }
     }
-    public int LegalKeySize { get {return 16;}}
+    public override int LegalKeySize { get {return 16;}}
 
-    public Stream CreateDecryptStream(Stream inputStream, byte[] key, byte[] iv)
+    public override void Decrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
-        return CreateStream(false, inputStream, key, iv);
+        using (var decryptStream = CreateStream(false, outputStream, key, iv))
+        {
+            inputStream.CopyTo(decryptStream);
+        }
     }
-
-    public Stream CreateEncryptStream(Stream inputStream, byte[] key, byte[] iv)
+    public override void Encrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
-        return CreateStream(true, inputStream, key, iv);
+        using (Stream encryptStream = CreateStream(true, outputStream, key, iv))
+        {
+            inputStream.CopyTo(encryptStream);
+        }
     }
-    private Stream CreateStream(bool forEncryption, Stream inputStream, byte[] key, byte[] iv)
+    private Stream CreateStream(bool forEncryption, Stream outputStream, byte[] key, byte[] iv)
     {
         var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new AesEngine()));
         cipher.Init(forEncryption, new ParametersWithIV(new KeyParameter(key), iv));
 
-        return new CipherStream(inputStream, cipher, cipher);
+        return new CipherStream(outputStream, cipher, cipher);
     }
 }
