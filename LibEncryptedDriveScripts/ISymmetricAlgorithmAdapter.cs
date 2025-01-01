@@ -4,6 +4,8 @@ public interface ISymmetricAlgorithmAdapter
 {
     int LegalIVSize { get; }
     int LegalKeySize { get; }
-    Stream CreateEncryptStream(Stream inputStream, byte[] key, byte[] iv);
-    Stream CreateDecryptStream(Stream inputStream, byte[] key, byte[] iv);
+    void Encrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv);
+    void Decrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv);
+    byte[] EncryptBytes(byte[] inputBytes, byte[] key, byte[] iv);
+    byte[] DecryptBytes(byte[] inputBytes, byte[] key, byte[] iv);
 }
