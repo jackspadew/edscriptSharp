@@ -36,4 +36,12 @@ public class AES : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
 
         return new CipherStream(outputStream, cipher, cipher);
     }
+    public override Stream CreateWritableDecryptStream(Stream outputStream, byte[] key, byte[] iv)
+    {
+        return CreateStream(false, outputStream, key, iv);
+    }
+    public override Stream CreateWritableEncryptStream(Stream outputStream, byte[] key, byte[] iv)
+    {
+        return CreateStream(true, outputStream, key, iv);
+    }
 }

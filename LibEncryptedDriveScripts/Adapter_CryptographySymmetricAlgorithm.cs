@@ -14,22 +14,30 @@ public class AES : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
 
     public override void Encrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
-        System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
-        aes.Key = key;
-        aes.IV = iv;
-        using (var encryptStream = new CryptoStream(outputStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+        using (var encryptStream = CreateWritableEncryptStream(outputStream, key, iv))
         {
             inputStream.CopyTo(encryptStream);
         }
     }
     public override void Decrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
-        System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
-        aes.Key = key;
-        aes.IV = iv;
-        using (var decryptStream = new CryptoStream(outputStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
+        using (var decryptStream = CreateWritableDecryptStream(outputStream, key, iv))
         {
             inputStream.CopyTo(decryptStream);
         }
+    }
+    public override Stream CreateWritableEncryptStream(Stream outputStream, byte[] key, byte[] iv)
+    {
+        System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
+        aes.Key = key;
+        aes.IV = iv;
+        return new CryptoStream(outputStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
+    }
+    public override Stream CreateWritableDecryptStream(Stream outputStream, byte[] key, byte[] iv)
+    {
+        System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
+        aes.Key = key;
+        aes.IV = iv;
+        return new CryptoStream(outputStream, aes.CreateDecryptor(), CryptoStreamMode.Write);
     }
 }
