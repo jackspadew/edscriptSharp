@@ -13,7 +13,7 @@ public class AES : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
     public override int LegalIVSize {
         get { return (new AesEngine()).GetBlockSize(); }
     }
-    public override int LegalKeySize { get {return 16;}}
+    public override int LegalKeySize { get {return 32;}}
 
     public override void Decrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
