@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts;
+namespace LibEncryptedDriveScripts.HashAlgorithmAdapter;
 
 public interface IHashAlgorithmAdapter
 {

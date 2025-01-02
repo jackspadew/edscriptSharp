@@ -1,4 +1,6 @@
-namespace LibEncryptedDriveScripts.BouncyCastleAdapter;
+namespace LibEncryptedDriveScripts.HashAlgorithmAdapter.BouncyCastle;
+
+using LibEncryptedDriveScripts.HashAlgorithmAdapter;
 
 using Org.BouncyCastle.Crypto.Digests;
 
