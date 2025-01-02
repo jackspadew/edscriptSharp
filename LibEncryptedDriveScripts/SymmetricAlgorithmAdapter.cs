@@ -1,6 +1,3 @@
-
-using System.Xml.XPath;
-
 namespace LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
 
 public abstract class SymmetricAlgorithmAdapterBase : ISymmetricAlgorithmAdapter
