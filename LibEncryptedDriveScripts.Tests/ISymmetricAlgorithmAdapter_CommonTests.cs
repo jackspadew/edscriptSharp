@@ -55,4 +55,35 @@ public class ISymmetricAlgorithmAdapterCommonTests
         byte[] decryptedBytes = outputStream.ToArray();
         Assert.Equal(inputBytes, decryptedBytes);
     }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
+    public void WriteToCreatedWritableEncryptStream_NotThrowAndOutSomething(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] inputBytes = new byte[] {0,1,2,3};
+        byte[] iv = new byte[encryptAlgo.LegalIVSize];
+        byte[] key = new byte[encryptAlgo.LegalKeySize];
+        MemoryStream outputStream = new MemoryStream();
+        using(Stream writableStream = encryptAlgo.CreateWritableEncryptStream(outputStream, key, iv))
+        {
+            writableStream.Write(inputBytes, 0, inputBytes.Length);
+        }
+        Assert.NotEmpty(outputStream.ToArray());
+    }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
+    public void WriteToCreatedWritableDecryptStream_NotThrowAndOutSomething(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] inputBytes = new byte[] {0,1,2,3};
+        byte[] iv = new byte[encryptAlgo.LegalIVSize];
+        byte[] key = new byte[encryptAlgo.LegalKeySize];
+        byte[] encryptedBytes = encryptAlgo.EncryptBytes(inputBytes,key,iv);
+        MemoryStream outputStream = new MemoryStream();
+        using(Stream writableStream = encryptAlgo.CreateWritableDecryptStream(outputStream, key, iv))
+        {
+            writableStream.Write(encryptedBytes, 0, encryptedBytes.Length);
+        }
+        Assert.NotEmpty(outputStream.ToArray());
+    }
 }
