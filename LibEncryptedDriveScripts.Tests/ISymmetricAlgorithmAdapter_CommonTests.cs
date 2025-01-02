@@ -86,4 +86,77 @@ public class ISymmetricAlgorithmAdapterCommonTests
         }
         Assert.NotEmpty(outputStream.ToArray());
     }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
+    public void EncryptThenDecryptByCreatedWritableEncryptStream_InputAndOutputIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] inputBytes = new byte[1024];
+        byte[] iv = new byte[encryptAlgo.LegalIVSize];
+        byte[] key = new byte[encryptAlgo.LegalKeySize];
+        byte[] encrypted;
+        byte[] decrypted;
+        MemoryStream encryptOutputStream = new MemoryStream();
+        Stream writableEncryptStream = encryptAlgo.CreateWritableEncryptStream(encryptOutputStream, key, iv);
+        writableEncryptStream.Write(inputBytes, 0, inputBytes.Length);
+        writableEncryptStream.Dispose();
+        encrypted = encryptOutputStream.ToArray();
+        encryptOutputStream.Dispose();
+        MemoryStream decryptOutputStream = new MemoryStream();
+        Stream writableDecryptStream = encryptAlgo.CreateWritableDecryptStream(decryptOutputStream, key, iv);
+        writableDecryptStream.Write(encrypted, 0, encrypted.Length);
+        writableDecryptStream.Dispose();
+        decrypted = decryptOutputStream.ToArray();
+        decryptOutputStream.Dispose();
+        Assert.Equal(inputBytes, decrypted);
+    }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
+    public void MultiEncryptionStream_DecryptedIsInput(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] iv = new byte[encryptAlgo.LegalIVSize];
+        byte[] key = new byte[encryptAlgo.LegalKeySize];
+        byte[] encryptedBytes = [];
+        byte[] decryptedBytes = [];
+        int multiple = 3;
+        using(MemoryStream encryptedOutputStream = new())
+        {
+            Stream[] encryptStreamArray = new Stream[multiple];
+            encryptStreamArray[multiple - 1] = encryptAlgo.CreateWritableEncryptStream(encryptedOutputStream, key, iv);
+            for(int i=multiple-2; i>=0; i--)
+            {
+                encryptStreamArray[i] = encryptAlgo.CreateWritableEncryptStream(encryptStreamArray[i+1], key, iv);
+            }
+            Stream encryptFirstStream = encryptStreamArray[0];
+            for(int i=0; i < 655360; i++) // 5MB
+            {
+                byte[] dataBlock = new byte[8];
+                encryptFirstStream.Write(dataBlock, 0, dataBlock.Length);
+            }
+            encryptFirstStream.Dispose();
+            encryptedBytes = encryptedOutputStream.ToArray();
+        }
+        Assert.InRange(encryptedBytes.Length, 5242880*0.9, 5242880*1.1);
+        using(MemoryStream decryptedOutputStream = new())
+        {
+            Stream[] decryptStreamArray = new Stream[multiple];
+            decryptStreamArray[multiple - 1] = encryptAlgo.CreateWritableDecryptStream(decryptedOutputStream, key, iv);
+            for(int i=multiple-2; i>=0; i--)
+            {
+                decryptStreamArray[i] = encryptAlgo.CreateWritableDecryptStream(decryptStreamArray[i+1], key, iv);
+            }
+            Stream decryptFirstStream = decryptStreamArray[0];
+            decryptFirstStream.Write(encryptedBytes, 0, encryptedBytes.Length);
+            decryptFirstStream.Dispose();
+            decryptedBytes = decryptedOutputStream.ToArray();
+        }
+        for(int i=0; i<decryptedBytes.Length; i++)
+        {
+            if(decryptedBytes[i] != 0)
+            {
+                Assert.Fail($"A byte at index {i} is not 0.");
+            }
+        }
+    }
 }
