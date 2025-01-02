@@ -32,4 +32,6 @@ public abstract class SymmetricAlgorithmAdapterBase : ISymmetricAlgorithmAdapter
         }
         return result;
     }
+    public abstract Stream CreateWritableDecryptStream(Stream outputStream, byte[] key, byte[] iv);
+    public abstract Stream CreateWritableEncryptStream(Stream outputStream, byte[] key, byte[] iv);
 }
