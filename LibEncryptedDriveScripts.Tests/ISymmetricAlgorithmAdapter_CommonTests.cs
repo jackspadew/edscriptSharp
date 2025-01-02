@@ -86,4 +86,28 @@ public class ISymmetricAlgorithmAdapterCommonTests
         }
         Assert.NotEmpty(outputStream.ToArray());
     }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
+    public void EncryptThenDecryptByCreatedWritableEncryptStream_InputAndOutputIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] inputBytes = new byte[1024];
+        byte[] iv = new byte[encryptAlgo.LegalIVSize];
+        byte[] key = new byte[encryptAlgo.LegalKeySize];
+        byte[] encrypted;
+        byte[] decrypted;
+        MemoryStream encryptOutputStream = new MemoryStream();
+        Stream writableEncryptStream = encryptAlgo.CreateWritableEncryptStream(encryptOutputStream, key, iv);
+        writableEncryptStream.Write(inputBytes, 0, inputBytes.Length);
+        writableEncryptStream.Dispose();
+        encrypted = encryptOutputStream.ToArray();
+        encryptOutputStream.Dispose();
+        MemoryStream decryptOutputStream = new MemoryStream();
+        Stream writableDecryptStream = encryptAlgo.CreateWritableDecryptStream(decryptOutputStream, key, iv);
+        writableDecryptStream.Write(encrypted, 0, encrypted.Length);
+        writableDecryptStream.Dispose();
+        decrypted = decryptOutputStream.ToArray();
+        decryptOutputStream.Dispose();
+        Assert.Equal(inputBytes, decrypted);
+    }
 }
