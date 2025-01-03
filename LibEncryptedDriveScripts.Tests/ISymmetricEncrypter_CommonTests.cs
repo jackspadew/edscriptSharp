@@ -14,6 +14,14 @@ public class ISymmetricEncrypter_CommonTests
             _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
         }
     }
+    public class SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES : SymmetricEncrypterBase
+    {
+        public SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES()
+        {
+            _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
+            _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
+        }
+    }
     public class SymmetricEncrypter_ForTestBouncyCastleAES : SymmetricEncrypterBase
     {
         public SymmetricEncrypter_ForTestBouncyCastleAES()
@@ -21,10 +29,24 @@ public class ISymmetricEncrypter_CommonTests
             _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
         }
     }
+    public class SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES : SymmetricEncrypterBase
+    {
+        public SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES()
+        {
+            _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
+            _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
+        }
+        protected override void DisposeCreatedStreams(List<Stream> streamList)
+        {
+            streamList[0].Dispose();
+        }
+    }
     public static IEnumerable<object[]> ISymmetricEncrypterObjects()
     {
         yield return new object[] { new SymmetricEncrypter_ForTestSystemCryptographyAES(), "SymmetricEncrypter_ForTestSystemCryptographyAES" };
+        yield return new object[] { new SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES(), "SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES" };
         yield return new object[] { new SymmetricEncrypter_ForTestBouncyCastleAES(), "SymmetricEncrypter_ForTestBouncyCastleAES" };
+        yield return new object[] { new SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES(), "SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES" };
     }
     public static byte[] exampleBytes = {0,1,2,3};
     public static byte[] exampleKey = new byte[32];
