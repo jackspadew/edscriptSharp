@@ -29,7 +29,7 @@ public class IHashAlgorithmAdapter_CommonTests
         byte[] dataTwo = {1,1};
         byte[] hashOne = hashAlgo.ComputeHash(dataOne);
         byte[] hashTwo = hashAlgo.ComputeHash(dataTwo);
-        Assert.NotEqual(dataOne,dataTwo);
+        Assert.NotEqual(hashOne,hashTwo);
     }
 
     [Theory]
