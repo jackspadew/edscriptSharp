@@ -63,7 +63,6 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
         }
         Stream FirstEncryptStream = nextOutputStream;
         inputStream.CopyTo(FirstEncryptStream);
-        FirstEncryptStream.Dispose();
         DisposeCreatedStreams(createdStreamList);
     }
     public virtual void Decrypt(Stream encryptedStream, Stream outputStream, byte[] key, byte[] iv)
@@ -81,7 +80,6 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
         }
         Stream FirstDecryptStream = nextOutputStream;
         encryptedStream.CopyTo(FirstDecryptStream);
-        FirstDecryptStream.Dispose();
         DisposeCreatedStreams(createdStreamList);
     }
 }

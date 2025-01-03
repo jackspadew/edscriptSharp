@@ -14,9 +14,17 @@ public class ISymmetricEncrypter_CommonTests
             _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
         }
     }
+    public class SymmetricEncrypter_ForTestBouncyCastleAES : SymmetricEncrypterBase
+    {
+        public SymmetricEncrypter_ForTestBouncyCastleAES()
+        {
+            _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
+        }
+    }
     public static IEnumerable<object[]> ISymmetricEncrypterObjects()
     {
         yield return new object[] { new SymmetricEncrypter_ForTestSystemCryptographyAES(), "SymmetricEncrypter_ForTestSystemCryptographyAES" };
+        yield return new object[] { new SymmetricEncrypter_ForTestBouncyCastleAES(), "SymmetricEncrypter_ForTestBouncyCastleAES" };
     }
     public static byte[] exampleBytes = {0,1,2,3};
     public static byte[] exampleKey = new byte[32];
