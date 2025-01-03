@@ -99,6 +99,24 @@ public class ISymmetricAlgorithmAdapterCommonTests
 
     [Theory]
     [MemberData(nameof(EncryptAlgorithObjects))]
+    public void EncryptWithAnotherArgumentType_ReturnSameValue(ISymmetricAlgorithmAdapter encryptAlgo, string className)
+    {
+        byte[] outputBytesByBytes = encryptAlgo.EncryptBytes(exampleBytes,exampleKey,exampleIV);
+        MemoryStream encryptOutputStream = new MemoryStream();
+        Stream writableEncryptStream = encryptAlgo.CreateWritableEncryptStream(encryptOutputStream, exampleKey, exampleIV);
+        writableEncryptStream.Write(exampleBytes, 0, exampleBytes.Length);
+        writableEncryptStream.Dispose();
+        byte[] outputBytesByCreatedStream = encryptOutputStream.ToArray();
+        MemoryStream inputEncryptStream = new MemoryStream(exampleBytes);
+        MemoryStream encryptedStream = new MemoryStream();
+        encryptAlgo.Encrypt(inputEncryptStream, encryptedStream, exampleKey, exampleIV);
+        byte[] outputBytesByInOutStreams = encryptedStream.ToArray();
+        Assert.Equal(outputBytesByBytes,outputBytesByCreatedStream);
+        Assert.Equal(outputBytesByBytes,outputBytesByInOutStreams);
+    }
+
+    [Theory]
+    [MemberData(nameof(EncryptAlgorithObjects))]
     public void MultiEncryptionStream_DecryptedIsInput(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
         byte[] encryptedBytes = [];
