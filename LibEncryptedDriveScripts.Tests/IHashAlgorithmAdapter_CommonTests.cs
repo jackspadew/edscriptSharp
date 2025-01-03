@@ -17,7 +17,7 @@ public class IHashAlgorithmAdapter_CommonTests
     [MemberData(nameof(HashAlgorithObjects))]
     public void ComputeHash_WillReturnThatHaveEnoughLength(IHashAlgorithmAdapter hashAlgo, string className)
     {
-        byte[] hash = hashAlgo.ComputeHash(new byte[0], new byte[0]);
+        byte[] hash = hashAlgo.ComputeHash(new byte[]{0},new byte[]{0});
         Assert.NotInRange(hash.Length, 0, 31);
     }
 
