@@ -6,23 +6,23 @@ public abstract class HashAlgorithmAdapterBase : IHashAlgorithmAdapter
 {
     public abstract byte[] ComputeHash(byte[] inputBytes);
     public abstract byte[] ComputeHash(Stream inputStream);
-    public virtual byte[] ComputeHash(byte[] inputBytes, byte[] solt)
+    public virtual byte[] ComputeHash(byte[] inputBytes, byte[] salt)
     {
-        byte[] soltedBytes = ToSolted(inputBytes, solt);
-        return ComputeHash(soltedBytes);
+        byte[] saltedBytes = ToSalted(inputBytes, salt);
+        return ComputeHash(saltedBytes);
     }
-    public virtual byte[] ComputeHash(Stream inputStream, byte[] solt)
+    public virtual byte[] ComputeHash(Stream inputStream, byte[] salt)
     {
-        Stream soltedStream = ToSolted(inputStream, solt);
-        return ComputeHash(soltedStream);
+        Stream saltedStream = ToSalted(inputStream, salt);
+        return ComputeHash(saltedStream);
     }
-    protected virtual byte[] ToSolted(byte[] source, byte[] solt)
+    protected virtual byte[] ToSalted(byte[] source, byte[] salt)
     {
-        return source.Concat(solt).ToArray();
+        return source.Concat(salt).ToArray();
     }
-    protected virtual Stream ToSolted(Stream source, byte[] solt)
+    protected virtual Stream ToSalted(Stream source, byte[] salt)
     {
-        Stream saltedStream = new SaltStream(source, solt, true);
+        Stream saltedStream = new SaltStream(source, salt, true);
         return saltedStream;
     }
 }
