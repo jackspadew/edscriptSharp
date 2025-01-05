@@ -1,5 +1,7 @@
 namespace LibEncryptedDriveScripts.HashAlgorithmAdapter;
 
+using LibEncryptedDriveScripts.SaltStream;
+
 public abstract class HashAlgorithmAdapterBase : IHashAlgorithmAdapter
 {
     public abstract byte[] ComputeHash(byte[] inputBytes);
@@ -20,6 +22,7 @@ public abstract class HashAlgorithmAdapterBase : IHashAlgorithmAdapter
     }
     protected virtual Stream ToSolted(Stream source, byte[] solt)
     {
-        throw new NotImplementedException();
+        Stream saltedStream = new SaltStream(source, solt, true);
+        return saltedStream;
     }
 }
