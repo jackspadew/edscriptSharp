@@ -58,6 +58,7 @@ public class SaltStream : Stream
 
         while(true)
         {
+            if(countRemain == 0) break;
             if( _nextInsertPosition == _baseStream.Position )
             {
                 UpdateNextInsertBytes();
