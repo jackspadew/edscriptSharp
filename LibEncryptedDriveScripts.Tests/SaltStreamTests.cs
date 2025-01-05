@@ -12,7 +12,7 @@ public class SaltStream_Tests
     public static string saltString = "SALT";
 
     [Fact]
-    public void InsertToTailTheSalt_ReturnSaltedString()
+    public void InsertSaltToTail_ReturnSaltedString()
     {
         byte[] sourceBytes = Encoding.UTF8.GetBytes(message);
         byte[] saltBytes = Encoding.UTF8.GetBytes(saltString);
@@ -21,7 +21,8 @@ public class SaltStream_Tests
         using (StreamReader reader = new StreamReader(saltStream, Encoding.UTF8))
         {
             string result = reader.ReadToEnd();
-            Assert.Equal(message+saltString, result);
+            string expected = message + saltString;
+            Assert.Equal(expected, result);
         }
     }
 }
