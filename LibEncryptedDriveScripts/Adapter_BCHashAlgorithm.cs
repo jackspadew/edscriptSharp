@@ -1,8 +1,11 @@
-namespace LibEncryptedDriveScripts.BouncyCastleAdapter;
+namespace LibEncryptedDriveScripts.HashAlgorithmAdapter.BouncyCastle;
 
+using LibEncryptedDriveScripts.HashAlgorithmAdapter;
+
+using System.IO;
 using Org.BouncyCastle.Crypto.Digests;
 
-public class SHA3 : IHashAlgorithmAdapter
+public class SHA3 : HashAlgorithmAdapterBase,IHashAlgorithmAdapter
 {
     public static int[] LegalBitLengthList = { 224, 256, 384, 512 };
     private int _bitLength = 512;
@@ -21,9 +24,13 @@ public class SHA3 : IHashAlgorithmAdapter
     {
         this.BitLength = bitLength;
     }
-    public byte[] ComputeHash(byte[] inputBytes, byte[] solt)
+    public override byte[] ComputeHash(byte[] inputBytes)
     {
-        return ComputeBCSHA3Hash(inputBytes.Concat(solt).ToArray());
+        return ComputeBCSHA3Hash(inputBytes);
+    }
+    public override byte[] ComputeHash(Stream inputStream)
+    {
+        return ComputeBCSHA3Hash(inputStream);
     }
     private byte[] ComputeBCSHA3Hash(byte[] inputBytes)
     {
@@ -34,6 +41,19 @@ public class SHA3 : IHashAlgorithmAdapter
         byte[] result = new byte[sha3.GetDigestSize()];
         sha3.DoFinal(result, 0);
         
+        return result;
+    }
+    private byte[] ComputeBCSHA3Hash(Stream inputStream)
+    {
+        var sha3 = new Sha3Digest(BitLength);
+        int bytesRead;
+        byte[] buffer = new byte[1024];
+        while((bytesRead = inputStream.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            sha3.BlockUpdate(buffer, 0, bytesRead);
+        }
+        byte[] result = new byte[sha3.GetDigestSize()];
+        sha3.DoFinal(result, 0);
         return result;
     }
     private bool isLegalBitLength(int bitLength)
