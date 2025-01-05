@@ -35,11 +35,11 @@ public class IHashAlgorithmAdapter_CommonTests
 
     [Theory]
     [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashAnotherSolt_WillReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
+    public void ComputeHashAnotherSalt_WillReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
-        byte[] hashSoltOne = hashAlgo.ComputeHash(exampleBytes, exampleSalt);
-        byte[] hashSoltTwo = hashAlgo.ComputeHash(exampleBytes, anotherSalt);
-        Assert.NotEqual(hashSoltOne, hashSoltTwo);
+        byte[] hashSaltOne = hashAlgo.ComputeHash(exampleBytes, exampleSalt);
+        byte[] hashSaltTwo = hashAlgo.ComputeHash(exampleBytes, anotherSalt);
+        Assert.NotEqual(hashSaltOne, hashSaltTwo);
     }
 
     private Stream CreateFilledLargeDataStream(byte oneByte, int lengthMB)
@@ -66,7 +66,7 @@ public class IHashAlgorithmAdapter_CommonTests
 
     [Theory]
     [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByStreamWithSolt_ReturnHash(IHashAlgorithmAdapter hashAlgo, string className)
+    public void ComputeHashByStreamWithSalt_ReturnHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
         Stream stream = CreateFilledLargeDataStream(0,10);
         byte[] hash = hashAlgo.ComputeHash(stream, exampleSalt);
@@ -76,7 +76,7 @@ public class IHashAlgorithmAdapter_CommonTests
 
     [Theory]
     [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByStreamWithSoltAndWithoutSolt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
+    public void ComputeHashByStreamWithSaltAndWithoutSalt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
         Stream streamOne = CreateFilledLargeDataStream(0,10);
         byte[] hashSalted = hashAlgo.ComputeHash(streamOne, exampleSalt);
@@ -87,7 +87,7 @@ public class IHashAlgorithmAdapter_CommonTests
 
     [Theory]
     [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByStreamWithDifferentSolt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
+    public void ComputeHashByStreamWithDifferentSalt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
         Stream streamOne = CreateFilledLargeDataStream(0,10);
         byte[] hashSalted = hashAlgo.ComputeHash(streamOne, exampleSalt);
