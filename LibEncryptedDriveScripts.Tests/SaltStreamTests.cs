@@ -10,6 +10,8 @@ public class SaltStream_Tests
 {
     public static string message = "text";
     public static string saltString = "SALT";
+    public static byte[] exampleBytes = {0,0,0,0};
+    public static byte[] exampleSalt = {1,1};
 
     [Fact]
     public void InsertSaltToTail_ReturnSaltedString()
@@ -39,5 +41,25 @@ public class SaltStream_Tests
             string expected = saltString + message;
             Assert.Equal(expected, result);
         }
+    }
+
+    [Theory]
+    [InlineData(32)]
+    public void UsingReadMethod_ReturnSaltedBytes(int bufferSize)
+    {
+        MemoryStream sourceStream = new MemoryStream(exampleBytes);
+        SaltStream saltStream = new SaltStream(sourceStream, exampleSalt, new long[]{0}, false);
+        int readCount;
+        byte[] buffer = new byte[bufferSize];
+        List<byte> resultList = new();
+        int count = 0;
+        while((readCount = saltStream.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            resultList.AddRange(buffer[0..readCount]);
+        }
+        byte[] expectedBytes = new byte[exampleBytes.Length + exampleSalt.Length];
+        Array.Copy(exampleSalt, 0, expectedBytes, 0, exampleSalt.Length);
+        Array.Copy(exampleBytes, 0, expectedBytes, exampleSalt.Length, exampleBytes.Length);
+        Assert.Equal(expectedBytes, resultList.ToArray());
     }
 }
