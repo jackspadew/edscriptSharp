@@ -87,6 +87,8 @@ public class SaltStream_Tests
     [Theory]
     [InlineData(32,5)]
     [InlineData(32,100)]
+    [InlineData(1,5)]
+    [InlineData(6,5)]
     public void InsertSaltToInvalidPosByUsingReadMethod_ReturnSameBytesAtSource(int bufferSize, int insertPos)
     {
         byte[] result = GetSaltedBytesUsingReadMethod(exampleBytes, exampleSalt, bufferSize, insertPos);
