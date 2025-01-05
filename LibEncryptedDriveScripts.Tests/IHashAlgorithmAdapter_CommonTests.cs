@@ -2,12 +2,13 @@ namespace LibEncryptedDriveScripts.Tests;
 
 using Xunit;
 using LibEncryptedDriveScripts.HashAlgorithmAdapter;
-using System.Collections;
 
 #pragma warning disable xUnit1026 // Unused arguments
 
 public class IHashAlgorithmAdapter_CommonTests
 {
+    public static byte[] exampleBytes = {0,1,0,0};
+    public static byte[] anotherBytes = {0,0,0,0};
     public static byte[] exampleSalt = {1,1};
     public static byte[] anotherSalt = {2,2};
     public static IEnumerable<object[]> HashAlgorithObjects()
@@ -19,7 +20,7 @@ public class IHashAlgorithmAdapter_CommonTests
     [MemberData(nameof(HashAlgorithObjects))]
     public void ComputeHash_WillReturnThatHaveEnoughLength(IHashAlgorithmAdapter hashAlgo, string className)
     {
-        byte[] hash = hashAlgo.ComputeHash(new byte[]{0},new byte[]{0});
+        byte[] hash = hashAlgo.ComputeHash(exampleBytes);
         Assert.NotInRange(hash.Length, 0, 31);
     }
 
@@ -27,10 +28,8 @@ public class IHashAlgorithmAdapter_CommonTests
     [MemberData(nameof(HashAlgorithObjects))]
     public void ComputeHashBySomeValues_WillReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
-        byte[] dataOne = {0,1};
-        byte[] dataTwo = {1,1};
-        byte[] hashOne = hashAlgo.ComputeHash(dataOne);
-        byte[] hashTwo = hashAlgo.ComputeHash(dataTwo);
+        byte[] hashOne = hashAlgo.ComputeHash(exampleBytes);
+        byte[] hashTwo = hashAlgo.ComputeHash(anotherBytes);
         Assert.NotEqual(hashOne,hashTwo);
     }
 
@@ -38,11 +37,8 @@ public class IHashAlgorithmAdapter_CommonTests
     [MemberData(nameof(HashAlgorithObjects))]
     public void ComputeHashAnotherSolt_WillReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
-        byte[] data = {0,1,2,3,4,5,6,7};
-        byte[] soltOne = {0};
-        byte[] soltTwo = {1};
-        byte[] hashSoltOne = hashAlgo.ComputeHash(data, soltOne);
-        byte[] hashSoltTwo = hashAlgo.ComputeHash(data, soltTwo);
+        byte[] hashSoltOne = hashAlgo.ComputeHash(exampleBytes, exampleSalt);
+        byte[] hashSoltTwo = hashAlgo.ComputeHash(exampleBytes, anotherSalt);
         Assert.NotEqual(hashSoltOne, hashSoltTwo);
     }
 
