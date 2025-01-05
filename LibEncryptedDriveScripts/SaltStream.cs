@@ -22,6 +22,8 @@ public class SaltStream : Stream
         UpdateNextInsertPosition();
     }
 
+    public SaltStream(Stream baseStream, byte[] salt, bool insertTail=false) : this(baseStream, salt, new long[]{}, insertTail) {}
+
     public override bool CanRead => _baseStream.CanRead;
     public override bool CanSeek => false;
     public override bool CanWrite => false;
