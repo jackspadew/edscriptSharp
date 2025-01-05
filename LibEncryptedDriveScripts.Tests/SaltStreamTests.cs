@@ -43,6 +43,29 @@ public class SaltStream_Tests
         }
     }
 
+    private byte[] GetInsertedBytes(byte[] source, byte[] insertData, int position)
+    {
+        byte[] result = new byte[source.Length + insertData.Length];
+        Array.Copy(source, 0, result, 0, position);
+        Array.Copy(insertData, 0, result, position, insertData.Length);
+        Array.Copy(source, position, result, position+insertData.Length, source.Length-position);
+        return result;
+    }
+
+    private byte[] GetSaltedBytesUsingReadMethod(byte[] source, byte[] salt, int bufferSize, long insertPos)
+    {
+        MemoryStream sourceStream = new MemoryStream(exampleBytes);
+        SaltStream saltStream = new SaltStream(sourceStream, exampleSalt, new long[]{insertPos}, false);
+        int readCount;
+        byte[] buffer = new byte[bufferSize];
+        List<byte> resultList = new();
+        while((readCount = saltStream.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            resultList.AddRange(buffer[0..readCount]);
+        }
+        return resultList.ToArray();
+    }
+
     [Theory]
     [InlineData(32)]
     public void UsingReadMethod_ReturnSaltedBytes(int bufferSize)
