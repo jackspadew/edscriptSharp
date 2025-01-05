@@ -74,4 +74,13 @@ public class SaltStream_Tests
         byte[] expected = GetInsertedBytes(exampleBytes, exampleSalt, insertPos);
         Assert.Equal(expected, result);
     }
+
+    [Theory]
+    [InlineData(32,5)]
+    [InlineData(32,100)]
+    public void InsertSaltToInvalidPosByUsingReadMethod_ReturnSameBytesAtSource(int bufferSize, int insertPos)
+    {
+        byte[] result = GetSaltedBytesUsingReadMethod(exampleBytes, exampleSalt, bufferSize, insertPos);
+        Assert.Equal(exampleBytes, result);
+    }
 }
