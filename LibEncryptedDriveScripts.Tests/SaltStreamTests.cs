@@ -68,6 +68,9 @@ public class SaltStream_Tests
 
     [Theory]
     [InlineData(32,0)]
+    [InlineData(32,1)]
+    [InlineData(32,3)]
+    [InlineData(32,4)]
     public void UsingReadMethod_ReturnSaltedBytes(int bufferSize, int insertPos)
     {
         byte[] result = GetSaltedBytesUsingReadMethod(exampleBytes, exampleSalt, bufferSize, insertPos);
