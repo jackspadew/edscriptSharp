@@ -25,4 +25,19 @@ public class SaltStream_Tests
             Assert.Equal(expected, result);
         }
     }
+
+    [Fact]
+    public void InsertSaltToHead_ReturnSaltedString()
+    {
+        byte[] sourceBytes = Encoding.UTF8.GetBytes(message);
+        byte[] saltBytes = Encoding.UTF8.GetBytes(saltString);
+        MemoryStream sourceStream = new MemoryStream(sourceBytes);
+        SaltStream saltStream = new SaltStream(sourceStream, saltBytes, new long[]{0});
+        using (StreamReader reader = new StreamReader(saltStream, Encoding.UTF8))
+        {
+            string result = reader.ReadToEnd();
+            string expected = saltString + message;
+            Assert.Equal(expected, result);
+        }
+    }
 }
