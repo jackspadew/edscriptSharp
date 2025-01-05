@@ -8,6 +8,8 @@ using System.Collections;
 
 public class IHashAlgorithmAdapter_CommonTests
 {
+    public static byte[] exampleSalt = {1,1};
+    public static byte[] anotherSalt = {2,2};
     public static IEnumerable<object[]> HashAlgorithObjects()
     {
         yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.SHA3(), "BouncyCastle.SHA3" };
@@ -64,6 +66,38 @@ public class IHashAlgorithmAdapter_CommonTests
         byte[] hash = hashAlgo.ComputeHash(stream);
         stream.Dispose();
         Assert.NotInRange(hash.Length, 0, 31);
+    }
+
+    [Theory]
+    [MemberData(nameof(HashAlgorithObjects))]
+    public void ComputeHashByStreamWithSolt_ReturnHash(IHashAlgorithmAdapter hashAlgo, string className)
+    {
+        Stream stream = CreateFilledLargeDataStream(0,10);
+        byte[] hash = hashAlgo.ComputeHash(stream, exampleSalt);
+        stream.Dispose();
+        Assert.NotInRange(hash.Length, 0, 31);
+    }
+
+    [Theory]
+    [MemberData(nameof(HashAlgorithObjects))]
+    public void ComputeHashByStreamWithSoltAndWithoutSolt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
+    {
+        Stream streamOne = CreateFilledLargeDataStream(0,10);
+        byte[] hashSalted = hashAlgo.ComputeHash(streamOne, exampleSalt);
+        Stream streamTwo = CreateFilledLargeDataStream(0,10);
+        byte[] hash = hashAlgo.ComputeHash(streamTwo);
+        Assert.NotEqual(hash, hashSalted);
+    }
+
+    [Theory]
+    [MemberData(nameof(HashAlgorithObjects))]
+    public void ComputeHashByStreamWithDifferentSolt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
+    {
+        Stream streamOne = CreateFilledLargeDataStream(0,10);
+        byte[] hashSalted = hashAlgo.ComputeHash(streamOne, exampleSalt);
+        Stream streamTwo = CreateFilledLargeDataStream(0,10);
+        byte[] hashAnother = hashAlgo.ComputeHash(streamTwo, anotherSalt);
+        Assert.NotEqual(hashAnother, hashSalted);
     }
 
     [Theory]
