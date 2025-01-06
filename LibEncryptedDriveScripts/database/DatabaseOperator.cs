@@ -28,7 +28,19 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
 
     public Stream GetDataStream(byte[] index)
     {
-        throw new NotImplementedException();
+        string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
+        {
+            command.Parameters.AddWithValue($"@{_indexName}", index);
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return reader.GetStream(0);
+                }
+            }
+        }
+        throw new InvalidOperationException($"There was no row with the specified index value.");
     }
     public byte[] GetDataBytes(byte[] index)
     {
