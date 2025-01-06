@@ -44,7 +44,26 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     public byte[] GetDataBytes(byte[] index)
     {
-        throw new NotImplementedException();
+        _sqliteConnection.Open();
+        string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+        byte[] result;
+        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
+        {
+            command.Parameters.AddWithValue($"@{_indexName}", index);
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    result = (byte[])reader[_dataName];
+                    _sqliteConnection.Close();
+                    SqliteConnection.ClearPool(_sqliteConnection);
+                    return result;
+                }
+            }
+        }
+        _sqliteConnection.Close();
+        SqliteConnection.ClearPool(_sqliteConnection);
+        throw new InvalidOperationException($"There was no row with the specified index value.");
     }
     public void InsertData(byte[] index, byte[] data)
     {
