@@ -27,12 +27,20 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     {
         throw new NotImplementedException();
     }
+    public byte[] GetDataBytes(byte[] index)
+    {
+        throw new NotImplementedException();
+    }
     public void InsertData(byte[] index, byte[] data)
     {
         throw new NotImplementedException();
     }
 
     protected void InitDatabase()
+    {
+        throw new NotImplementedException();
+    }
+    public void InsertData(byte[] index, Stream readableStream)
     {
         throw new NotImplementedException();
     }
