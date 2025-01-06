@@ -5,6 +5,9 @@ using Microsoft.Data.Sqlite;
 
 public abstract class DatabaseOperatorBase : IDatabaseOperator
 {
+    private static string _tableName = "data";
+    private static string _indexName = "b_index";
+    private static string _dataName = "b_data";
     private SqliteConnection _sqliteConnection;
 
     public DatabaseOperatorBase(string dbPath, bool createFlag)
