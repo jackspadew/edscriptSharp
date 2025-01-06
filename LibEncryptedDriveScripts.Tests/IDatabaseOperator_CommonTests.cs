@@ -64,6 +64,32 @@ public class IDatabaseOperator_CommonTests : IDisposable
         dbOperator.InsertData(exampleIndex, mStream);
     }
 
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void InsertThenReadBytes_ReturnEqualBytes(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] exampleIndex = {0,0,0,3};
+        byte[] exampleBytes = {1,1,1,1};
+        dbOperator.InsertData(exampleIndex, exampleBytes);
+        byte[] result = dbOperator.GetDataBytes(exampleIndex);
+        bool isEqual = exampleBytes.SequenceEqual(result);
+        Assert.True(isEqual);
+    }
+
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void InsertThenReadBytesByStream_ReturnEqualBytes(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] exampleIndex = {0,0,0,4};
+        byte[] exampleBytes = {2,2,2,2};
+        dbOperator.InsertData(exampleIndex, exampleBytes);
+        Stream stream = dbOperator.GetDataStream(exampleIndex);
+        byte[] result = new byte[stream.Length];
+        stream.Read(result, 0, result.Length);
+        bool isEqual = exampleBytes.SequenceEqual(result);
+        Assert.True(isEqual);
+    }
+
     public void Dispose()
     {
         DeleteFileIfExists(dbPathDbOpeBaseForTestPath);
