@@ -13,20 +13,26 @@ public class IDatabaseOperator_CommonTests : IDisposable
         public DatabaseOperator_ForTest(string dbPath) : base(dbPath, true) {}
     }
 
-    public static string dbPath = "example.db";
+    public static string dbPathDbOpeBaseForTestPath = "example.db";
+    public static byte[] exampleBytes = {0,1,2,3};
     public static IEnumerable<object[]> IDatabaseOperatorObjects()
     {
-        yield return new object[] { new DatabaseOperator_ForTest(dbPath, true), "DatabaseOperator_ForTest" };
+        yield return new object[] { new DatabaseOperator_ForTest(dbPathDbOpeBaseForTestPath, true), "DatabaseOperator_ForTest" };
+    }
+
+    private void DeleteFileIfExists(string path)
+    {
+        if(File.Exists(path))
+        {
+            File.Delete(path);
+        }
     }
 
     [Fact]
     public void CreateDatabaseOperatorInstance_DbFileCreated()
     {
         string dbPathCreateTest = "createtest.db";
-        if(File.Exists(dbPathCreateTest))
-        {
-            File.Delete(dbPathCreateTest);
-        }
+        DeleteFileIfExists(dbPathCreateTest);
         DatabaseOperator_ForTest dbOperator = new (dbPathCreateTest, true);
         Assert.True(File.Exists(dbPathCreateTest), "The database file was not created.");
         File.Delete(dbPathCreateTest);
@@ -36,10 +42,7 @@ public class IDatabaseOperator_CommonTests : IDisposable
     public void CreateDatabaseOperatorInstanceWithoutCreateFlag_Throw()
     {
         string dbPathNonExistentFile = "nonexistent.db";
-        if(File.Exists(dbPathNonExistentFile))
-        {
-            File.Delete(dbPathNonExistentFile);
-        }
+        DeleteFileIfExists(dbPathNonExistentFile);
         Assert.Throws<FileNotFoundException>( () => new DatabaseOperator_ForTest(dbPathNonExistentFile, false) );
     }
 
@@ -47,9 +50,8 @@ public class IDatabaseOperator_CommonTests : IDisposable
     [MemberData(nameof(IDatabaseOperatorObjects))]
     public void InsertDataByBytes_NotThrow(IDatabaseOperator dbOperator, string className)
     {
-        byte[] exampleIndex = new byte[8];
-        byte[] exampleData = new byte[16];
-        dbOperator.InsertData(exampleIndex, exampleData);
+        byte[] exampleIndex = {0,0,0,1};
+        dbOperator.InsertData(exampleIndex, exampleBytes);
     }
 
     [Theory]
@@ -57,17 +59,13 @@ public class IDatabaseOperator_CommonTests : IDisposable
     public void InsertDataByStream_NotThrow(IDatabaseOperator dbOperator, string className)
     {
         byte[] exampleIndex = {0,0,0,2};
-        byte[] exampleData = new byte[16];
         MemoryStream mStream = new();
-        mStream.Write(exampleData, 0, exampleData.Length);
+        mStream.Write(exampleBytes, 0, exampleBytes.Length);
         dbOperator.InsertData(exampleIndex, mStream);
     }
 
     public void Dispose()
     {
-        if(File.Exists(dbPath))
-        {
-            File.Delete(dbPath);
-        }
+        DeleteFileIfExists(dbPathDbOpeBaseForTestPath);
     }
 }
