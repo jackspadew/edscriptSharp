@@ -32,6 +32,17 @@ public class IDatabaseOperator_CommonTests : IDisposable
         File.Delete(dbPathCreateTest);
     }
 
+    [Fact]
+    public void CreateDatabaseOperatorInstanceWithoutCreateFlag_Throw()
+    {
+        string dbPathNonExistentFile = "nonexistent.db";
+        if(File.Exists(dbPathNonExistentFile))
+        {
+            File.Delete(dbPathNonExistentFile);
+        }
+        Assert.Throws<FileNotFoundException>( () => new DatabaseOperator_ForTest(dbPathNonExistentFile, false) );
+    }
+
     public void Dispose()
     {
         if(File.Exists(dbPath))
