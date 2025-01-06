@@ -38,7 +38,10 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
 
     protected void InitDatabase()
     {
-        throw new NotImplementedException();
+        _sqliteConnection.Open();
+        CreatedDataTable();
+        _sqliteConnection.Close();
+        SqliteConnection.ClearPool(_sqliteConnection);
     }
     public void InsertData(byte[] index, Stream readableStream)
     {
@@ -47,5 +50,12 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     private bool IsIndexExists(byte[] index)
     {
         throw new NotImplementedException();
+    }
+    private void CreatedDataTable()
+    {
+        using (var command = new SqliteCommand("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)", _sqliteConnection))
+        {
+            command.ExecuteNonQuery();
+        }
     }
 }
