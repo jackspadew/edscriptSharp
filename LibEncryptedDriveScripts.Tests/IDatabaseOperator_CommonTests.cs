@@ -43,6 +43,15 @@ public class IDatabaseOperator_CommonTests : IDisposable
         Assert.Throws<FileNotFoundException>( () => new DatabaseOperator_ForTest(dbPathNonExistentFile, false) );
     }
 
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void InsertDataByBytes_NotThrow(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] exampleIndex = new byte[8];
+        byte[] exampleData = new byte[16];
+        dbOperator.InsertData(exampleIndex, exampleData);
+    }
+
     public void Dispose()
     {
         if(File.Exists(dbPath))
