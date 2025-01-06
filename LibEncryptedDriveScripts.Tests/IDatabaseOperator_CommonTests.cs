@@ -52,6 +52,17 @@ public class IDatabaseOperator_CommonTests : IDisposable
         dbOperator.InsertData(exampleIndex, exampleData);
     }
 
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void InsertDataByStream_NotThrow(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] exampleIndex = {0,0,0,2};
+        byte[] exampleData = new byte[16];
+        MemoryStream mStream = new();
+        mStream.Write(exampleData, 0, exampleData.Length);
+        dbOperator.InsertData(exampleIndex, mStream);
+    }
+
     public void Dispose()
     {
         if(File.Exists(dbPath))
