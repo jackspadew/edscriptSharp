@@ -53,7 +53,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     private void CreatedDataTable()
     {
-        using (var command = new SqliteCommand("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)", _sqliteConnection))
+        using (var command = new SqliteCommand("CREATE TABLE data (b_index BLOB PRIMARY KEY, b_data BLOB)", _sqliteConnection))
         {
             command.ExecuteNonQuery();
         }
