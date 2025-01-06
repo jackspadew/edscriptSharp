@@ -68,7 +68,8 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     private void CreatedDataTable()
     {
-        using (var command = new SqliteCommand("CREATE TABLE data (b_index BLOB PRIMARY KEY, b_data BLOB)", _sqliteConnection))
+        string sqltext = $"CREATE TABLE {_tableName} ({_indexName} BLOB PRIMARY KEY, {_dataName} BLOB)";
+        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
         {
             command.ExecuteNonQuery();
         }
