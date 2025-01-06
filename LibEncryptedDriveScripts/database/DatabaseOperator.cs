@@ -28,7 +28,9 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
 
     public Stream GetDataStream(byte[] index)
     {
+        _sqliteConnection.Open();
         string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+        Stream result;
         using (var command = new SqliteCommand(sqltext, _sqliteConnection))
         {
             command.Parameters.AddWithValue($"@{_indexName}", index);
@@ -36,10 +38,15 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
             {
                 if (reader.Read())
                 {
-                    return reader.GetStream(0);
+                    result = reader.GetStream(0);
+                    _sqliteConnection.Close();
+                    SqliteConnection.ClearPool(_sqliteConnection);
+                    return result;
                 }
             }
         }
+        _sqliteConnection.Close();
+        SqliteConnection.ClearPool(_sqliteConnection);
         throw new InvalidOperationException($"There was no row with the specified index value.");
     }
     public byte[] GetDataBytes(byte[] index)
