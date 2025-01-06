@@ -48,7 +48,16 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     public void InsertData(byte[] index, byte[] data)
     {
-        throw new NotImplementedException();
+        _sqliteConnection.Open();
+        string sqltext = $"INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
+        using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+        {
+            command.Parameters.AddWithValue($"@{_indexName}", index);
+            command.Parameters.AddWithValue($"@{_dataName}", data);
+            command.ExecuteNonQuery();
+        }
+        _sqliteConnection.Close();
+        SqliteConnection.ClearPool(_sqliteConnection);
     }
 
     protected void InitDatabase()
