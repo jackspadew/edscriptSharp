@@ -69,7 +69,24 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     public void InsertData(byte[] index, Stream readableStream)
     {
-        throw new NotImplementedException();
+        _sqliteConnection.Open();
+        long streamLength = readableStream.Length - readableStream.Position;
+        string sqltext = $@"
+            INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, zeroblob({streamLength}));
+            SELECT last_insert_rowid();
+        ";
+        using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+        {
+            command.Parameters.AddWithValue($"@{_indexName}", index);
+            long rowid = (long)(command.ExecuteScalar() ??
+                throw new InvalidOperationException("Could not read the value of \"last_insert_rowid()\"."));
+            using (var writeStream = new SqliteBlob(_sqliteConnection, "data", "b_data", rowid))
+            {
+                readableStream.CopyTo(writeStream);
+            }
+        }
+        _sqliteConnection.Close();
+        SqliteConnection.ClearPool(_sqliteConnection);
     }
     private bool IsIndexExists(byte[] index)
     {
