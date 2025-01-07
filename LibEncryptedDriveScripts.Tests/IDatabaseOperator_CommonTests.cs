@@ -100,6 +100,15 @@ public class IDatabaseOperator_CommonTests : IDisposable
         Assert.True(result);
     }
 
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void CheckNonExistentIndex_ReturnFalse(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] nonExistentIndex = {255,0,0,7};
+        bool result = dbOperator.IsIndexExists(nonExistentIndex);
+        Assert.False(result);
+    }
+
     public void Dispose()
     {
         DeleteFileIfExists(dbPathDbOpeBaseForTestPath);
