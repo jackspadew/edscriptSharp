@@ -90,6 +90,16 @@ public class IDatabaseOperator_CommonTests : IDisposable
         Assert.True(isEqual);
     }
 
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void InsertDataThenCheckExists_ReturnTrue(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] exampleIndex = {0,0,0,6};
+        dbOperator.InsertData(exampleIndex, exampleBytes);
+        bool result = dbOperator.IsIndexExists(exampleIndex);
+        Assert.True(result);
+    }
+
     public void Dispose()
     {
         DeleteFileIfExists(dbPathDbOpeBaseForTestPath);

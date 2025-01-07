@@ -126,4 +126,26 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
             command.ExecuteNonQuery();
         }
     }
+
+    bool IDatabaseOperator.IsIndexExists(byte[] index)
+    {
+        _sqliteConnection.Open();
+        string sqltext = $"SELECT _ROWID_ FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
+        {
+            command.Parameters.AddWithValue($"@{_indexName}", index);
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    _sqliteConnection.Close();
+                    SqliteConnection.ClearPool(_sqliteConnection);
+                    return true;
+                }
+            }
+        }
+        _sqliteConnection.Close();
+        SqliteConnection.ClearPool(_sqliteConnection);
+        return false;
+    }
 }
