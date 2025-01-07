@@ -114,10 +114,6 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         _sqliteConnection.Close();
         SqliteConnection.ClearPool(_sqliteConnection);
     }
-    private bool IsIndexExists(byte[] index)
-    {
-        throw new NotImplementedException();
-    }
     private void CreatedDataTable()
     {
         string sqltext = $"CREATE TABLE {_tableName} ({_indexName} BLOB PRIMARY KEY, {_dataName} BLOB)";
@@ -127,7 +123,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
     }
 
-    bool IDatabaseOperator.IsIndexExists(byte[] index)
+    public bool IsIndexExists(byte[] index)
     {
         _sqliteConnection.Open();
         string sqltext = $"SELECT _ROWID_ FROM {_tableName} WHERE {_indexName} = @{_indexName};";
