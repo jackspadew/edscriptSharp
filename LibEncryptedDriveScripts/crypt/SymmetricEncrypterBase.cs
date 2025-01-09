@@ -1,5 +1,7 @@
 namespace LibEncryptedDriveScripts.SymmetricEncrypter;
 
+using LibEncryptedDriveScripts.Converter;
+using LibEncryptedDriveScripts.KeyGenerator;
 using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
 
 public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
@@ -82,4 +84,10 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
         encryptedStream.CopyTo(FirstDecryptStream);
         DisposeCreatedStreams(createdStreamList);
     }
+}
+
+public class SameKeyListGenerator : SequentialGenerator<byte[]>, IListGenerator<byte[]>
+{
+    public SameKeyListGenerator(byte[] initBytes) : base(new JustReturnConverter<byte[]>(), initBytes)
+    {}
 }
