@@ -8,38 +8,34 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
 {
     protected List<ISymmetricAlgorithmAdapter> _algorithm = new();
 
-    protected virtual byte[] KeyConverter(byte[] inputBytes)
-    {
-        return inputBytes;
-    }
-    protected virtual byte[] IVConverter(byte[] inputBytes)
-    {
-        return inputBytes;
-    }
     public virtual byte[] Encrypt(byte[] inputBytes, byte[] key, byte[] iv)
     {
         byte[] tmpBytes = inputBytes;
-        byte[] tmpKey = key;
-        byte[] tmpIV = iv;
+        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().GetEnumerator();
+        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().GetEnumerator();
         foreach(ISymmetricAlgorithmAdapter algo in _algorithm)
         {
-            tmpKey = KeyConverter(tmpKey);
-            tmpIV = IVConverter(tmpIV);
-            tmpBytes = algo.EncryptBytes(tmpBytes, tmpKey, tmpIV);
+            keyEnum.MoveNext();
+            ivEnum.MoveNext();
+            tmpBytes = algo.EncryptBytes(tmpBytes, keyEnum.Current, ivEnum.Current);
         }
+        keyEnum.Dispose();
+        ivEnum.Dispose();
         return tmpBytes;
     }
     public virtual byte[] Decrypt(byte[] encryptedBytes, byte[] key, byte[] iv)
     {
         byte[] tmpBytes = encryptedBytes;
-        byte[] tmpKey = key;
-        byte[] tmpIV = iv;
+        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
+        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
         foreach(ISymmetricAlgorithmAdapter algo in _algorithm.AsEnumerable().Reverse())
         {
-            tmpKey = KeyConverter(tmpKey);
-            tmpIV = IVConverter(tmpIV);
-            tmpBytes = algo.DecryptBytes(tmpBytes, tmpKey, tmpIV);
+            keyEnum.MoveNext();
+            ivEnum.MoveNext();
+            tmpBytes = algo.DecryptBytes(tmpBytes, keyEnum.Current, ivEnum.Current);
         }
+        keyEnum.Dispose();
+        ivEnum.Dispose();
         return tmpBytes;
     }
 
@@ -54,15 +50,17 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
     {
         List<Stream> createdStreamList = new();
         Stream nextOutputStream = outputStream;
-        byte[] tmpKey = key;
-        byte[] tmpIV = iv;
+        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().GetEnumerator();
+        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().GetEnumerator();
         foreach(ISymmetricAlgorithmAdapter algo in _algorithm.AsEnumerable().Reverse())
         {
-            tmpKey = KeyConverter(tmpKey);
-            tmpIV = IVConverter(tmpIV);
-            nextOutputStream = algo.CreateWritableEncryptStream(nextOutputStream, tmpKey, tmpIV);
+            keyEnum.MoveNext();
+            ivEnum.MoveNext();
+            nextOutputStream = algo.CreateWritableEncryptStream(nextOutputStream, keyEnum.Current, ivEnum.Current);
             createdStreamList.Insert(0, nextOutputStream);
         }
+        keyEnum.Dispose();
+        ivEnum.Dispose();
         Stream FirstEncryptStream = nextOutputStream;
         inputStream.CopyTo(FirstEncryptStream);
         DisposeCreatedStreams(createdStreamList);
@@ -71,18 +69,35 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
     {
         List<Stream> createdStreamList = new();
         Stream nextOutputStream = outputStream;
-        byte[] tmpKey = key;
-        byte[] tmpIV = iv;
+        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
+        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
         foreach(ISymmetricAlgorithmAdapter algo in _algorithm)
         {
-            tmpKey = KeyConverter(tmpKey);
-            tmpIV = IVConverter(tmpIV);
-            nextOutputStream = algo.CreateWritableDecryptStream(nextOutputStream, tmpKey, tmpIV);
+            keyEnum.MoveNext();
+            ivEnum.MoveNext();
+            nextOutputStream = algo.CreateWritableDecryptStream(nextOutputStream, keyEnum.Current, ivEnum.Current);
             createdStreamList.Insert(0, nextOutputStream);
         }
+        keyEnum.Dispose();
+        ivEnum.Dispose();
         Stream FirstDecryptStream = nextOutputStream;
         encryptedStream.CopyTo(FirstDecryptStream);
         DisposeCreatedStreams(createdStreamList);
+    }
+    protected virtual List<byte[]> GenerateKeyList(byte[] key, int count)
+    {
+        return GenerateSameBytesList(key,count);
+    }
+    protected virtual List<byte[]> GenerateIVList(byte[] iv, int count)
+    {
+        return GenerateSameBytesList(iv,count);
+    }
+    private List<byte[]> GenerateSameBytesList(byte[] initBytes, int count)
+    {
+        IListGenerator<byte[]> generator = new SameKeyListGenerator(initBytes);
+        List<byte[]> list = generator.Generate(count);
+
+        return list;
     }
 }
 
