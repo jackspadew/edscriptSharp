@@ -2,7 +2,7 @@ namespace LibEncryptedDriveScripts.KeyGenerator;
 
 using LibEncryptedDriveScripts.Converter;
 
-public abstract class SequentialGenerator<T> : IListGenerator<T>
+public class SequentialGenerator<T> : IListGenerator<T>
 {
     protected T _initialValue;
     private IConverter<T,T> _converter;
