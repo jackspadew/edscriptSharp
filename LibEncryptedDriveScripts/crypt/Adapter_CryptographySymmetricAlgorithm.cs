@@ -31,13 +31,13 @@ public class AES : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
         System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
         aes.Key = key;
         aes.IV = iv;
-        return new CryptoStream(outputStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
+        return new CryptoStream(outputStream, aes.CreateEncryptor(), CryptoStreamMode.Write, false);
     }
     public override Stream CreateWritableDecryptStream(Stream outputStream, byte[] key, byte[] iv)
     {
         System.Security.Cryptography.Aes aes = System.Security.Cryptography.Aes.Create();
         aes.Key = key;
         aes.IV = iv;
-        return new CryptoStream(outputStream, aes.CreateDecryptor(), CryptoStreamMode.Write);
+        return new CryptoStream(outputStream, aes.CreateDecryptor(), CryptoStreamMode.Write, false);
     }
 }

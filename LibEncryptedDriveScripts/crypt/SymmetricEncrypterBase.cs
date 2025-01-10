@@ -41,10 +41,7 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
 
     protected virtual void DisposeCreatedStreams(List<Stream> streamList)
     {
-        foreach(Stream stream in streamList)
-        {
-            stream.Dispose();
-        }
+        streamList[0].Dispose();
     }
     public virtual void Encrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
