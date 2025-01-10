@@ -47,6 +47,7 @@ public class ISymmetricEncrypter_CommonTests
         yield return new object[] { new SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES(), "SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES" };
         yield return new object[] { new SymmetricEncrypter_ForTestBouncyCastleAES(), "SymmetricEncrypter_ForTestBouncyCastleAES" };
         yield return new object[] { new SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES(), "SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES" };
+        yield return new object[] { new RandomizedMultipleEncrypter(1,1), "RandomizedMultipleEncrypter" };
     }
     public static byte[] exampleBytes = {0,1,2,3};
     public static byte[] exampleKey = new byte[32];
