@@ -50,8 +50,8 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
     {
         List<Stream> createdStreamList = new();
         Stream nextOutputStream = outputStream;
-        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().GetEnumerator();
-        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().GetEnumerator();
+        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
+        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
         foreach(ISymmetricAlgorithmAdapter algo in _algorithm.AsEnumerable().Reverse())
         {
             keyEnum.MoveNext();
@@ -69,8 +69,8 @@ public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
     {
         List<Stream> createdStreamList = new();
         Stream nextOutputStream = outputStream;
-        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
-        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().Reverse().GetEnumerator();
+        var keyEnum = GenerateKeyList(key, _algorithm.Count).AsEnumerable().GetEnumerator();
+        var ivEnum = GenerateIVList(iv, _algorithm.Count).AsEnumerable().GetEnumerator();
         foreach(ISymmetricAlgorithmAdapter algo in _algorithm)
         {
             keyEnum.MoveNext();
