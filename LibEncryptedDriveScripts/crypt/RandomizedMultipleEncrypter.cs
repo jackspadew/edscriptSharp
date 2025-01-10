@@ -1,7 +1,6 @@
-namespace LibEncryptedDriveScripts.EncryptedDriveCryptographer;
+namespace LibEncryptedDriveScripts.SymmetricEncrypter;
 
 using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
-using LibEncryptedDriveScripts.SymmetricEncrypter;
 
 public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEncrypter
 {
