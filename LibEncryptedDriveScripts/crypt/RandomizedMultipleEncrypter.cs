@@ -29,11 +29,11 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
     {
         return GenerateRandomBlendedSequentialBytesList(iv,count,_ivSeed);
     }
-    private List<byte[]> GenerateRandomBlendedSequentialBytesList(byte[] key, int count, int seed)
+    private List<byte[]> GenerateRandomBlendedSequentialBytesList(byte[] bytes, int count, int seed)
     {
-        Random random = new Random(_keySeed);
+        Random random = new Random(seed);
         var converter = new RandomBlendConverter(random);
-        var listGenerator = new SequentialGenerator<byte[]>(converter, key);
+        var listGenerator = new SequentialGenerator<byte[]>(converter, bytes);
         return listGenerator.Generate(count);
     }
     private List<ISymmetricAlgorithmAdapter> CreateSymmetricAlgorithmComboList(List<ISymmetricAlgorithmAdapter> validAlgorithmList, int seed, int count)
