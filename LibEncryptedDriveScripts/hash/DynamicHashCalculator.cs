@@ -4,6 +4,10 @@ using LibEncryptedDriveScripts.HashAlgorithmAdapter;
 
 public class DynamicHashCalculator : HashCalculatorBase, IHashCalculator
 {
-    public DynamicHashCalculator(IHashAlgorithmAdapter hashAlgorithm) : base(hashAlgorithm)
-    {}
+    private IHashAlgorithmAdapter _algorithm;
+    protected override IHashAlgorithmAdapter Algorithm => _algorithm;
+    public DynamicHashCalculator(IHashAlgorithmAdapter hashAlgorithm)
+    {
+        _algorithm = hashAlgorithm;
+    }
 }

@@ -5,13 +5,7 @@ using LibEncryptedDriveScripts.SaltStream;
 
 public abstract class HashCalculatorBase : IHashCalculator
 {
-    protected IHashAlgorithmAdapter _algo;
-
-    public HashCalculatorBase(IHashAlgorithmAdapter hashAlgorithm)
-    {
-        _algo = hashAlgorithm;
-    }
-
+    protected virtual IHashAlgorithmAdapter Algorithm => new HashAlgorithmAdapter.BouncyCastle.SHA3();
     protected virtual byte[] ComputeHashByGivenAlgorithm(IHashAlgorithmAdapter hashAlgorithm, byte[] inputBytes)
     {
         return hashAlgorithm.ComputeHash(inputBytes);
@@ -35,7 +29,7 @@ public abstract class HashCalculatorBase : IHashCalculator
         byte[] tmpHash = inputBytes;
         for(int i=0; i < stretchCount; i++)
         {
-            tmpHash = ComputeHashByGivenAlgorithm(_algo, tmpHash);
+            tmpHash = ComputeHashByGivenAlgorithm(Algorithm, tmpHash);
         }
         return tmpHash;
     }
@@ -52,7 +46,7 @@ public abstract class HashCalculatorBase : IHashCalculator
         {
             throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
         }
-        byte[] tmpHash = ComputeHashByGivenAlgorithm(_algo, inputStream);
+        byte[] tmpHash = ComputeHashByGivenAlgorithm(Algorithm, inputStream);
         return ComputeHash(tmpHash, stretchCount-1);
     }
 

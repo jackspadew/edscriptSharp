@@ -10,8 +10,12 @@ public class IHashCalculator_Tests
 {
     public class HashCalculator_ForTest : HashCalculatorBase, IHashCalculator
     {
-        public HashCalculator_ForTest(IHashAlgorithmAdapter hashAlgorithm) : base(hashAlgorithm)
-        {}
+        private IHashAlgorithmAdapter _algorithm;
+        protected override IHashAlgorithmAdapter Algorithm => _algorithm;
+        public HashCalculator_ForTest(IHashAlgorithmAdapter hashAlgorithm)
+        {
+            _algorithm = hashAlgorithm;
+        }
     }
     public static byte[] exampleBytes = {0,1,0,0};
     public static byte[] anotherBytes = {0,0,0,0};
