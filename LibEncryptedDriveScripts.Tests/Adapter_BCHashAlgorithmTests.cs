@@ -9,7 +9,7 @@ public class Adapter_BCHashAlgorithmTests
     public void ComputeHashBySHA3_HashLengthIs512bits()
     {
         IHashAlgorithmAdapter hashAlgo = new HashAlgorithmAdapter.BouncyCastle.SHA3();
-        byte[] hash = hashAlgo.ComputeHash(new byte[0], new byte[0]);
+        byte[] hash = hashAlgo.ComputeHash(new byte[1]);
         Assert.Equal((512/8), hash.Length);
     }
 
@@ -21,7 +21,7 @@ public class Adapter_BCHashAlgorithmTests
     public void ComputeHashBySHA3_HashLengthIsGivenValue(int value)
     {
         IHashAlgorithmAdapter hashAlgo = new HashAlgorithmAdapter.BouncyCastle.SHA3(value);
-        byte[] hash = hashAlgo.ComputeHash(new byte[0], new byte[0]);
+        byte[] hash = hashAlgo.ComputeHash(new byte[1]);
         Assert.Equal((value/8), hash.Length);
     }
 
