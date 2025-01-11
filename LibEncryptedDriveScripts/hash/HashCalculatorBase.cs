@@ -34,13 +34,13 @@ public abstract class HashCalculatorBase : IHashCalculator
         return tmpHash;
     }
 
-    public byte[] ComputeHash(Stream inputStream, byte[] salt, int stretchCount = 1)
+    public virtual byte[] ComputeHash(Stream inputStream, byte[] salt, int stretchCount = 1)
     {
         Stream saltedStream = ToSaltedStream(inputStream, salt);
         return ComputeHash(saltedStream, stretchCount);
     }
 
-    public byte[] ComputeHash(Stream inputStream, int stretchCount = 1)
+    public virtual byte[] ComputeHash(Stream inputStream, int stretchCount = 1)
     {
         if(stretchCount < 1)
         {
