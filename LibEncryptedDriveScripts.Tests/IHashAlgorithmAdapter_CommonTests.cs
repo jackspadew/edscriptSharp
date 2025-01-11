@@ -9,8 +9,6 @@ public class IHashAlgorithmAdapter_CommonTests
 {
     public static byte[] exampleBytes = {0,1,0,0};
     public static byte[] anotherBytes = {0,0,0,0};
-    public static byte[] exampleSalt = {1,1};
-    public static byte[] anotherSalt = {2,2};
     public static IEnumerable<object[]> HashAlgorithObjects()
     {
         yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.SHA3(), "BouncyCastle.SHA3" };
@@ -31,15 +29,6 @@ public class IHashAlgorithmAdapter_CommonTests
         byte[] hashOne = hashAlgo.ComputeHash(exampleBytes);
         byte[] hashTwo = hashAlgo.ComputeHash(anotherBytes);
         Assert.NotEqual(hashOne,hashTwo);
-    }
-
-    [Theory]
-    [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashAnotherSalt_WillReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
-    {
-        byte[] hashSaltOne = hashAlgo.ComputeHash(exampleBytes, exampleSalt);
-        byte[] hashSaltTwo = hashAlgo.ComputeHash(exampleBytes, anotherSalt);
-        Assert.NotEqual(hashSaltOne, hashSaltTwo);
     }
 
     private Stream CreateFilledLargeDataStream(byte oneByte, int lengthMB)
@@ -66,38 +55,6 @@ public class IHashAlgorithmAdapter_CommonTests
 
     [Theory]
     [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByStreamWithSalt_ReturnHash(IHashAlgorithmAdapter hashAlgo, string className)
-    {
-        Stream stream = CreateFilledLargeDataStream(0,10);
-        byte[] hash = hashAlgo.ComputeHash(stream, exampleSalt);
-        stream.Dispose();
-        Assert.NotInRange(hash.Length, 0, 31);
-    }
-
-    [Theory]
-    [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByStreamWithSaltAndWithoutSalt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
-    {
-        Stream streamOne = CreateFilledLargeDataStream(0,10);
-        byte[] hashSalted = hashAlgo.ComputeHash(streamOne, exampleSalt);
-        Stream streamTwo = CreateFilledLargeDataStream(0,10);
-        byte[] hash = hashAlgo.ComputeHash(streamTwo);
-        Assert.NotEqual(hash, hashSalted);
-    }
-
-    [Theory]
-    [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByStreamWithDifferentSalt_ReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
-    {
-        Stream streamOne = CreateFilledLargeDataStream(0,10);
-        byte[] hashSalted = hashAlgo.ComputeHash(streamOne, exampleSalt);
-        Stream streamTwo = CreateFilledLargeDataStream(0,10);
-        byte[] hashAnother = hashAlgo.ComputeHash(streamTwo, anotherSalt);
-        Assert.NotEqual(hashAnother, hashSalted);
-    }
-
-    [Theory]
-    [MemberData(nameof(HashAlgorithObjects))]
     public void ComputeHashByTwoStream_WillReturnAnotherHash(IHashAlgorithmAdapter hashAlgo, string className)
     {
         Stream streamOne = CreateFilledLargeDataStream(0,1);
@@ -116,16 +73,6 @@ public class IHashAlgorithmAdapter_CommonTests
         MemoryStream inputStream = new MemoryStream(exampleBytes);
         byte[] hashFromStream = hashAlgo.ComputeHash(inputStream);
         byte[] hashFromBytes = hashAlgo.ComputeHash(exampleBytes);
-        Assert.Equal(hashFromStream, hashFromBytes);
-    }
-
-    [Theory]
-    [MemberData(nameof(HashAlgorithObjects))]
-    public void ComputeHashByBytesAndStreamWithSalt_ReturnSameHash(IHashAlgorithmAdapter hashAlgo, string className)
-    {
-        MemoryStream inputStream = new MemoryStream(exampleBytes);
-        byte[] hashFromStream = hashAlgo.ComputeHash(inputStream, exampleSalt);
-        byte[] hashFromBytes = hashAlgo.ComputeHash(exampleBytes, exampleSalt);
         Assert.Equal(hashFromStream, hashFromBytes);
     }
 }
