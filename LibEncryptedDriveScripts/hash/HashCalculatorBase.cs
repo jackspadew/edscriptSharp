@@ -47,6 +47,7 @@ public abstract class HashCalculatorBase : IHashCalculator
             throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
         }
         byte[] tmpHash = ComputeHashByGivenAlgorithm(Algorithm, inputStream);
+        if(stretchCount == 1) return tmpHash;
         return ComputeHash(tmpHash, stretchCount-1);
     }
 
