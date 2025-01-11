@@ -108,4 +108,24 @@ public class IHashAlgorithmAdapter_CommonTests
         streamTwo.Dispose();
         Assert.NotEqual(hashOne,hashTwo);
     }
+
+    [Theory]
+    [MemberData(nameof(HashAlgorithObjects))]
+    public void ComputeHashByBytesAndStream_ReturnSameHash(IHashAlgorithmAdapter hashAlgo, string className)
+    {
+        MemoryStream inputStream = new MemoryStream(exampleBytes);
+        byte[] hashFromStream = hashAlgo.ComputeHash(inputStream);
+        byte[] hashFromBytes = hashAlgo.ComputeHash(exampleBytes);
+        Assert.Equal(hashFromStream, hashFromBytes);
+    }
+
+    [Theory]
+    [MemberData(nameof(HashAlgorithObjects))]
+    public void ComputeHashByBytesAndStreamWithSalt_ReturnSameHash(IHashAlgorithmAdapter hashAlgo, string className)
+    {
+        MemoryStream inputStream = new MemoryStream(exampleBytes);
+        byte[] hashFromStream = hashAlgo.ComputeHash(inputStream, exampleSalt);
+        byte[] hashFromBytes = hashAlgo.ComputeHash(exampleBytes, exampleSalt);
+        Assert.Equal(hashFromStream, hashFromBytes);
+    }
 }
