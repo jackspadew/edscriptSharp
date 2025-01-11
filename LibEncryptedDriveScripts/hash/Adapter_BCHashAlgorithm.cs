@@ -5,7 +5,7 @@ using LibEncryptedDriveScripts.HashAlgorithmAdapter;
 using System.IO;
 using Org.BouncyCastle.Crypto.Digests;
 
-public class SHA3 : HashAlgorithmAdapterBase,IHashAlgorithmAdapter
+public class SHA3 : IHashAlgorithmAdapter
 {
     public static int[] LegalBitLengthList = { 224, 256, 384, 512 };
     private int _bitLength = 512;
@@ -24,11 +24,11 @@ public class SHA3 : HashAlgorithmAdapterBase,IHashAlgorithmAdapter
     {
         this.BitLength = bitLength;
     }
-    public override byte[] ComputeHash(byte[] inputBytes)
+    public byte[] ComputeHash(byte[] inputBytes)
     {
         return ComputeBCSHA3Hash(inputBytes);
     }
-    public override byte[] ComputeHash(Stream inputStream)
+    public byte[] ComputeHash(Stream inputStream)
     {
         return ComputeBCSHA3Hash(inputStream);
     }
