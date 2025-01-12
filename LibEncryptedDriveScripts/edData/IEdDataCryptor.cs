@@ -4,6 +4,6 @@ public interface IEdDataCryptor
 {
     byte[] EncryptBytes(byte[] dataBytes, IMultipleKeyExchanger multiKey);
     byte[] DecryptBytes(byte[] dataBytes, IMultipleKeyExchanger multiKey);
-    Stream EncryptStream(Stream dataStream, IMultipleKeyExchanger multiKey);
-    Stream DecryptStream(Stream dataStream, IMultipleKeyExchanger multiKey);
+    void EncryptStream(Stream dataStream, Stream outputStream, IMultipleKeyExchanger multiKey);
+    void DecryptStream(Stream dataStream, Stream outputStream, IMultipleKeyExchanger multiKey);
 }
