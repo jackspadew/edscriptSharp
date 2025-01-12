@@ -11,7 +11,7 @@ public abstract class EdDataWorkerBase : IEdDataExtractor, IEdDataPlanter
         _dbOperator = dbOperator;
         _edCryptor = edCryptor;
     }
-    public virtual void Insert(string index, byte[] data, IMultipleKeyExchanger multiKey, byte[] key)
+    public virtual void Stash(string index, byte[] data, IMultipleKeyExchanger multiKey, byte[] key)
     {
         byte[] encryptedBytes = _edCryptor.EncryptBytes(data, multiKey);
         byte[] indexBytes = GenerateIndexBytes(index);
