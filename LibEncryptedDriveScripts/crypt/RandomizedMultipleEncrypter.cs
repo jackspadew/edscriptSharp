@@ -38,9 +38,7 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
     }
     private List<ISymmetricAlgorithmAdapter> CreateSymmetricAlgorithmComboList(List<ISymmetricAlgorithmAdapter> validAlgorithmList, int seed, int count)
     {
-        Random random = new Random(seed);
-        return Enumerable.Range(1, count)
-                         .Select(_ => validAlgorithmList[random.Next(validAlgorithmList.Count)])
-                         .ToList();
+        var generator = new RandomPickedListGenerator<ISymmetricAlgorithmAdapter>(AlgorithmCandidateList, seed);
+        return generator.Generate(count);
     }
 }
