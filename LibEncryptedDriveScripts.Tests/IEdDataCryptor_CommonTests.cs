@@ -35,4 +35,21 @@ public class IEdDataCryptor_CommonTests
         Assert.NotEqual(exampleBytes, encryptedBytes);
         Assert.Equal(exampleBytes, resultBytes);
     }
+
+    [Theory]
+    [MemberData(nameof(IEdDataCryptorObjects))]
+    public void EncryptAndDecryptByStream_ReturnSourceBytes(IEdDataCryptor cryptor, string className)
+    {
+        var mockMultiKey = GetMockedMultipleKeyExchanger();
+        Stream sourceStream = new MemoryStream(exampleBytes);
+        MemoryStream encryptedStream = new MemoryStream();
+        cryptor.EncryptStream(sourceStream, encryptedStream, mockMultiKey.Object);
+        byte[] encryptedBytes = encryptedStream.ToArray();
+        encryptedStream = new MemoryStream(encryptedBytes);
+        MemoryStream decryptedStream = new MemoryStream();
+        cryptor.DecryptStream(encryptedStream, decryptedStream, mockMultiKey.Object);
+        byte[] resultBytes = decryptedStream.ToArray();
+        Assert.NotEqual(exampleBytes, encryptedBytes);
+        Assert.Equal(exampleBytes, resultBytes);
+    }
 }
