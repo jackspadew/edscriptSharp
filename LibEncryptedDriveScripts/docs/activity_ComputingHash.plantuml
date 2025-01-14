@@ -1,0 +1,31 @@
+@startuml
+|Hash|
+start
+
+if (Need Salt?) then (yes)
+  |Salt|
+  :combine __input__ and __salt__;
+else (no)
+endif
+|Hash|
+#palegreen:calc hash;
+
+if (Need Stretching?) then (yes)
+  |Stretching|
+  repeat :Stretching Loop;
+    if (Need lye?) then (yes)
+      |Lye|
+      :combine __hashed__ and __lye__;
+    else (no)
+    endif
+    |Stretching|
+    #palegreen:calc hash;
+  repeat while (completed the Stretching count?) is (no) not (yes)
+else (no)
+  |Hash|
+  stop
+endif
+|Hash|
+
+stop
+@enduml
