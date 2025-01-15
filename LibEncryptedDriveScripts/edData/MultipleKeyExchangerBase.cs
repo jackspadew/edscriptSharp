@@ -1,5 +1,7 @@
 namespace LibEncryptedDriveScripts.EdData;
 
+using LibEncryptedDriveScripts.Converter;
+
 public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
 {
     public int KeySeed { get; set; }
@@ -7,14 +9,36 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public int AlgorithmSeed { get; set; }
     public byte[] Key { get; set; } = new byte[32];
     public byte[] IV { get; set; } = new byte[16];
+    public static int BytesLength = (32 * 3) + 32 + 16;
 
     public byte[] GetBytes()
     {
-        throw new NotImplementedException();
+        List<byte[]> list = new();
+        list.Add(BitConverter.GetBytes(KeySeed));
+        list.Add(BitConverter.GetBytes(IVSeed));
+        list.Add(BitConverter.GetBytes(AlgorithmSeed));
+        list.Add(Key);
+        list.Add(IV);
+        var converter = new BytesListToCombinedBytesConverter();
+        return converter.Convert(list);
     }
 
     public void SetBytes(byte[] inputBytes)
     {
-        throw new NotImplementedException();
+        if(inputBytes.Length != BytesLength)
+        {
+            throw new ArgumentOutOfRangeException("The length of the given byte[] does not match the legal length.");
+        }
+        int currentPos = 0;
+        this.KeySeed = BitConverter.ToInt32(inputBytes, currentPos);
+        currentPos += 32;
+        this.IVSeed = BitConverter.ToInt32(inputBytes, currentPos);
+        currentPos += 32;
+        this.AlgorithmSeed = BitConverter.ToInt32(inputBytes, currentPos);
+        currentPos += 32;
+        Array.Copy(inputBytes, currentPos, this.Key, 0, 32);
+        currentPos += 32;
+        Array.Copy(inputBytes, currentPos, this.IV, 0, 16);
+        currentPos += 16;
     }
 }
