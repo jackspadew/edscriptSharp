@@ -9,7 +9,7 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public int AlgorithmSeed { get; set; }
     public byte[] Key { get; set; } = new byte[32];
     public byte[] IV { get; set; } = new byte[16];
-    public static int BytesLength = (32 * 3) + 32 + 16;
+    public static int BytesLength = (4 * 3) + 32 + 16;
 
     public byte[] GetBytes()
     {
@@ -31,11 +31,11 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         }
         int currentPos = 0;
         this.KeySeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 32;
+        currentPos += 4;
         this.IVSeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 32;
+        currentPos += 4;
         this.AlgorithmSeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 32;
+        currentPos += 4;
         Array.Copy(inputBytes, currentPos, this.Key, 0, 32);
         currentPos += 32;
         Array.Copy(inputBytes, currentPos, this.IV, 0, 16);
