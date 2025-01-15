@@ -8,6 +8,7 @@ public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlan
 {
     private readonly int MultipleEncryptionCount = 1000;
     private readonly int HashStretchingCount = 1000;
+    private readonly string InitialMultipleKeyIndexName = "__InitialMultiKey";
     private IDatabaseOperator _dbOperator;
     protected override IDatabaseOperator DbOperator { get => _dbOperator; }
     private IEdDataCryptor _edCryptor;
@@ -22,12 +23,19 @@ public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlan
         _multipleKey = new InitialMultipleKeyExchanger();
         _edCryptor = new EdDataCryptor(MultipleEncryptionCount);
         _hashCalculator = new RandomizedHashCalculator(new byte[64], MultipleKey.HashSeed);
+        StashInitialMultipleKeyIfNotExists();
     }
     protected override byte[] GenerateIndexBytes(string name)
     {
         byte[] nameBytes = Encoding.UTF8.GetBytes(name);
         byte[] rawIndexBytes = nameBytes;
         return _hashCalculator.ComputeHash(rawIndexBytes, HashStretchingCount);
+    }
+    private void StashInitialMultipleKeyIfNotExists()
+    {
+        if(IsIndexExists(InitialMultipleKeyIndexName)) return;
+        var stashedMultipleKey = new StashedMultipleKeyExchanger();
+        Stash(InitialMultipleKeyIndexName, stashedMultipleKey.GetBytes());
     }
 }
 
