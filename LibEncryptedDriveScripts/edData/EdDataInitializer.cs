@@ -1,6 +1,7 @@
 namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
+using LibEncryptedDriveScripts.HashCalculator;
 
 public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlanter
 {
@@ -11,12 +12,13 @@ public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlan
     protected override IEdDataCryptor EdCryptor { get => _edCryptor; }
     private IMultipleKeyExchanger _multipleKey;
     protected override IMultipleKeyExchanger MultipleKey { get => _multipleKey; }
-
+    private IHashCalculator _hashCalculator;
     public EdDataInitializer(string dbPath)
     {
         _dbOperator = new EdDatabaseOperator(dbPath, true);
         _multipleKey = new InitialMultipleKeyExchanger();
         _edCryptor = new EdDataCryptor(MultipleEncryptionCount);
+        _hashCalculator = new RandomizedHashCalculator(new byte[64], MultipleKey.HashSeed);
     }
     protected override byte[] GenerateIndexBytes(string name)
     {
