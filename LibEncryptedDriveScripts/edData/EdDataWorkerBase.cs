@@ -21,5 +21,10 @@ public abstract class EdDataWorkerBase : IEdDataExtractor, IEdDataPlanter
         byte[] sourceBytes = EdCryptor.DecryptBytes(stashedBytes, MultipleKey);
         return sourceBytes;
     }
+    public bool IsIndexExists(string index)
+    {
+        byte[] indexBytes = GenerateIndexBytes(index);
+        return DbOperator.IsIndexExists(indexBytes);
+    }
     protected abstract byte[] GenerateIndexBytes(string name);
 }
