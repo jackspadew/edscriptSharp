@@ -61,7 +61,7 @@ public abstract class HashCalculatorBase : IHashCalculator
         byte[] tmpHash = hashBytes;
         for(int i=1; i < stretchCount; i++)
         {
-            tmpHash = ComputeHashByGivenAlgorithm(Algorithm, hashBytes);
+            tmpHash = ComputeHashByGivenAlgorithm(Algorithm, tmpHash);
         }
         return tmpHash;
     }
