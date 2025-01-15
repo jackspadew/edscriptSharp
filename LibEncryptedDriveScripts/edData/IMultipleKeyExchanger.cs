@@ -7,6 +7,7 @@ public interface IMultipleKeyExchanger
     int KeySeed {get; set;}
     int IVSeed {get; set;}
     int AlgorithmSeed {get; set;}
+    int HashSeed {get; set;}
     byte[] Key {get; set;}
     byte[] IV {get; set;}
 }
