@@ -13,6 +13,7 @@ public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlan
     private IMultipleKeyExchanger _multipleKey;
     protected override IMultipleKeyExchanger MultipleKey { get => _multipleKey; }
     private IHashCalculator _hashCalculator;
+
     public EdDataInitializer(string dbPath)
     {
         _dbOperator = new EdDatabaseOperator(dbPath, true);
