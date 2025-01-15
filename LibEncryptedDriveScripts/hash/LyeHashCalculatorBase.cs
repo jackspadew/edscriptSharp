@@ -15,9 +15,10 @@ public abstract class LyeHashCalculatorBase : HashCalculatorBase, IHashCalculato
     }
     protected virtual byte[] LyeTreatment(byte[] hashBytes)
     {
-        byte[] result = new byte[hashBytes.Length + LyeBytes.Length];
+        byte[] lyeBytes = this.LyeBytes;
+        byte[] result = new byte[hashBytes.Length + lyeBytes.Length];
         Array.Copy(hashBytes, 0, result, 0, hashBytes.Length);
-        Array.Copy(LyeBytes, 0, result, hashBytes.Length, LyeBytes.Length);
+        Array.Copy(lyeBytes, 0, result, hashBytes.Length, lyeBytes.Length);
         return result;
     }
 }
