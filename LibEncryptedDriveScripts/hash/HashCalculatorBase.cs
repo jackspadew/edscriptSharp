@@ -22,15 +22,9 @@ public abstract class HashCalculatorBase : IHashCalculator
 
     public virtual byte[] ComputeHash(byte[] inputBytes, int stretchCount = 1)
     {
-        if(stretchCount < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
-        }
-        byte[] tmpHash = inputBytes;
-        for(int i=0; i < stretchCount; i++)
-        {
-            tmpHash = ComputeHashByGivenAlgorithm(Algorithm, tmpHash);
-        }
+        CheckStretchingCount(stretchCount);
+        byte[] tmpHash = ComputeHashByGivenAlgorithm(Algorithm, inputBytes);
+        tmpHash = Stretching(tmpHash, stretchCount);
         return tmpHash;
     }
 
@@ -42,13 +36,10 @@ public abstract class HashCalculatorBase : IHashCalculator
 
     public virtual byte[] ComputeHash(Stream inputStream, int stretchCount = 1)
     {
-        if(stretchCount < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
-        }
+        CheckStretchingCount(stretchCount);
         byte[] tmpHash = ComputeHashByGivenAlgorithm(Algorithm, inputStream);
-        if(stretchCount == 1) return tmpHash;
-        return ComputeHash(tmpHash, stretchCount-1);
+        tmpHash = Stretching(tmpHash, stretchCount);
+        return tmpHash;
     }
 
     protected virtual byte[] ToSaltedBytes(byte[] inputBytes, byte[] salt)
@@ -64,5 +55,21 @@ public abstract class HashCalculatorBase : IHashCalculator
     {
         SaltStream saltStream = new(inputStream, salt, true);
         return saltStream;
+    }
+    protected virtual byte[] Stretching(byte[] hashBytes, int stretchCount)
+    {
+        byte[] tmpHash = hashBytes;
+        for(int i=1; i < stretchCount; i++)
+        {
+            tmpHash = ComputeHashByGivenAlgorithm(Algorithm, tmpHash);
+        }
+        return tmpHash;
+    }
+    private void CheckStretchingCount(int stretchCount)
+    {
+        if(stretchCount < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
+        }
     }
 }
