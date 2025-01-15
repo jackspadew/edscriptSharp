@@ -28,3 +28,22 @@ public class RandomBlendConverter : IConverter<byte[], byte[]>
         return buffer;
     }
 }
+
+public class BytesListToCombinedBytesConverter : IConverter<List<byte[]>, byte[]>
+{
+    public byte[] Convert(List<byte[]> input)
+    {
+        return BytesListToCombinedBytes(input);
+    }
+
+    private byte[] BytesListToCombinedBytes(List<byte[]> bytesList)
+    {
+        List<byte> combinedList = new List<byte>();
+        foreach (var byteArray in bytesList)
+        {
+            combinedList.AddRange(byteArray);
+        }
+        byte[] result = combinedList.ToArray();
+        return result;
+    }
+}
