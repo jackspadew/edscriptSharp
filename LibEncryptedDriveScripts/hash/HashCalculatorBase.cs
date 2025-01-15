@@ -22,10 +22,7 @@ public abstract class HashCalculatorBase : IHashCalculator
 
     public virtual byte[] ComputeHash(byte[] inputBytes, int stretchCount = 1)
     {
-        if(stretchCount < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
-        }
+        CheckStretchingCount(stretchCount);
         byte[] tmpHash = inputBytes;
         for(int i=0; i < stretchCount; i++)
         {
@@ -42,10 +39,7 @@ public abstract class HashCalculatorBase : IHashCalculator
 
     public virtual byte[] ComputeHash(Stream inputStream, int stretchCount = 1)
     {
-        if(stretchCount < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
-        }
+        CheckStretchingCount(stretchCount);
         byte[] tmpHash = ComputeHashByGivenAlgorithm(Algorithm, inputStream);
         if(stretchCount == 1) return tmpHash;
         return ComputeHash(tmpHash, stretchCount-1);
@@ -64,5 +58,12 @@ public abstract class HashCalculatorBase : IHashCalculator
     {
         SaltStream saltStream = new(inputStream, salt, true);
         return saltStream;
+    }
+    private void CheckStretchingCount(int stretchCount)
+    {
+        if(stretchCount < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(stretchCount), "The number of stretches must be at least once.");
+        }
     }
 }
