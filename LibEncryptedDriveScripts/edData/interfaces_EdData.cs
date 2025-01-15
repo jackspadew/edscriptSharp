@@ -2,10 +2,10 @@ namespace LibEncryptedDriveScripts.EdData;
 
 public interface IEdDataPlanter
 {
-    void Stash(string index, byte[] data, IMultipleKeyExchanger multiKey, byte[] key);
+    void Stash(string index, byte[] data);
 }
 
 public interface IEdDataExtractor
 {
-    byte[] Extract(string index, IMultipleKeyExchanger multiKey, byte[] key);
+    byte[] Extract(string index);
 }

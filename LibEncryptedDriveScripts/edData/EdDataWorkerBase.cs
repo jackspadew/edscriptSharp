@@ -4,24 +4,21 @@ using LibEncryptedDriveScripts.Database;
 
 public abstract class EdDataWorkerBase : IEdDataExtractor, IEdDataPlanter
 {
-    private IDatabaseOperator _dbOperator;
-    private IEdDataCryptor _edCryptor;
-    public EdDataWorkerBase(IDatabaseOperator dbOperator, IEdDataCryptor edCryptor)
+    protected abstract IDatabaseOperator DbOperator {get;}
+    protected abstract IEdDataCryptor EdCryptor {get;}
+    protected abstract IMultipleKeyExchanger MultipleKey {get;}
+
+    public virtual void Stash(string index, byte[] data)
     {
-        _dbOperator = dbOperator;
-        _edCryptor = edCryptor;
-    }
-    public virtual void Stash(string index, byte[] data, IMultipleKeyExchanger multiKey, byte[] key)
-    {
-        byte[] encryptedBytes = _edCryptor.EncryptBytes(data, multiKey);
+        byte[] encryptedBytes = EdCryptor.EncryptBytes(data, MultipleKey);
         byte[] indexBytes = GenerateIndexBytes(index);
-        _dbOperator.InsertData(indexBytes, encryptedBytes);
+        DbOperator.InsertData(indexBytes, encryptedBytes);
     }
-    public virtual byte[] Extract(string index, IMultipleKeyExchanger multiKey, byte[] key)
+    public virtual byte[] Extract(string index)
     {
         byte[] indexBytes = GenerateIndexBytes(index);
-        byte[] stashedBytes = _dbOperator.GetDataBytes(indexBytes);
-        byte[] sourceBytes = _edCryptor.DecryptBytes(stashedBytes, multiKey);
+        byte[] stashedBytes = DbOperator.GetDataBytes(indexBytes);
+        byte[] sourceBytes = EdCryptor.DecryptBytes(stashedBytes, MultipleKey);
         return sourceBytes;
     }
     protected abstract byte[] GenerateIndexBytes(string name);
