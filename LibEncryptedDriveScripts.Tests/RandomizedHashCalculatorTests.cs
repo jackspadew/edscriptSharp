@@ -87,4 +87,19 @@ public class RandomizedHashCalculator_Tests
         byte[] hashBasic = basicHashCalculator.ComputeHash(exampleBytes, exampleSalt, 1);
         Assert.Equal(hashBasic, hashRandomized);
     }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void GenerateHashWithStretchingWithoutLye_ReturnSameHash(int seed)
+    {
+        var randomizedHashCalculator = new RandomizedHashCalculator(seed);
+        var basicHashCalculator = new BasicHashCalculator();
+        byte[] hashRandomized = randomizedHashCalculator.ComputeHash(exampleBytes, StandardStretchingCount);
+        byte[] hashBasic = basicHashCalculator.ComputeHash(exampleBytes, StandardStretchingCount);
+        Assert.Equal(hashBasic, hashRandomized);
+    }
 }
