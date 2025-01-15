@@ -2,10 +2,12 @@ namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
+using System.Text;
 
 public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlanter
 {
     private readonly int MultipleEncryptionCount = 1000;
+    private readonly int HashStretchingCount = 1000;
     private IDatabaseOperator _dbOperator;
     protected override IDatabaseOperator DbOperator { get => _dbOperator; }
     private IEdDataCryptor _edCryptor;
@@ -23,7 +25,9 @@ public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlan
     }
     protected override byte[] GenerateIndexBytes(string name)
     {
-        throw new NotImplementedException();
+        byte[] nameBytes = Encoding.UTF8.GetBytes(name);
+        byte[] rawIndexBytes = nameBytes;
+        return _hashCalculator.ComputeHash(rawIndexBytes, HashStretchingCount);
     }
 }
 
