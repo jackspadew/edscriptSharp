@@ -3,7 +3,7 @@ namespace LibEncryptedDriveScripts.HashCalculator;
 using LibEncryptedDriveScripts.HashAlgorithmAdapter;
 using LibEncryptedDriveScripts.KeyGenerator;
 
-public class RandomizedHashCalculator : HashCalculatorBase, IHashCalculator
+public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator
 {
     protected static List<IHashAlgorithmAdapter> AvailableAlgorithmList = new(){
         new HashAlgorithmAdapter.BouncyCastle.SHA3(),
