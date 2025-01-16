@@ -27,4 +27,8 @@ public abstract class EdDataWorkerBase : IEdDataWorker
         return DbOperator.IsIndexExists(indexBytes);
     }
     protected abstract byte[] GenerateIndexBytes(string name);
+    public virtual void SetMultipleKey(IMultipleKeyExchanger multiKey)
+    {
+        multiKey.CopyTo(MultipleKey);
+    }
 }
