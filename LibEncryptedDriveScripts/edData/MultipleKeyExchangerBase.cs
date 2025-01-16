@@ -10,7 +10,7 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public int HashSeed { get; set; }
     public byte[] Key { get; set; } = new byte[32];
     public byte[] IV { get; set; } = new byte[16];
-    public static int BytesLength = (4 * 3) + 32 + 16;
+    public static int BytesLength = (4 * 4) + 32 + 16;
 
     public byte[] GetBytes()
     {
