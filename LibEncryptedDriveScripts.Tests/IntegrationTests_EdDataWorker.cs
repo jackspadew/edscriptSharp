@@ -14,6 +14,7 @@ public class IntegrationTests_EdDataWorker
         }
     }
     private static string dbPath = "IntegrationTests_EdDataWorker.db";
+    private static string exampleDataName = "example";
 
     [Fact]
     public void CreateWorker_ReturnEdDataKeyMakingWorker()
@@ -23,5 +24,18 @@ public class IntegrationTests_EdDataWorker
         var createdWorker = initWorker.NextWorker();
         bool IsEdDataWorker = createdWorker is EdDataKeyMakingWorker;
         Assert.True(IsEdDataWorker);
+    }
+
+    [Fact]
+    public void StashAndExtractByEdDataKeyMakingWorker_ReturnSameBytes()
+    {
+        DeleteFileIfExists(dbPath);
+        var initWorker = new EdDataInitialWorker(dbPath);
+        var keymakeWorker = initWorker.NextWorker();
+        var exampleMultiKey = new KeyMakerMultipleKeyExchanger();
+        byte[] exampleMultiKeyBytes = exampleMultiKey.GetBytes();
+        keymakeWorker.Stash(exampleDataName, exampleMultiKeyBytes);
+        byte[] extractKeyBytes = keymakeWorker.Extract(exampleDataName);
+        Assert.Equal(exampleMultiKeyBytes, extractKeyBytes);
     }
 }
