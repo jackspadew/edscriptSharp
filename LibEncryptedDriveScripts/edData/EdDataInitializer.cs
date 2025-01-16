@@ -4,7 +4,7 @@ using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
 using System.Text;
 
-public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlanter
+public class EdDataInitialWorker : EdDataWorkerBase, IEdDataExtractor, IEdDataPlanter
 {
     private readonly int MultipleEncryptionCount = 1000;
     private readonly int HashStretchingCount = 1000;
@@ -17,7 +17,7 @@ public class EdDataInitializer : EdDataWorkerBase, IEdDataExtractor, IEdDataPlan
     protected override IMultipleKeyExchanger MultipleKey { get => _multipleKey; }
     private IHashCalculator _hashCalculator;
 
-    public EdDataInitializer(string dbPath)
+    public EdDataInitialWorker(string dbPath)
     {
         _dbOperator = new EdDatabaseOperator(dbPath, true);
         _multipleKey = new InitialMultipleKeyExchanger();
