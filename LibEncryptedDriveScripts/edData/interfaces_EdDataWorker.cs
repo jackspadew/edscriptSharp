@@ -6,3 +6,8 @@ public interface IEdDataWorker
     byte[] Extract(string index);
     void SetMultipleKey(IMultipleKeyExchanger multiKey);
 }
+
+public interface IEdDataWorkerFactory
+{
+    IEdDataWorker NextWorker();
+}
