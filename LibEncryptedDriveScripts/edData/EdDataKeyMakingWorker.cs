@@ -2,6 +2,7 @@ namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
+using System.Text;
 
 public class EdDataKeyMakingWorker : EdDataWorkerBase, IEdDataWorker
 {
@@ -23,7 +24,9 @@ public class EdDataKeyMakingWorker : EdDataWorkerBase, IEdDataWorker
     }
     protected override byte[] GenerateIndexBytes(string name)
     {
-        throw new NotImplementedException();
+        byte[] nameBytes = Encoding.UTF8.GetBytes(name);
+        byte[] rawIndexBytes = nameBytes;
+        return _hashCalculator.ComputeHash(rawIndexBytes, HashStretchingCount);
     }
 }
 
