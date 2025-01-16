@@ -8,8 +8,28 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public int IVSeed { get; set; }
     public int AlgorithmSeed { get; set; }
     public int HashSeed { get; set; }
-    public byte[] Key { get; set; } = new byte[32];
-    public byte[] IV { get; set; } = new byte[16];
+    protected byte[] _key = new byte[32];
+    public byte[] Key {
+        get => _key;
+        set {
+            if(value.Length != _key.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            _key = (byte[])value.Clone();
+        }
+        }
+    protected byte[] _iv = new byte[16];
+    public byte[] IV {
+        get => _iv;
+        set {
+            if(value.Length != _iv.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            _iv = (byte[])value.Clone();
+        }
+        }
     public static int BytesLength = (4 * 4) + 32 + 16;
 
     public byte[] GetBytes()
@@ -44,5 +64,15 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         currentPos += 32;
         Array.Copy(inputBytes, currentPos, this.IV, 0, 16);
         currentPos += 16;
+    }
+
+    public void CopyTo(IMultipleKeyExchanger targetMultiKey)
+    {
+        targetMultiKey.KeySeed = this.KeySeed;
+        targetMultiKey.IVSeed = this.IVSeed;
+        targetMultiKey.AlgorithmSeed = this.AlgorithmSeed;
+        targetMultiKey.HashSeed = this.HashSeed;
+        targetMultiKey.Key = this.Key;
+        targetMultiKey.IV = this.IV;
     }
 }

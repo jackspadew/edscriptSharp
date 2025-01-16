@@ -2,7 +2,7 @@ namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
 
-public abstract class EdDataWorkerBase : IEdDataExtractor, IEdDataPlanter
+public abstract class EdDataWorkerBase : IEdDataWorker
 {
     protected abstract IDatabaseOperator DbOperator {get;}
     protected abstract IEdDataCryptor EdCryptor {get;}
@@ -27,4 +27,8 @@ public abstract class EdDataWorkerBase : IEdDataExtractor, IEdDataPlanter
         return DbOperator.IsIndexExists(indexBytes);
     }
     protected abstract byte[] GenerateIndexBytes(string name);
+    public virtual void SetMultipleKey(IMultipleKeyExchanger multiKey)
+    {
+        multiKey.CopyTo(MultipleKey);
+    }
 }

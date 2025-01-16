@@ -4,9 +4,9 @@ using Xunit;
 using LibEncryptedDriveScripts.EdData;
 using LibEncryptedDriveScripts.Database;
 
-public class EdDataInitializer_Tests
+public class EdDataInitialWorker_Tests
 {
-    public static string dbPath = "EdDataInitializer_Tests.db";
+    public static string dbPath = "EdDataInitialWorker_Tests.db";
 
     private IDatabaseOperator GetDatabaseOperator()
     {
@@ -25,7 +25,7 @@ public class EdDataInitializer_Tests
     public void CreateObject_InitialMultiKeyIsExists()
     {
         DeleteFileIfExists(dbPath);
-        var edWorker = new EdDataInitializer(dbPath);
+        var edWorker = new EdDataInitialWorker(dbPath);
         bool IsInitialMultiKeyExists = edWorker.IsIndexExists("__InitialMultiKey");
         Assert.True(IsInitialMultiKeyExists);
     }
