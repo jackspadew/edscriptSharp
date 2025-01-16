@@ -4,7 +4,7 @@ using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
 using System.Text;
 
-public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
+public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorkerFactory
 {
     private readonly int MultipleEncryptionCount = 1000;
     private readonly int HashStretchingCount = 1000;
@@ -36,6 +36,20 @@ public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
         if(IsIndexExists(InitialMultipleKeyIndexName)) return;
         var stashedMultipleKey = new KeyMakerMultipleKeyExchanger();
         Stash(InitialMultipleKeyIndexName, stashedMultipleKey.GetBytes());
+    }
+    private IMultipleKeyExchanger ExtractInitialMultipleKey()
+    {
+        byte[] initMultiKeyBytes = Extract(InitialMultipleKeyIndexName);
+        var initMultiKey = new KeyMakerMultipleKeyExchanger();
+        initMultiKey.SetBytes(initMultiKeyBytes);
+        return initMultiKey;
+    }
+    public IEdDataWorker NextWorker()
+    {
+        var worker = new EdDataKeyMakingWorker();
+        var initialMultiKey = ExtractInitialMultipleKey();
+        worker.SetMultipleKey(initialMultiKey);
+        return worker;
     }
 }
 
