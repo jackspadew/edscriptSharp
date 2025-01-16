@@ -2,7 +2,7 @@ namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
 
-public abstract class EdDataWorkerBase : IEdDataExtractor, IEdDataPlanter
+public abstract class EdDataWorkerBase : IEdDataWorker
 {
     protected abstract IDatabaseOperator DbOperator {get;}
     protected abstract IEdDataCryptor EdCryptor {get;}

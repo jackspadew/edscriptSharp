@@ -4,7 +4,7 @@ using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
 using System.Text;
 
-public class EdDataInitialWorker : EdDataWorkerBase, IEdDataExtractor, IEdDataPlanter
+public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
 {
     private readonly int MultipleEncryptionCount = 1000;
     private readonly int HashStretchingCount = 1000;

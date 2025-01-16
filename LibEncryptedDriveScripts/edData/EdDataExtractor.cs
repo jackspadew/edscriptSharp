@@ -2,7 +2,7 @@ namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
 
-public class EdDataExtractor : EdDataWorkerBase, IEdDataExtractor, IEdDataPlanter
+public class EdDataExtractor : EdDataWorkerBase, IEdDataWorker
 {
     protected override IDatabaseOperator DbOperator => throw new NotImplementedException();
 
