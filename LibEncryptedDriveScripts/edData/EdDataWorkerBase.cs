@@ -31,4 +31,8 @@ public abstract class EdDataWorkerBase : IEdDataWorker
     {
         multiKey.CopyTo(MultipleKey);
     }
+    public void SetSecretKey(byte[] key)
+    {
+        MultipleKey.Key = key;
+    }
 }
