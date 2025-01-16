@@ -46,7 +46,7 @@ public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorke
     }
     public IEdDataWorker NextWorker()
     {
-        var worker = new EdDataKeyMakingWorker();
+        var worker = new EdDataKeyMakingWorker(DbOperator);
         var initialMultiKey = ExtractInitialMultipleKey();
         worker.SetMultipleKey(initialMultiKey);
         return worker;
