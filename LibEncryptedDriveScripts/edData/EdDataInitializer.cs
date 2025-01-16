@@ -34,7 +34,7 @@ public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
     private void StashInitialMultipleKeyIfNotExists()
     {
         if(IsIndexExists(InitialMultipleKeyIndexName)) return;
-        var stashedMultipleKey = new StashedMultipleKeyExchanger();
+        var stashedMultipleKey = new KeyMakerMultipleKeyExchanger();
         Stash(InitialMultipleKeyIndexName, stashedMultipleKey.GetBytes());
     }
 }

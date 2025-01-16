@@ -2,7 +2,7 @@ namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Database;
 
-public class EdDataExtractor : EdDataWorkerBase, IEdDataWorker
+public class EdDataKeyMakingWorker : EdDataWorkerBase, IEdDataWorker
 {
     protected override IDatabaseOperator DbOperator => throw new NotImplementedException();
 
@@ -16,5 +16,5 @@ public class EdDataExtractor : EdDataWorkerBase, IEdDataWorker
     }
 }
 
-public class StashedMultipleKeyExchanger : MultipleKeyExchangerBase, IMultipleKeyExchanger
+public class KeyMakerMultipleKeyExchanger : MultipleKeyExchangerBase, IMultipleKeyExchanger
 {}
