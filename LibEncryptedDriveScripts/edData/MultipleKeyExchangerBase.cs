@@ -8,8 +8,28 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public int IVSeed { get; set; }
     public int AlgorithmSeed { get; set; }
     public int HashSeed { get; set; }
-    public byte[] Key { get; set; } = new byte[32];
-    public byte[] IV { get; set; } = new byte[16];
+    protected byte[] _key = new byte[32];
+    public byte[] Key {
+        get => _key;
+        set {
+            if(value.Length != _key.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            _key = (byte[])value.Clone();
+        }
+        }
+    protected byte[] _iv = new byte[16];
+    public byte[] IV {
+        get => _iv;
+        set {
+            if(value.Length != _iv.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            _iv = (byte[])value.Clone();
+        }
+        }
     public static int BytesLength = (4 * 4) + 32 + 16;
 
     public byte[] GetBytes()
