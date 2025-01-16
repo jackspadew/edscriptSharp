@@ -126,4 +126,26 @@ public class IHashCalculator_Tests
         byte[] hashAnother = hashCalculator.ComputeHash(exampleStream, exampleSalt, stretchCount);
         Assert.Equal(hash, hashAnother);
     }
+
+    [Theory]
+    [MemberData(nameof(IHashCalculatorObjects))]
+    public void ComputeHashAnotherStretchingCount_ReturnAnotherHash(IHashCalculator hashCalculator, string className)
+    {
+        List<byte[]> list = new();
+        for(int i=1; i<1000; i++)
+        {
+            byte[] hash = hashCalculator.ComputeHash(exampleBytes, i);
+            list.Add(hash);
+        }
+        foreach(var value1 in list)
+        {
+            foreach(var value2 in list)
+            {
+                if(!ReferenceEquals(value1,value2))
+                {
+                    Assert.NotEqual(value1, value2);
+                }
+            }
+        }
+    }
 }
