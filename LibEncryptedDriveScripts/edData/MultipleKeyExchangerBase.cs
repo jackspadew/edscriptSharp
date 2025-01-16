@@ -45,4 +45,14 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         Array.Copy(inputBytes, currentPos, this.IV, 0, 16);
         currentPos += 16;
     }
+
+    public void CopyTo(IMultipleKeyExchanger targetMultiKey)
+    {
+        targetMultiKey.KeySeed = this.KeySeed;
+        targetMultiKey.IVSeed = this.IVSeed;
+        targetMultiKey.AlgorithmSeed = this.AlgorithmSeed;
+        targetMultiKey.HashSeed = this.HashSeed;
+        targetMultiKey.Key = this.Key;
+        targetMultiKey.IV = this.IV;
+    }
 }
