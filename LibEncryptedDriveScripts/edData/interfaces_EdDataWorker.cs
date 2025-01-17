@@ -5,8 +5,3 @@ public interface IEdDataWorker
     void Stash(string index, byte[] data);
     byte[] Extract(string index);
 }
-
-public interface IEdDataWorkerFactory
-{
-    IEdDataWorker NextWorker();
-}
