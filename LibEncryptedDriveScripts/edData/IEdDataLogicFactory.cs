@@ -1,6 +1,5 @@
 namespace LibEncryptedDriveScripts.EdData;
 
-using LibEncryptedDriveScripts.SymmetricEncrypter;
 using LibEncryptedDriveScripts.Database;
 
 public interface IEdDataLogicFactory
