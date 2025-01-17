@@ -4,52 +4,26 @@ using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
 using System.Text;
 
-public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorkerFactory
+public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
 {
-    private readonly int MultipleEncryptionCount = 1000;
-    private readonly int HashStretchingCount = 1000;
     private readonly string InitialMultipleKeyIndexName = "__InitialMultiKey";
-    private IDatabaseOperator _dbOperator;
-    protected override IDatabaseOperator DbOperator { get => _dbOperator; }
-    private IEdDataCryptor _edCryptor;
-    protected override IEdDataCryptor EdCryptor { get => _edCryptor; }
-    private IMultipleKeyExchanger _multipleKey;
-    protected override IMultipleKeyExchanger MultipleKey { get => _multipleKey; }
-    private IHashCalculator _hashCalculator;
 
-    public EdDataInitialWorker(string dbPath)
+    public EdDataInitialWorker(IEdDataLogicFactory logicFactory) : base(logicFactory)
     {
-        _dbOperator = new EdDatabaseOperator(dbPath, true);
-        _multipleKey = new InitialMultipleKeyExchanger();
-        _edCryptor = new EdDataCryptor(MultipleEncryptionCount);
-        _hashCalculator = new RandomizedHashCalculator(new byte[64], MultipleKey.HashSeed);
         StashInitialMultipleKeyIfNotExists();
-    }
-    protected override byte[] GenerateIndexBytes(string name)
-    {
-        byte[] nameBytes = Encoding.UTF8.GetBytes(name);
-        byte[] rawIndexBytes = nameBytes;
-        return _hashCalculator.ComputeHash(rawIndexBytes, HashStretchingCount);
     }
     private void StashInitialMultipleKeyIfNotExists()
     {
         if(IsIndexExists(InitialMultipleKeyIndexName)) return;
-        var stashedMultipleKey = new KeyMakerMultipleKeyExchanger();
+        var stashedMultipleKey = _logicFactory.CreateMultipleKeyExchanger();
         Stash(InitialMultipleKeyIndexName, stashedMultipleKey.GetBytes());
     }
     private IMultipleKeyExchanger ExtractInitialMultipleKey()
     {
         byte[] initMultiKeyBytes = Extract(InitialMultipleKeyIndexName);
-        var initMultiKey = new KeyMakerMultipleKeyExchanger();
+        var initMultiKey = _logicFactory.CreateMultipleKeyExchanger();
         initMultiKey.SetBytes(initMultiKeyBytes);
         return initMultiKey;
-    }
-    public IEdDataWorker NextWorker()
-    {
-        var worker = new EdDataKeyMakingWorker(DbOperator);
-        var initialMultiKey = ExtractInitialMultipleKey();
-        worker.SetMultipleKey(initialMultiKey);
-        return worker;
     }
 }
 
