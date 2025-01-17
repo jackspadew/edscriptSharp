@@ -10,4 +10,5 @@ public interface IEdDataLogicFactory
     IMultipleKeyExchanger CreateMultipleKeyExchangerGeneratedRandomly();
     IMultipleKeyExchanger CreateMultipleKeyExchangerBlendedWithSecretKey();
     IEdDataWorker CreateWorker();
+    IEdDataHashCalculator CreateHashCalculator();
 }
