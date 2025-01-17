@@ -6,8 +6,7 @@ public interface IEdDataLogicFactory
 {
     IEdDataCryptor CreateCryptor();
     IDatabaseOperator CreateDatabaseOperator();
-    IMultipleKeyExchanger CreateMultipleKeyExchangerGeneratedRandomly();
-    IMultipleKeyExchanger CreateMultipleKeyExchangerBlendedWithSecretKey();
+    IMultipleKeyExchanger CreateMultipleKeyExchanger();
     IEdDataWorker CreateWorker();
     IEdDataHashCalculator CreateHashCalculator();
 }
