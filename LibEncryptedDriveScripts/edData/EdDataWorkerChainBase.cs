@@ -16,13 +16,19 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             _depth = worker.Depth + 1;
         }
     }
-    public void Stash(string index, byte[] data)
+    public override void Stash(string index, byte[] data)
     {
-        throw new NotImplementedException();
+        _parentWorker.Stash(index, new byte[0]);
+        ExtractOwnMultipleKey(index);
+        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger();
+        childMultiKey.Randomize();
+        byte[] childMultiKeyBytes = childMultiKey.GetBytes();
+        base.Stash(index, childMultiKeyBytes);
     }
-    public byte[] Extract(string index)
+    public override byte[] Extract(string index)
     {
-        throw new NotImplementedException();
+        ExtractOwnMultipleKey(index);
+        return base.Extract(index);
     }
     protected virtual void ExtractOwnMultipleKey(string index)
     {
