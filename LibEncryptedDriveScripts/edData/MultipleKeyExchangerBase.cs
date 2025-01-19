@@ -75,4 +75,9 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         targetMultiKey.Key = this.Key;
         targetMultiKey.IV = this.IV;
     }
+
+    public void Randomize()
+    {
+        throw new NotImplementedException();
+    }
 }
