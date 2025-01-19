@@ -16,25 +16,37 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             _depth = worker.Depth + 1;
         }
     }
-    public override void Stash(string index, byte[] data)
+    public virtual void StashChildMultipleKey(string index)
     {
-        _parentWorker.Stash(index, new byte[0]);
+        if(_parentWorker is IEdDataWorkerChain parentChainWorker)
+        {
+            parentChainWorker.StashChildMultipleKey(index);
+        }
         ExtractOwnMultipleKey(index);
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger();
         childMultiKey.Randomize();
         byte[] childMultiKeyBytes = childMultiKey.GetBytes();
         base.Stash(index, childMultiKeyBytes);
     }
-    public override byte[] Extract(string index)
+    public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
         ExtractOwnMultipleKey(index);
-        return base.Extract(index);
+        byte[] childMultipleKeyBytes = base.Extract(index);
+        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger();
+        childMultiKey.SetBytes(childMultipleKeyBytes);
+        return childMultiKey;
     }
     protected virtual void ExtractOwnMultipleKey(string index)
     {
-        byte[] myMultiKeyBytes = _parentWorker.Extract(index);
-        var myMultiKey = _logicFactory.CreateMultipleKeyExchanger();
-        myMultiKey.SetBytes(myMultiKeyBytes);
-        _multipleKey = myMultiKey;
+        if(_parentWorker is IEdDataWorkerChain chainworker)
+        {
+            var myMultiKey = chainworker.ExtractChildMultipleKey(index);
+            _multipleKey = myMultiKey;
+        }
+        else if(_parentWorker is IEdDataWorkerInitializer initializer)
+        {
+            var myMultiKey = initializer.ExtractInitialMultipleKey();
+            _multipleKey = myMultiKey;
+        }
     }
 }
