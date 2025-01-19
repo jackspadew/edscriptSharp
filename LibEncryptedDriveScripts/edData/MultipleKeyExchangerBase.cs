@@ -30,7 +30,29 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
             _iv = (byte[])value.Clone();
         }
         }
-    public static int BytesLength = (4 * 4) + 32 + 16;
+    protected byte[] _salt = new byte[32];
+    public byte[] Salt {
+        get => _salt;
+        set {
+            if(value.Length != _salt.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            _salt = (byte[])value.Clone();
+        }
+        }
+    protected byte[] _lye = new byte[32];
+    public byte[] Lye {
+        get => _lye;
+        set {
+            if(value.Length != _lye.Length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            _lye = (byte[])value.Clone();
+        }
+        }
+    public static int BytesLength = (4 * 4) + 32 + 16 + (32 * 2);
 
     public byte[] GetBytes()
     {
@@ -41,6 +63,8 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         list.Add(BitConverter.GetBytes(HashSeed));
         list.Add(Key);
         list.Add(IV);
+        list.Add(Salt);
+        list.Add(Lye);
         var converter = new BytesListToCombinedBytesConverter();
         return converter.Convert(list);
     }
@@ -64,6 +88,10 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         currentPos += 32;
         Array.Copy(inputBytes, currentPos, this.IV, 0, 16);
         currentPos += 16;
+        Array.Copy(inputBytes, currentPos, this.Salt, 0, this.Salt.Length);
+        currentPos += this.Salt.Length;
+        Array.Copy(inputBytes, currentPos, this.Lye, 0, this.Lye.Length);
+        currentPos += this.Lye.Length;
     }
 
     public void CopyTo(IMultipleKeyExchanger targetMultiKey)
@@ -74,6 +102,8 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         targetMultiKey.HashSeed = this.HashSeed;
         targetMultiKey.Key = this.Key;
         targetMultiKey.IV = this.IV;
+        targetMultiKey.Salt = this.Salt;
+        targetMultiKey.Lye = this.Lye;
     }
 
     public void Randomize()

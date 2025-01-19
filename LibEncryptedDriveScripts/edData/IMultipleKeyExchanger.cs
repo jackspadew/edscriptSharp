@@ -11,5 +11,7 @@ public interface IMultipleKeyExchanger
     int HashSeed {get; set;}
     byte[] Key {get; set;}
     byte[] IV {get; set;}
+    byte[] Salt {get; set;}
+    byte[] Lye {get; set;}
     void Randomize();
 }
