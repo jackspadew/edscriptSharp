@@ -23,7 +23,7 @@ public class EdDataInitialWorker_Tests
         {
             var mockObj = new Mock<IEdDataHashCalculator>();
             byte[] hash = new byte[512];
-            mockObj.Setup(x => x.ComputeHash(It.IsAny<byte[]>())).Returns(hash);
+            mockObj.Setup(x => x.ComputeHash(It.IsAny<byte[]>(), It.IsAny<IMultipleKeyExchanger>())).Returns(hash);
             return mockObj.Object;
         }
         public IMultipleKeyExchanger CreateMultipleKeyExchanger()

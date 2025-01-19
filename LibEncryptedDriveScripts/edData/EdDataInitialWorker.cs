@@ -4,7 +4,7 @@ using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.HashCalculator;
 using System.Text;
 
-public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
+public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorkerInitializer
 {
     private readonly string InitialMultipleKeyIndexName = "__InitialMultiKey";
 
@@ -18,7 +18,7 @@ public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker
         var stashedMultipleKey = _logicFactory.CreateMultipleKeyExchanger();
         Stash(InitialMultipleKeyIndexName, stashedMultipleKey.GetBytes());
     }
-    private IMultipleKeyExchanger ExtractInitialMultipleKey()
+    public IMultipleKeyExchanger ExtractInitialMultipleKey()
     {
         byte[] initMultiKeyBytes = Extract(InitialMultipleKeyIndexName);
         var initMultiKey = _logicFactory.CreateMultipleKeyExchanger();
