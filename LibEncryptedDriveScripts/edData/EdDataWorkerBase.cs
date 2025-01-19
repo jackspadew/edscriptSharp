@@ -61,6 +61,6 @@ public abstract class EdDataWorkerBase : IEdDataWorker
     {
         byte[] nameBytes = Encoding.UTF8.GetBytes(name);
         byte[] rawIndexBytes = nameBytes;
-        return _hashCalculator.ComputeHash(rawIndexBytes);
+        return _hashCalculator.ComputeHash(rawIndexBytes, MultipleKey);
     }
 }
