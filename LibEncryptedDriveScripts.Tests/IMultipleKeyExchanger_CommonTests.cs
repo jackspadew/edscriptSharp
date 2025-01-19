@@ -38,6 +38,8 @@ public class IMultipleKeyExchanger_CommonTests
         multiKey.HashSeed = random.Next();
         random.NextBytes(multiKey.Key);
         random.NextBytes(multiKey.IV);
+        random.NextBytes(multiKey.Salt);
+        random.NextBytes(multiKey.Lye);
         var targetMultiKey = new MultipleKeyExchangerBase_Concrete();
         multiKey.CopyTo(targetMultiKey);
         Assert.Equal(multiKey.KeySeed, targetMultiKey.KeySeed);
@@ -46,6 +48,8 @@ public class IMultipleKeyExchanger_CommonTests
         Assert.Equal(multiKey.HashSeed, targetMultiKey.HashSeed);
         Assert.Equal(multiKey.Key, targetMultiKey.Key);
         Assert.Equal(multiKey.IV, targetMultiKey.IV);
+        Assert.Equal(multiKey.Salt, targetMultiKey.Salt);
+        Assert.Equal(multiKey.Lye, targetMultiKey.Lye);
     }
 
     [Theory]
