@@ -9,4 +9,11 @@ public interface IEdDataWorker
 public interface IEdDataWorkerChain
 {
     int Depth {get;}
+    void StashChildMultipleKey(string index);
+    IMultipleKeyExchanger ExtractChildMultipleKey(string index);
+}
+
+public interface IEdDataWorkerInitializer
+{
+    IMultipleKeyExchanger ExtractInitialMultipleKey();
 }
