@@ -38,6 +38,8 @@ public class IMultipleKeyExchanger_CommonTests
         multiKey.HashSeed = random.Next();
         random.NextBytes(multiKey.Key);
         random.NextBytes(multiKey.IV);
+        random.NextBytes(multiKey.Salt);
+        random.NextBytes(multiKey.Lye);
         var targetMultiKey = new MultipleKeyExchangerBase_Concrete();
         multiKey.CopyTo(targetMultiKey);
         Assert.Equal(multiKey.KeySeed, targetMultiKey.KeySeed);
@@ -46,5 +48,30 @@ public class IMultipleKeyExchanger_CommonTests
         Assert.Equal(multiKey.HashSeed, targetMultiKey.HashSeed);
         Assert.Equal(multiKey.Key, targetMultiKey.Key);
         Assert.Equal(multiKey.IV, targetMultiKey.IV);
+        Assert.Equal(multiKey.Salt, targetMultiKey.Salt);
+        Assert.Equal(multiKey.Lye, targetMultiKey.Lye);
+    }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void Randomized_AllValueIsNotEqual(IMultipleKeyExchanger multiKey, string className)
+    {
+        var oldKeySeed = multiKey.KeySeed;
+        var oldIVSeed = multiKey.IVSeed;
+        var oldAlgoSeed = multiKey.AlgorithmSeed;
+        var oldHashSeed = multiKey.HashSeed;
+        var oldKey = multiKey.Key.Clone();
+        var oldIV = multiKey.IV.Clone();
+        var oldSalt = multiKey.Salt.Clone();
+        var oldLye = multiKey.Lye.Clone();
+        multiKey.Randomize();
+        Assert.NotEqual(multiKey.KeySeed, oldKeySeed);
+        Assert.NotEqual(multiKey.IVSeed, oldIVSeed);
+        Assert.NotEqual(multiKey.AlgorithmSeed, oldAlgoSeed);
+        Assert.NotEqual(multiKey.HashSeed, oldHashSeed);
+        Assert.NotEqual(multiKey.Key, oldKey);
+        Assert.NotEqual(multiKey.IV, oldIV);
+        Assert.NotEqual(multiKey.Salt, oldSalt);
+        Assert.NotEqual(multiKey.Lye, oldLye);
     }
 }

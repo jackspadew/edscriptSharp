@@ -1,6 +1,7 @@
 namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Converter;
+using System.Security.Cryptography;
 
 public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
 {
@@ -108,6 +109,14 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
 
     public void Randomize()
     {
-        throw new NotImplementedException();
+        RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        this.KeySeed = RandomNumberGenerator.GetInt32(int.MaxValue);
+        this.IVSeed = RandomNumberGenerator.GetInt32(int.MaxValue);
+        this.AlgorithmSeed = RandomNumberGenerator.GetInt32(int.MaxValue);
+        this.HashSeed = RandomNumberGenerator.GetInt32(int.MaxValue);
+        rng.GetBytes(Key);
+        rng.GetBytes(IV);
+        rng.GetBytes(Salt);
+        rng.GetBytes(Lye);
     }
 }
