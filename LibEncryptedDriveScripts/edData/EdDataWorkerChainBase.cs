@@ -5,6 +5,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     private int _depth;
     public int Depth { get => _depth; }
     protected IEdDataWorker _parentWorker;
+    private IMultipleKeyExchanger? _multipleKey;
+    protected override IMultipleKeyExchanger MultipleKey => _multipleKey ?? throw new NullReferenceException();
 
     protected EdDataWorkerChainBase(IEdDataLogicFactory logicFactory, IEdDataWorker parentWorker) : base(logicFactory)
     {
@@ -21,5 +23,12 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     public byte[] Extract(string index)
     {
         throw new NotImplementedException();
+    }
+    protected virtual void ExtractOwnMultipleKey(string index)
+    {
+        byte[] myMultiKeyBytes = _parentWorker.Extract(index);
+        var myMultiKey = _logicFactory.CreateMultipleKeyExchanger();
+        myMultiKey.SetBytes(myMultiKeyBytes);
+        _multipleKey = myMultiKey;
     }
 }
