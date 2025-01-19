@@ -47,4 +47,27 @@ public class IMultipleKeyExchanger_CommonTests
         Assert.Equal(multiKey.Key, targetMultiKey.Key);
         Assert.Equal(multiKey.IV, targetMultiKey.IV);
     }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void Randomized_AllValueIsNotEqual(IMultipleKeyExchanger multiKey, string className)
+    {
+        var oldKeySeed = multiKey.KeySeed;
+        var oldIVSeed = multiKey.IVSeed;
+        var oldAlgoSeed = multiKey.AlgorithmSeed;
+        var oldHashSeed = multiKey.HashSeed;
+        var oldKey = multiKey.Key.Clone();
+        var oldIV = multiKey.IV.Clone();
+        var oldSalt = multiKey.Salt.Clone();
+        var oldLye = multiKey.Lye.Clone();
+        multiKey.Randomize();
+        Assert.NotEqual(multiKey.KeySeed, oldKeySeed);
+        Assert.NotEqual(multiKey.IVSeed, oldIVSeed);
+        Assert.NotEqual(multiKey.AlgorithmSeed, oldAlgoSeed);
+        Assert.NotEqual(multiKey.HashSeed, oldHashSeed);
+        Assert.NotEqual(multiKey.Key, oldKey);
+        Assert.NotEqual(multiKey.IV, oldIV);
+        Assert.NotEqual(multiKey.Salt, oldSalt);
+        Assert.NotEqual(multiKey.Lye, oldLye);
+    }
 }
