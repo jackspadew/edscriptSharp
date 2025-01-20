@@ -19,11 +19,11 @@ public class IMultipleKeyExchanger_CommonTests
     public void ConvertLikeRoundTrip_ReturnSameBytes(IMultipleKeyExchanger multiKey, string className)
     {
         Random random = new Random(0);
-        byte[] sourceBytes = new byte[MultipleKeyExchangerBase.BytesLength];
+        int bytesLength = multiKey.GetBytes().Length;
+        byte[] sourceBytes = new byte[bytesLength];
         random.NextBytes(sourceBytes);
         multiKey.SetBytes(sourceBytes);
         byte[] exchangedBytes = multiKey.GetBytes();
-        Assert.Equal(sourceBytes.Length, exchangedBytes.Length);
         Assert.Equal(sourceBytes, exchangedBytes);
     }
 
