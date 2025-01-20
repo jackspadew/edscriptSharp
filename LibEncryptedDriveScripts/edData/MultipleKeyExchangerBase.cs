@@ -53,7 +53,7 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
             _lye = (byte[])value.Clone();
         }
         }
-    public static int BytesLength = (4 * 4) + 32 + 16 + (32 * 2);
+    protected readonly int BytesLength = (4 * 4) + 32 + 16 + (32 * 2);
 
     public byte[] GetBytes()
     {
