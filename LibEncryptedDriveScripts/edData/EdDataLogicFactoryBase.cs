@@ -8,50 +8,50 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     protected abstract string DbPath {get;set;}
     protected int TargetWorkerChainDepth = 1;
 
-    private T DetermineObjectByWorkerType<T>(IEdDataWorker worker, T defaultObject, T forInitializer)
+    private T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer)
     {
-        return DetermineObjectByWorkerType(worker, defaultObject, forInitializer, defaultObject, defaultObject);
+        return DetermineObjectByWorkerType(context, defaultObject, forInitializer, defaultObject, defaultObject);
     }
-    private T DetermineObjectByWorkerType<T>(IEdDataWorker worker, T defaultObject, T forInitializer, T forChain)
+    private T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer, T forChain)
     {
-        return DetermineObjectByWorkerType(worker, defaultObject, forInitializer, forChain, forChain);
+        return DetermineObjectByWorkerType(context, defaultObject, forInitializer, forChain, forChain);
     }
-    protected T DetermineObjectByWorkerType<T>(IEdDataWorker worker, T defaultObject, T forInitializer, T forChainZero, T forChain)
+    protected T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer, T forChainZero, T forChain)
     {
-        if(worker is IEdDataWorkerInitializer)
+        if(context is IEdDataWorkerInitializer)
         {
             return forInitializer;
         }
-        else if(worker is IEdDataWorkerChain chainWorker)
+        else if(context is IEdDataWorkerChain chainWorker)
         {
             if(chainWorker.Depth == 0) return forChainZero;
             return forChain;
         }
         return defaultObject;
     }
-    public virtual IEdDataCryptor CreateCryptor(IEdDataWorker worker)
+    public virtual IEdDataCryptor CreateCryptor(IEdDataWorker thisInstance)
     {
         return DetermineObjectByWorkerType(
-            worker,
+            thisInstance,
             DefaultCryptor,
             InitialCryptor);
     }
     protected abstract IEdDataCryptor InitialCryptor {get;}
     protected abstract IEdDataCryptor DefaultCryptor {get;}
-    public virtual IDatabaseOperator CreateDatabaseOperator(IEdDataWorker worker)
+    public virtual IDatabaseOperator CreateDatabaseOperator(IEdDataWorker thisInstance)
     {
         return DefaultDatabaseOperator;
     }
     protected abstract IDatabaseOperator DefaultDatabaseOperator {get;}
-    public virtual IEdDataHashCalculator CreateHashCalculator(IEdDataWorker worker)
+    public virtual IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
     {
         return DefaultHashCalculator;
     }
     protected abstract IEdDataHashCalculator DefaultHashCalculator {get;}
-    public virtual IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker worker)
+    public virtual IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
     {
         return DetermineObjectByWorkerType(
-            worker,
+            thisInstance,
             DefaultMultipleKeyExchanger,
             InitialMultipleKeyExchanger,
             SecretKeyCombinedMultipleKeyExchanger,

@@ -11,22 +11,22 @@ public class EdDataInitialWorker_Tests
 
     public class Concrete_LogicFactory : IEdDataLogicFactory
     {
-        public IEdDataCryptor CreateCryptor(IEdDataWorker worker)
+        public IEdDataCryptor CreateCryptor(IEdDataWorker thisInstance)
         {
             return new EdDataCryptor();
         }
-        public IDatabaseOperator CreateDatabaseOperator(IEdDataWorker worker)
+        public IDatabaseOperator CreateDatabaseOperator(IEdDataWorker thisInstance)
         {
             return new EdDatabaseOperator(dbPath, true);
         }
-        public IEdDataHashCalculator CreateHashCalculator(IEdDataWorker worker)
+        public IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
         {
             var mockObj = new Mock<IEdDataHashCalculator>();
             byte[] hash = new byte[512];
             mockObj.Setup(x => x.ComputeHash(It.IsAny<byte[]>(), It.IsAny<IMultipleKeyExchanger>())).Returns(hash);
             return mockObj.Object;
         }
-        public IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker worker)
+        public IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
         {
             return new InitialMultipleKeyExchanger();
         }
