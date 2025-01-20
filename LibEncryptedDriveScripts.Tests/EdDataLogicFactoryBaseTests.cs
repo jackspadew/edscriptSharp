@@ -96,4 +96,25 @@ public class EdDataLogicFactoryBase_Tests
         Assert.True( cryptor is ConcreteCryptor_Default );
         Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
     }
+
+    [Fact]
+    public void CreateWorker_ReturnedWorkerTypeIsCorrect()
+    {
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        var worker = logicFactory.CreateWorker();
+        Assert.True( worker is IEdDataWorkerChain );
+    }
+
+    [Fact]
+    public void CreateWorker_ReturnedWorkerDepthIsCorrect()
+    {
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        var worker = logicFactory.CreateWorker();
+        if(worker is IEdDataWorkerChain chainWorker)
+        {
+            Assert.Equal(1, chainWorker.Depth);
+            return;
+        }
+        Assert.Fail();
+    }
 }
