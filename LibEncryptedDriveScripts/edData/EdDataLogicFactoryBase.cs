@@ -6,6 +6,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
 {
     public static int MultipleEncryptionCount = 1000;
     protected abstract string DbPath {get;set;}
+    protected int TargetWorkerChainDepth = 1;
 
     private T DetermineObjectByWorkerType<T>(IEdDataWorker worker, T defaultObject, T forInitializer)
     {
@@ -60,8 +61,16 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     protected abstract IMultipleKeyExchanger SecretKeyCombinedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger ChainedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger DefaultMultipleKeyExchanger {get;}
-    public virtual IEdDataWorker CreateWorker(IEdDataWorker worker)
+    public virtual IEdDataWorker CreateWorker()
     {
-        throw new NotImplementedException();
+        var initialWorker = CreateInitialWorker();
+        IEdDataWorker leafWorker = initialWorker;
+        for(int currentDepth=0; currentDepth < TargetWorkerChainDepth; currentDepth++)
+        {
+            leafWorker = CreateChainWorker(leafWorker);
+        }
+        return leafWorker;
     }
+    protected abstract IEdDataWorkerInitializer CreateInitialWorker();
+    protected abstract IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker);
 }
