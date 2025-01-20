@@ -1,5 +1,7 @@
 namespace LibEncryptedDriveScripts.EdData;
 
+using LibEncryptedDriveScripts.Converter;
+
 public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
 {
     public override int KeySeed { get; set; }
@@ -11,4 +13,10 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
     public override byte[] Salt { get; set; } = new byte[32];
     public override byte[] Lye { get; set; } = new byte[32];
     protected override int BytesLength => (4 * 4) + 32 + 16 + (32 * 2);
+
+    protected byte[] BlendBytes(byte[] originBytes, byte[] additiveBytes)
+    {
+        var converter = new BytesXorBlendConverter(additiveBytes);
+        return converter.Convert(originBytes);
+    }
 }
