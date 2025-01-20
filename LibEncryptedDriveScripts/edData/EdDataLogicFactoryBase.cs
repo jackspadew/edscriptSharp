@@ -65,7 +65,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     {
         var initialWorker = CreateInitialWorker();
         IEdDataWorker leafWorker = initialWorker;
-        for(int currentDepth=0; currentDepth < TargetWorkerChainDepth; currentDepth++)
+        for(int currentDepth=0; currentDepth <= TargetWorkerChainDepth; currentDepth++)
         {
             leafWorker = CreateChainWorker(leafWorker);
         }
