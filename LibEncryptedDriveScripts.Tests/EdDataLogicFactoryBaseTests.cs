@@ -14,10 +14,10 @@ public class EdDataLogicFactoryBase_Tests
         {}
     }
     public class ConcreteHashCalculator_Default : EdDataHashCalculator {}
-    public class ConcreteMultipleKeyExchanger_Default : MultipleKeyExchangerBase {}
-    public class ConcreteMultipleKeyExchanger_ForInitializer: MultipleKeyExchangerBase {}
-    public class ConcreteMultipleKeyExchanger_ForChainZero : MultipleKeyExchangerBase {}
-    public class ConcreteMultipleKeyExchanger_ForChain : MultipleKeyExchangerBase {}
+    public class ConcreteMultipleKeyExchanger_Default : ExemplaryMultipleKeyExchangerBase {}
+    public class ConcreteMultipleKeyExchanger_ForInitializer: ExemplaryMultipleKeyExchangerBase {}
+    public class ConcreteMultipleKeyExchanger_ForChainZero : ExemplaryMultipleKeyExchangerBase {}
+    public class ConcreteMultipleKeyExchanger_ForChain : ExemplaryMultipleKeyExchangerBase {}
     public class Iplemented_EdDataLogicFactory : EdDataLogicFactoryBase
     {
         protected override string DbPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

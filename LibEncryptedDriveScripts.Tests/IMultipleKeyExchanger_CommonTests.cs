@@ -7,7 +7,7 @@ using LibEncryptedDriveScripts.EdData;
 
 public class IMultipleKeyExchanger_CommonTests
 {
-    public class MultipleKeyExchangerBase_Concrete : MultipleKeyExchangerBase {}
+    public class MultipleKeyExchangerBase_Concrete : ExemplaryMultipleKeyExchangerBase {}
     public static IEnumerable<object[]> IMultipleKeyExchangerObjects()
     {
         yield return new object[] { new MultipleKeyExchangerBase_Concrete(), "MultipleKeyExchangerBase_Concrete" };
