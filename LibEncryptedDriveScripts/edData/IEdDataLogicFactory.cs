@@ -4,9 +4,9 @@ using LibEncryptedDriveScripts.Database;
 
 public interface IEdDataLogicFactory
 {
-    IEdDataCryptor CreateCryptor();
-    IDatabaseOperator CreateDatabaseOperator();
-    IMultipleKeyExchanger CreateMultipleKeyExchanger();
-    IEdDataWorker CreateWorker();
-    IEdDataHashCalculator CreateHashCalculator();
+    IEdDataCryptor CreateCryptor(IEdDataWorker worker);
+    IDatabaseOperator CreateDatabaseOperator(IEdDataWorker worker);
+    IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker worker);
+    IEdDataWorker CreateWorker(IEdDataWorker worker);
+    IEdDataHashCalculator CreateHashCalculator(IEdDataWorker worker);
 }
