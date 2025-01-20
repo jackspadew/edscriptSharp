@@ -37,6 +37,15 @@ public class EdDataLogicFactoryBase_Tests
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChain();
 
         protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_Default();
+
+        protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
+        {
+            return new ConcreteChainWorker(this, parentWorker);
+        }
+        protected override IEdDataWorkerInitializer CreateInitialWorker()
+        {
+            return new ConcreteInitializer(this);
+        }
     }
 
     public class ConcreteInitializer : EdDataInitialWorker
