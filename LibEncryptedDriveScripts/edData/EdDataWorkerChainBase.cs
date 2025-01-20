@@ -23,7 +23,7 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             parentChainWorker.StashChildMultipleKey(index);
         }
         ExtractOwnMultipleKey(index);
-        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger();
+        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.Randomize();
         byte[] childMultiKeyBytes = childMultiKey.GetBytes();
         base.Stash(index, childMultiKeyBytes);
@@ -32,7 +32,7 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     {
         ExtractOwnMultipleKey(index);
         byte[] childMultipleKeyBytes = base.Extract(index);
-        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger();
+        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.SetBytes(childMultipleKeyBytes);
         return childMultiKey;
     }

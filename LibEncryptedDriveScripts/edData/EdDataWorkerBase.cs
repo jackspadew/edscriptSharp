@@ -5,10 +5,10 @@ using System.Text;
 
 public abstract class EdDataWorkerBase : IEdDataWorker
 {
-    protected virtual IDatabaseOperator DbOperator => _logicFactory.CreateDatabaseOperator();
-    protected virtual IEdDataCryptor EdCryptor => _logicFactory.CreateCryptor();
-    protected virtual IEdDataHashCalculator HashCalculator => _logicFactory.CreateHashCalculator();
-    protected virtual IMultipleKeyExchanger MultipleKey => _logicFactory.CreateMultipleKeyExchanger();
+    protected virtual IDatabaseOperator DbOperator => _logicFactory.CreateDatabaseOperator(this);
+    protected virtual IEdDataCryptor EdCryptor => _logicFactory.CreateCryptor(this);
+    protected virtual IEdDataHashCalculator HashCalculator => _logicFactory.CreateHashCalculator(this);
+    protected virtual IMultipleKeyExchanger MultipleKey => _logicFactory.CreateMultipleKeyExchanger(this);
     protected IEdDataLogicFactory _logicFactory;
 
     public EdDataWorkerBase(IEdDataLogicFactory logicFactory)
