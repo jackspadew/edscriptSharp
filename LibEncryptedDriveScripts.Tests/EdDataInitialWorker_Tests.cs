@@ -30,7 +30,7 @@ public class EdDataInitialWorker_Tests
         {
             return new InitialMultipleKeyExchanger();
         }
-        public IEdDataWorker CreateWorker(IEdDataWorker worker)
+        public IEdDataWorker CreateWorker()
         {
             throw new NotImplementedException();
         }

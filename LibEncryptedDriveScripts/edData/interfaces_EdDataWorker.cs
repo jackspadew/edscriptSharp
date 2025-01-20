@@ -6,14 +6,14 @@ public interface IEdDataWorker
     byte[] Extract(string index);
 }
 
-public interface IEdDataWorkerChain
+public interface IEdDataWorkerChain : IEdDataWorker
 {
     int Depth {get;}
     void StashChildMultipleKey(string index);
     IMultipleKeyExchanger ExtractChildMultipleKey(string index);
 }
 
-public interface IEdDataWorkerInitializer
+public interface IEdDataWorkerInitializer : IEdDataWorker
 {
     IMultipleKeyExchanger ExtractInitialMultipleKey();
 }
