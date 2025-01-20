@@ -5,55 +5,15 @@ using System.Security.Cryptography;
 
 public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
 {
-    public int KeySeed { get; set; }
-    public int IVSeed { get; set; }
-    public int AlgorithmSeed { get; set; }
-    public int HashSeed { get; set; }
-    protected byte[] _key = new byte[32];
-    public byte[] Key {
-        get => _key;
-        set {
-            if(value.Length != _key.Length)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            _key = (byte[])value.Clone();
-        }
-        }
-    protected byte[] _iv = new byte[16];
-    public byte[] IV {
-        get => _iv;
-        set {
-            if(value.Length != _iv.Length)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            _iv = (byte[])value.Clone();
-        }
-        }
-    protected byte[] _salt = new byte[32];
-    public byte[] Salt {
-        get => _salt;
-        set {
-            if(value.Length != _salt.Length)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            _salt = (byte[])value.Clone();
-        }
-        }
-    protected byte[] _lye = new byte[32];
-    public byte[] Lye {
-        get => _lye;
-        set {
-            if(value.Length != _lye.Length)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            _lye = (byte[])value.Clone();
-        }
-        }
-    protected readonly int BytesLength = (4 * 4) + 32 + 16 + (32 * 2);
+    public abstract int KeySeed { get; set; }
+    public abstract int IVSeed { get; set; }
+    public abstract int AlgorithmSeed { get; set; }
+    public abstract int HashSeed { get; set; }
+    public abstract byte[] Key { get; set; }
+    public abstract byte[] IV { get; set; }
+    public abstract byte[] Salt { get; set; }
+    public abstract byte[] Lye { get; set; }
+    protected abstract int BytesLength {get;}
 
     public byte[] GetBytes()
     {
