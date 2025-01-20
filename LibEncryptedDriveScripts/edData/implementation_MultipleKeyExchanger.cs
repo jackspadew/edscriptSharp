@@ -1,6 +1,6 @@
 namespace LibEncryptedDriveScripts.EdData;
 
-public class InitialMultipleKeyExchanger : MultipleKeyExchangerBase, IMultipleKeyExchanger
+public class InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IMultipleKeyExchanger
 {
     public InitialMultipleKeyExchanger()
     {
