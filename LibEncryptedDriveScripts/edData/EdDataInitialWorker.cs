@@ -7,6 +7,7 @@ using System.Text;
 public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorkerInitializer
 {
     private readonly string InitialMultipleKeyIndexName = "__InitialMultiKey";
+    protected override IMultipleKeyExchanger MultipleKey => _logicFactory.CreateMultipleKeyExchanger(this);
 
     public EdDataInitialWorker(IEdDataLogicFactory logicFactory) : base(logicFactory)
     {
