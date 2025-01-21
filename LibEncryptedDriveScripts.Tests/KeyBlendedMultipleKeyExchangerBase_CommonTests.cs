@@ -38,16 +38,28 @@ public class KeyBlendedMultipleKeyExchangerBase_CommonTests
 
     [Theory]
     [MemberData(nameof(IMultipleKeyExchangerObjects))]
-    public void ConvertLikeRoundTrip_ReturnSameBytes(IMultipleKeyExchanger multiKey, string className)
+    public void ConvertLikeRoundTrip_ReturnSameValues(IMultipleKeyExchanger multiKey, string className)
     {
         multiKey.Randomize();
+        var oldKeySeed = multiKey.KeySeed;
+        var oldIVSeed = multiKey.IVSeed;
+        var oldAlgoSeed = multiKey.AlgorithmSeed;
+        var oldHashSeed = multiKey.HashSeed;
+        var oldIV = multiKey.IV.Clone();
+        var oldSalt = multiKey.Salt.Clone();
+        var oldLye = multiKey.Lye.Clone();
         byte[] backupedKey = (byte[])multiKey.Key.Clone();
-        byte[] firstExportedBytes = multiKey.GetBytes();
+        byte[] exportedBytes = multiKey.GetBytes();
         multiKey.Randomize();
-        multiKey.SetBytes(firstExportedBytes);
+        multiKey.SetBytes(exportedBytes);
         multiKey.Key = backupedKey;
-        byte[] secondExportedBytes = multiKey.GetBytes();
-        Assert.Equal(firstExportedBytes, secondExportedBytes);
+        Assert.Equal(multiKey.KeySeed, oldKeySeed);
+        Assert.Equal(multiKey.IVSeed, oldIVSeed);
+        Assert.Equal(multiKey.AlgorithmSeed, oldAlgoSeed);
+        Assert.Equal(multiKey.HashSeed, oldHashSeed);
+        Assert.Equal(multiKey.IV, oldIV);
+        Assert.Equal(multiKey.Salt, oldSalt);
+        Assert.Equal(multiKey.Lye, oldLye);
     }
 
     [Theory]
