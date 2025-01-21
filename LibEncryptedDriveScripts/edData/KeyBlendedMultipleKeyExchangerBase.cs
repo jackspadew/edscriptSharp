@@ -85,4 +85,20 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
     {
         return BlendBytes(originBytes, Key);
     }
+    public override byte[] GetBytes()
+    {
+        List<byte[]> list =
+        [
+            BitConverter.GetBytes(_keySeed),
+            BitConverter.GetBytes(_ivSeed),
+            BitConverter.GetBytes(_algorithmSeed),
+            BitConverter.GetBytes(_hashSeed),
+            Key,
+            _iv,
+            _salt,
+            _lye,
+        ];
+        var converter = new BytesListToCombinedBytesConverter();
+        return converter.Convert(list);
+    }
 }
