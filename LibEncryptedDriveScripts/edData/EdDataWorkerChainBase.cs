@@ -40,8 +40,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     {
         if(_parentWorker is IEdDataWorkerChain chainworker)
         {
-            var myMultiKey = chainworker.ExtractChildMultipleKey(index);
-            _multipleKey = myMultiKey;
+            var myChildMultiKey = chainworker.ExtractChildMultipleKey(index);
+            _multipleKey = myChildMultiKey;
         }
         else if(_parentWorker is IEdDataWorkerInitializer initializer)
         {
