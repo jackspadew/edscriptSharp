@@ -1,5 +1,6 @@
 namespace LibEncryptedDriveScripts.EdData;
 
+using System.Security.Cryptography;
 using LibEncryptedDriveScripts.Converter;
 
 public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
@@ -87,13 +88,16 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
     }
     public override byte[] GetBytes()
     {
+        RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        byte[] fakeKey = new byte[KEY_BYTES_LENGTH];
+        rng.GetBytes(fakeKey);
         List<byte[]> list =
         [
             BitConverter.GetBytes(_keySeed),
             BitConverter.GetBytes(_ivSeed),
             BitConverter.GetBytes(_algorithmSeed),
             BitConverter.GetBytes(_hashSeed),
-            Key,
+            fakeKey,
             _iv,
             _salt,
             _lye,
