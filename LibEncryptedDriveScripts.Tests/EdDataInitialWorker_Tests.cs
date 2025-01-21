@@ -9,6 +9,7 @@ public class EdDataInitialWorker_Tests
 {
     public static string dbPath = "EdDataInitialWorker_Tests.db";
 
+    public class Concrete_InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
     public class Concrete_KeyBlendedMultipleKeyExchanger : KeyBlendedMultipleKeyExchangerBase {}
     public class Concrete_LogicFactory : IEdDataLogicFactory
     {
@@ -33,7 +34,7 @@ public class EdDataInitialWorker_Tests
         }
         public IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
         {
-            return new InitialMultipleKeyExchanger();
+            return new Concrete_InitialMultipleKeyExchanger();
         }
         public IEdDataWorker CreateWorker()
         {
