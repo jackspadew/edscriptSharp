@@ -1,0 +1,52 @@
+namespace LibEncryptedDriveScripts.Tests;
+
+using Xunit;
+using LibEncryptedDriveScripts.EdData;
+
+#pragma warning disable xUnit1026 // Unused arguments
+
+public class KeyBlendedMultipleKeyExchangerBase_CommonTests
+{
+    public class KeyBlendedMultipleKeyExchangerBase_Concrete : KeyBlendedMultipleKeyExchangerBase {}
+    public static IEnumerable<object[]> IMultipleKeyExchangerObjects()
+    {
+        yield return new object[] { new KeyBlendedMultipleKeyExchangerBase_Concrete(), "KeyBlendedMultipleKeyExchangerBase_Concrete" };
+    }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void Randomized_AllValueIsNotEqual(IMultipleKeyExchanger multiKey, string className)
+    {
+        var oldKeySeed = multiKey.KeySeed;
+        var oldIVSeed = multiKey.IVSeed;
+        var oldAlgoSeed = multiKey.AlgorithmSeed;
+        var oldHashSeed = multiKey.HashSeed;
+        var oldKey = multiKey.Key.Clone();
+        var oldIV = multiKey.IV.Clone();
+        var oldSalt = multiKey.Salt.Clone();
+        var oldLye = multiKey.Lye.Clone();
+        multiKey.Randomize();
+        Assert.NotEqual(multiKey.KeySeed, oldKeySeed);
+        Assert.NotEqual(multiKey.IVSeed, oldIVSeed);
+        Assert.NotEqual(multiKey.AlgorithmSeed, oldAlgoSeed);
+        Assert.NotEqual(multiKey.HashSeed, oldHashSeed);
+        Assert.NotEqual(multiKey.Key, oldKey);
+        Assert.NotEqual(multiKey.IV, oldIV);
+        Assert.NotEqual(multiKey.Salt, oldSalt);
+        Assert.NotEqual(multiKey.Lye, oldLye);
+    }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void ConvertLikeRoundTrip_ReturnSameBytes(IMultipleKeyExchanger multiKey, string className)
+    {
+        multiKey.Randomize();
+        byte[] backupedKey = (byte[])multiKey.Key.Clone();
+        byte[] firstExportedBytes = multiKey.GetBytes();
+        multiKey.Randomize();
+        multiKey.SetBytes(firstExportedBytes);
+        multiKey.Key = backupedKey;
+        byte[] secondExportedBytes = multiKey.GetBytes();
+        Assert.Equal(firstExportedBytes, secondExportedBytes);
+    }
+}
