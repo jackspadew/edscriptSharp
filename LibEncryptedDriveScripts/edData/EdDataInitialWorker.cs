@@ -16,14 +16,14 @@ public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorke
     private void StashInitialMultipleKeyIfNotExists()
     {
         if(IsIndexExists(InitialMultipleKeyIndexName)) return;
-        var stashedMultipleKey = _logicFactory.CreateMultipleKeyExchanger(this);
-        Stash(InitialMultipleKeyIndexName, stashedMultipleKey.GetBytes());
+        var initialMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
+        Stash(InitialMultipleKeyIndexName, initialMultiKey.GetBytes());
     }
     public IMultipleKeyExchanger ExtractInitialMultipleKey()
     {
-        byte[] initMultiKeyBytes = Extract(InitialMultipleKeyIndexName);
-        var initMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
-        initMultiKey.SetBytes(initMultiKeyBytes);
-        return initMultiKey;
+        byte[] initialMultiKeyBytes = Extract(InitialMultipleKeyIndexName);
+        var initialMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
+        initialMultiKey.SetBytes(initialMultiKeyBytes);
+        return initialMultiKey;
     }
 }
