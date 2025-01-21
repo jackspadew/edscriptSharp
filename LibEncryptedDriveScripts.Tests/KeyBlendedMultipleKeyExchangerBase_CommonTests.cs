@@ -49,4 +49,30 @@ public class KeyBlendedMultipleKeyExchangerBase_CommonTests
         byte[] secondExportedBytes = multiKey.GetBytes();
         Assert.Equal(firstExportedBytes, secondExportedBytes);
     }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void SetKey_ProperiesReturnAnotherValue(IMultipleKeyExchanger multiKey, string className)
+    {
+        Random random = new Random(0);
+        byte[] anotherKey = new byte[multiKey.Key.Length];
+        random.NextBytes(anotherKey);
+        var oldKeySeed = multiKey.KeySeed;
+        var oldIVSeed = multiKey.IVSeed;
+        var oldAlgoSeed = multiKey.AlgorithmSeed;
+        var oldHashSeed = multiKey.HashSeed;
+        var oldKey = multiKey.Key.Clone();
+        var oldIV = multiKey.IV.Clone();
+        var oldSalt = multiKey.Salt.Clone();
+        var oldLye = multiKey.Lye.Clone();
+        multiKey.Key = anotherKey;
+        Assert.NotEqual(multiKey.KeySeed, oldKeySeed);
+        Assert.NotEqual(multiKey.IVSeed, oldIVSeed);
+        Assert.NotEqual(multiKey.AlgorithmSeed, oldAlgoSeed);
+        Assert.NotEqual(multiKey.HashSeed, oldHashSeed);
+        Assert.NotEqual(multiKey.Key, oldKey);
+        Assert.NotEqual(multiKey.IV, oldIV);
+        Assert.NotEqual(multiKey.Salt, oldSalt);
+        Assert.NotEqual(multiKey.Lye, oldLye);
+    }
 }
