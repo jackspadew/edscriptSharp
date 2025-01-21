@@ -54,15 +54,15 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
             thisInstance,
             DefaultMultipleKeyExchanger,
             InitialMultipleKeyExchanger,
-            SecretKeyCombinedMultipleKeyExchanger,
+            KeyBlendedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger);
     }
     public IMultipleKeyExchanger CreateKeyBlendedMultipleKeyExchanger(IEdDataWorker thisInstance)
     {
-        return SecretKeyCombinedMultipleKeyExchanger;
+        return KeyBlendedMultipleKeyExchanger;
     }
     protected abstract IMultipleKeyExchanger InitialMultipleKeyExchanger {get;}
-    protected abstract IMultipleKeyExchanger SecretKeyCombinedMultipleKeyExchanger {get;}
+    protected abstract IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger ChainedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger DefaultMultipleKeyExchanger {get;}
     public virtual IEdDataWorker CreateWorker()
