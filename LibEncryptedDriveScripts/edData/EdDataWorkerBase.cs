@@ -8,7 +8,7 @@ public abstract class EdDataWorkerBase : IEdDataWorker
     protected virtual IDatabaseOperator DbOperator => _logicFactory.CreateDatabaseOperator(this);
     protected virtual IEdDataCryptor EdCryptor => _logicFactory.CreateCryptor(this);
     protected virtual IEdDataHashCalculator HashCalculator => _logicFactory.CreateHashCalculator(this);
-    protected virtual IMultipleKeyExchanger MultipleKey => _logicFactory.CreateMultipleKeyExchanger(this);
+    protected abstract IMultipleKeyExchanger MultipleKey {get;}
     protected IEdDataLogicFactory _logicFactory;
 
     public EdDataWorkerBase(IEdDataLogicFactory logicFactory)

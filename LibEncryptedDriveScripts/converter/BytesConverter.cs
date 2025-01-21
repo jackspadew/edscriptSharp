@@ -47,3 +47,30 @@ public class BytesListToCombinedBytesConverter : IConverter<List<byte[]>, byte[]
         return result;
     }
 }
+
+public class BytesXorBlendConverter : IConverter<byte[], byte[]>
+{
+    private byte[] _additiveBytes;
+    public BytesXorBlendConverter(byte[] additiveBytes)
+    {
+        _additiveBytes = (byte[])additiveBytes.Clone();
+    }
+
+    public byte[] Convert(byte[] input)
+    {
+        int chunkLength = input.Length;
+        byte[] result = (byte[])input.Clone();
+        int chunkCount = (_additiveBytes.Length + chunkLength - 1) / chunkLength;
+        for (int i=0; i < chunkCount; i++)
+        {
+            byte[] chunk = new byte[chunkLength];
+            int readableChunkSize = Math.Min(chunkLength, _additiveBytes.Length - i * chunkLength);
+            Array.Copy(_additiveBytes, i * chunkLength, chunk, 0, readableChunkSize);
+            for (int j = 0; j < chunkLength; j++)
+            {
+                result[j] ^= chunk[j];
+            }
+        }
+        return result;
+    }
+}
