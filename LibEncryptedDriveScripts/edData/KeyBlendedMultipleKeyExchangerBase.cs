@@ -24,7 +24,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
         get => KeyBlendedInt(_hashSeed);
         set => _hashSeed = value;
         }
-    protected byte[] _key = new byte[32];
+    protected byte[] _key = new byte[KEY_BYTES_LENGTH];
     public override byte[] Key {
         get => _key;
         set {
@@ -35,7 +35,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
             _key = (byte[])value.Clone();
         }
         }
-    protected byte[] _iv = new byte[16];
+    protected byte[] _iv = new byte[IV_BYTES_LENGTH];
     public override byte[] IV {
         get => KeyBlendedBytes(_iv);
         set {
@@ -46,7 +46,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
             _iv = (byte[])value.Clone();
         }
         }
-    protected byte[] _salt = new byte[32];
+    protected byte[] _salt = new byte[SALT_BYTES_LENGTH];
     public override byte[] Salt {
         get => KeyBlendedBytes(_salt);
         set {
@@ -57,7 +57,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
             _salt = (byte[])value.Clone();
         }
         }
-    protected byte[] _lye = new byte[32];
+    protected byte[] _lye = new byte[SALT_BYTES_LENGTH];
     public override byte[] Lye {
         get => KeyBlendedBytes(_lye);
         set {
@@ -68,7 +68,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
             _lye = (byte[])value.Clone();
         }
         }
-    protected override int BytesLength => (4 * 4) + 32 + 16 + (32 * 2);
+    protected override int BytesLength => (INTEGER_BYTES_LENGTH * 4) + KEY_BYTES_LENGTH + IV_BYTES_LENGTH + (SALT_BYTES_LENGTH * 2);
 
     protected byte[] BlendBytes(byte[] originBytes, byte[] additiveBytes)
     {

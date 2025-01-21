@@ -5,6 +5,10 @@ using System.Security.Cryptography;
 
 public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
 {
+    protected const int KEY_BYTES_LENGTH = 32;
+    protected const int IV_BYTES_LENGTH = 16;
+    protected const int SALT_BYTES_LENGTH = 32;
+    protected const int INTEGER_BYTES_LENGTH = 4;
     public abstract int KeySeed { get; set; }
     public abstract int IVSeed { get; set; }
     public abstract int AlgorithmSeed { get; set; }
@@ -38,17 +42,17 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         }
         int currentPos = 0;
         this.KeySeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 4;
+        currentPos += INTEGER_BYTES_LENGTH;
         this.IVSeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 4;
+        currentPos += INTEGER_BYTES_LENGTH;
         this.AlgorithmSeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 4;
+        currentPos += INTEGER_BYTES_LENGTH;
         this.HashSeed = BitConverter.ToInt32(inputBytes, currentPos);
-        currentPos += 4;
-        Array.Copy(inputBytes, currentPos, this.Key, 0, 32);
-        currentPos += 32;
-        Array.Copy(inputBytes, currentPos, this.IV, 0, 16);
-        currentPos += 16;
+        currentPos += INTEGER_BYTES_LENGTH;
+        Array.Copy(inputBytes, currentPos, this.Key, 0, this.Key.Length);
+        currentPos += this.Key.Length;
+        Array.Copy(inputBytes, currentPos, this.IV, 0, this.IV.Length);
+        currentPos += this.IV.Length;
         Array.Copy(inputBytes, currentPos, this.Salt, 0, this.Salt.Length);
         currentPos += this.Salt.Length;
         Array.Copy(inputBytes, currentPos, this.Lye, 0, this.Lye.Length);

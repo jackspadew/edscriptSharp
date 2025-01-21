@@ -6,7 +6,7 @@ public class ExemplaryMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMult
     public override int IVSeed { get; set; }
     public override int AlgorithmSeed { get; set; }
     public override int HashSeed { get; set; }
-    protected byte[] _key = new byte[32];
+    protected byte[] _key = new byte[KEY_BYTES_LENGTH];
     public override byte[] Key {
         get => _key;
         set {
@@ -17,7 +17,7 @@ public class ExemplaryMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMult
             _key = (byte[])value.Clone();
         }
         }
-    protected byte[] _iv = new byte[16];
+    protected byte[] _iv = new byte[IV_BYTES_LENGTH];
     public override byte[] IV {
         get => _iv;
         set {
@@ -28,7 +28,7 @@ public class ExemplaryMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMult
             _iv = (byte[])value.Clone();
         }
         }
-    protected byte[] _salt = new byte[32];
+    protected byte[] _salt = new byte[SALT_BYTES_LENGTH];
     public override byte[] Salt {
         get => _salt;
         set {
@@ -39,7 +39,7 @@ public class ExemplaryMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMult
             _salt = (byte[])value.Clone();
         }
         }
-    protected byte[] _lye = new byte[32];
+    protected byte[] _lye = new byte[SALT_BYTES_LENGTH];
     public override byte[] Lye {
         get => _lye;
         set {
@@ -50,5 +50,5 @@ public class ExemplaryMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMult
             _lye = (byte[])value.Clone();
         }
         }
-    protected override int BytesLength => (4 * 4) + 32 + 16 + (32 * 2);
+    protected override int BytesLength => (INTEGER_BYTES_LENGTH * 4) + KEY_BYTES_LENGTH + IV_BYTES_LENGTH + (SALT_BYTES_LENGTH * 2);
 }
