@@ -45,8 +45,10 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         }
         else if(_parentWorker is IEdDataWorkerInitializer initializer)
         {
-            var myMultiKey = initializer.ExtractInitialMultipleKey();
-            _multipleKey = myMultiKey;
+            var initialMultiKey = initializer.ExtractInitialMultipleKey();
+            var keyBlendedMultiKey = _logicFactory.CreateKeyBlendedMultipleKeyExchanger(this);
+            initialMultiKey.CopyTo(keyBlendedMultiKey);
+            _multipleKey = initialMultiKey;
         }
     }
 }
