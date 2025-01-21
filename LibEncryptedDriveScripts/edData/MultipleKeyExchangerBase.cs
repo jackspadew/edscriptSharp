@@ -15,7 +15,7 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public abstract byte[] Lye { get; set; }
     protected abstract int BytesLength {get;}
 
-    public byte[] GetBytes()
+    public virtual byte[] GetBytes()
     {
         List<byte[]> list = new();
         list.Add(BitConverter.GetBytes(KeySeed));
@@ -30,7 +30,7 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         return converter.Convert(list);
     }
 
-    public void SetBytes(byte[] inputBytes)
+    public virtual void SetBytes(byte[] inputBytes)
     {
         if(inputBytes.Length != BytesLength)
         {
