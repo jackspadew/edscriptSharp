@@ -7,6 +7,7 @@ using LibEncryptedDriveScripts.EdData;
 
 public class KeyBlendedMultipleKeyExchangerBase_CommonTests
 {
+    public class Concrete_ExemplaryMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
     public class KeyBlendedMultipleKeyExchangerBase_Concrete : KeyBlendedMultipleKeyExchangerBase {}
     public static IEnumerable<object[]> IMultipleKeyExchangerObjects()
     {
@@ -98,5 +99,32 @@ public class KeyBlendedMultipleKeyExchangerBase_CommonTests
         multiKey.Randomize();
         multiKey.SetBytes(exportedBytes);
         Assert.NotEqual(backupedKey, multiKey.Key);
+    }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void GenerateBlendedKeyFromExemplaryKey_PropertiesAreAnotherValue(IMultipleKeyExchanger multiKey, string className)
+    {
+        Random random = new Random(0);
+        byte[] secretKey = new byte[multiKey.Key.Length];
+        random.NextBytes(secretKey);
+        var exemplaryKey = new Concrete_ExemplaryMultipleKeyExchanger();
+        exemplaryKey.Randomize();
+        var oldKeySeed = exemplaryKey.KeySeed;
+        var oldIVSeed = exemplaryKey.IVSeed;
+        var oldAlgoSeed = exemplaryKey.AlgorithmSeed;
+        var oldHashSeed = exemplaryKey.HashSeed;
+        var oldIV = exemplaryKey.IV.Clone();
+        var oldSalt = exemplaryKey.Salt.Clone();
+        var oldLye = exemplaryKey.Lye.Clone();
+        exemplaryKey.CopyTo(multiKey);
+        multiKey.Key = secretKey;
+        Assert.NotEqual(multiKey.KeySeed, oldKeySeed);
+        Assert.NotEqual(multiKey.IVSeed, oldIVSeed);
+        Assert.NotEqual(multiKey.AlgorithmSeed, oldAlgoSeed);
+        Assert.NotEqual(multiKey.HashSeed, oldHashSeed);
+        Assert.NotEqual(multiKey.IV, oldIV);
+        Assert.NotEqual(multiKey.Salt, oldSalt);
+        Assert.NotEqual(multiKey.Lye, oldLye);
     }
 }
