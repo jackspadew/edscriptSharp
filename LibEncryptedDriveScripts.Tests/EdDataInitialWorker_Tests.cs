@@ -9,6 +9,7 @@ public class EdDataInitialWorker_Tests
 {
     public static string dbPath = "EdDataInitialWorker_Tests.db";
 
+    public class Concrete_KeyBlendedMultipleKeyExchanger : KeyBlendedMultipleKeyExchangerBase {}
     public class Concrete_LogicFactory : IEdDataLogicFactory
     {
         public IEdDataCryptor CreateCryptor(IEdDataWorker thisInstance)
@@ -25,6 +26,10 @@ public class EdDataInitialWorker_Tests
             byte[] hash = new byte[512];
             mockObj.Setup(x => x.ComputeHash(It.IsAny<byte[]>(), It.IsAny<IMultipleKeyExchanger>())).Returns(hash);
             return mockObj.Object;
+        }
+        public IMultipleKeyExchanger CreateKeyBlendedMultipleKeyExchanger(IEdDataWorker thisInstance)
+        {
+            return new Concrete_KeyBlendedMultipleKeyExchanger();
         }
         public IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
         {
