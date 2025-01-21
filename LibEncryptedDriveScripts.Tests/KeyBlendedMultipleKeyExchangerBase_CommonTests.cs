@@ -75,4 +75,16 @@ public class KeyBlendedMultipleKeyExchangerBase_CommonTests
         Assert.NotEqual(multiKey.Salt, oldSalt);
         Assert.NotEqual(multiKey.Lye, oldLye);
     }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void GetBytes_DoesNotExportKey(IMultipleKeyExchanger multiKey, string className)
+    {
+        multiKey.Randomize();
+        byte[] backupedKey = (byte[])multiKey.Key.Clone();
+        byte[] exportedBytes = multiKey.GetBytes();
+        multiKey.Randomize();
+        multiKey.SetBytes(exportedBytes);
+        Assert.NotEqual(backupedKey, multiKey.Key);
+    }
 }
