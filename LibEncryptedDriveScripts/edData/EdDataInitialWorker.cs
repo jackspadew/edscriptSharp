@@ -17,6 +17,7 @@ public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorke
     {
         if(IsIndexExists(InitialMultipleKeyIndexName)) return;
         var initialMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
+        initialMultiKey.Randomize();
         Stash(InitialMultipleKeyIndexName, initialMultiKey.GetBytes());
     }
     public IMultipleKeyExchanger ExtractInitialMultipleKey()
