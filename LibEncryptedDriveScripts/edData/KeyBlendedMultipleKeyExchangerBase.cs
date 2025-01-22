@@ -71,9 +71,10 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         }
     protected override int BytesLength => (INTEGER_BYTES_LENGTH * 4) + KEY_BYTES_LENGTH + IV_BYTES_LENGTH + (SALT_BYTES_LENGTH * 2);
 
+    protected abstract IConverter<byte[], byte[]> CreateKeyBlendConverter(byte[] additiveBytes);
     protected byte[] BlendBytes(byte[] originBytes, byte[] additiveBytes)
     {
-        var converter = new BytesXorBlendConverter(additiveBytes);
+        IConverter<byte[], byte[]> converter = CreateKeyBlendConverter(additiveBytes);
         return converter.Convert(originBytes);
     }
     protected int KeyBlendedInt(int originValue)

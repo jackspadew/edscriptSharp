@@ -1,5 +1,7 @@
 namespace LibEncryptedDriveScripts.EdData;
 
+using LibEncryptedDriveScripts.Converter;
+
 public class InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IMultipleKeyExchanger
 {
     public InitialMultipleKeyExchanger()
@@ -24,5 +26,8 @@ public class BasicExemplaryMultipleKeyExchanger : ExemplaryMultipleKeyExchangerB
 
 public class BasicKeyBlendedMultipleKeyExchanger : KeyBlendedMultipleKeyExchangerBase, IMultipleKeyExchanger
 {
-
+    protected override IConverter<byte[], byte[]> CreateKeyBlendConverter(byte[] additiveBytes)
+    {
+        return new BytesXorBlendConverter(additiveBytes);
+    }
 }
