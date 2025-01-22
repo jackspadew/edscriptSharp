@@ -6,6 +6,7 @@ using LibEncryptedDriveScripts.Database;
 
 public class EdDataLogicFactoryBase_Tests
 {
+    private static byte[] exampleKey = new byte[32]{0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1};
     public class ConcreteCryptor_ForInitializer : EdDataCryptor {}
     public class ConcreteCryptor_Default : EdDataCryptor {}
     public class ConcreteDataOperator_Default : DatabaseOperatorBase
@@ -21,23 +22,21 @@ public class EdDataLogicFactoryBase_Tests
     public class Iplemented_EdDataLogicFactory : EdDataLogicFactoryBase
     {
         protected override string DbPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        protected override byte[] Key { get; set; }
+
+        public Iplemented_EdDataLogicFactory()
+        {
+            Key = exampleKey;
+        }
 
         protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
-
         protected override IEdDataCryptor DefaultCryptor => new ConcreteCryptor_Default();
-
         protected override IDatabaseOperator DefaultDatabaseOperator => new ConcreteDataOperator_Default();
-
         protected override IEdDataHashCalculator DefaultHashCalculator => new ConcreteHashCalculator_Default();
-
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForInitializer();
-
-        protected override IMultipleKeyExchanger SecretKeyCombinedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChainZero();
-
+        protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChainZero();
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChain();
-
         protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_Default();
-
         protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
         {
             return new ConcreteChainWorker(this, parentWorker);
@@ -116,5 +115,15 @@ public class EdDataLogicFactoryBase_Tests
             return;
         }
         Assert.Fail();
+    }
+
+    [Fact]
+    public void CreateMultipleKeyExchangerForWorkerChainZero_ItHasKey()
+    {
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        var initialWorker = new ConcreteInitializer(logicFactory);
+        var workerChainZero = new ConcreteChainWorker(logicFactory,initialWorker);
+        var multiKey = logicFactory.CreateKeyBlendedMultipleKeyExchanger(workerChainZero);
+        Assert.Equal(exampleKey, multiKey.Key);
     }
 }
