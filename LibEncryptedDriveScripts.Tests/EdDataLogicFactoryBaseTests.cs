@@ -30,21 +30,13 @@ public class EdDataLogicFactoryBase_Tests
         }
 
         protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
-
         protected override IEdDataCryptor DefaultCryptor => new ConcreteCryptor_Default();
-
         protected override IDatabaseOperator DefaultDatabaseOperator => new ConcreteDataOperator_Default();
-
         protected override IEdDataHashCalculator DefaultHashCalculator => new ConcreteHashCalculator_Default();
-
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForInitializer();
-
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChainZero();
-
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChain();
-
         protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_Default();
-
         protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
         {
             return new ConcreteChainWorker(this, parentWorker);
