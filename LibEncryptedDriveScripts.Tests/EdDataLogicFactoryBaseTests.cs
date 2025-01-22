@@ -21,6 +21,12 @@ public class EdDataLogicFactoryBase_Tests
     public class Iplemented_EdDataLogicFactory : EdDataLogicFactoryBase
     {
         protected override string DbPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        protected override byte[] Key { get; set; }
+
+        public Iplemented_EdDataLogicFactory()
+        {
+            Key = new byte[KeyBlendedMultipleKeyExchanger.Key.Length];
+        }
 
         protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
 
@@ -32,7 +38,7 @@ public class EdDataLogicFactoryBase_Tests
 
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForInitializer();
 
-        protected override IMultipleKeyExchanger SecretKeyCombinedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChainZero();
+        protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChainZero();
 
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChain();
 
