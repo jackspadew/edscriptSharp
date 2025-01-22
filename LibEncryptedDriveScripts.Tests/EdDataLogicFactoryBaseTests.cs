@@ -6,6 +6,7 @@ using LibEncryptedDriveScripts.Database;
 
 public class EdDataLogicFactoryBase_Tests
 {
+    private static byte[] exampleKey = new byte[32]{0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1};
     public class ConcreteCryptor_ForInitializer : EdDataCryptor {}
     public class ConcreteCryptor_Default : EdDataCryptor {}
     public class ConcreteDataOperator_Default : DatabaseOperatorBase
@@ -25,7 +26,7 @@ public class EdDataLogicFactoryBase_Tests
 
         public Iplemented_EdDataLogicFactory()
         {
-            Key = new byte[KeyBlendedMultipleKeyExchanger.Key.Length];
+            Key = exampleKey;
         }
 
         protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
