@@ -10,4 +10,5 @@ public interface IEdDataLogicFactory
     IMultipleKeyExchanger CreateKeyBlendedMultipleKeyExchanger(IEdDataWorker thisInstance);
     IEdDataWorker CreateWorker();
     IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance);
+    void SetPassword(string password);
 }
