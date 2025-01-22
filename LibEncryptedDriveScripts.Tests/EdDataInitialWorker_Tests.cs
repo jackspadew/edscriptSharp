@@ -67,4 +67,22 @@ public class EdDataInitialWorker_Tests
         bool IsInitialMultiKeyExists = edWorker.IsIndexExists("__InitialMultiKey");
         Assert.True(IsInitialMultiKeyExists);
     }
+
+    [Fact]
+    public void ExtractInitialMultipleKey_ReturnedMultipleKeyHasDifferentValuesFromInitialValue()
+    {
+        DeleteFileIfExists(dbPath);
+        var logicFactory = CreateFactory();
+        var initialWorker = new EdDataInitialWorker(logicFactory);
+        var initialValuesMultipleKey = logicFactory.CreateMultipleKeyExchanger(initialWorker);
+        var initialMultiKey = initialWorker.ExtractInitialMultipleKey();
+        Assert.NotEqual(initialValuesMultipleKey.KeySeed, initialMultiKey.KeySeed);
+        Assert.NotEqual(initialValuesMultipleKey.IVSeed, initialMultiKey.IVSeed);
+        Assert.NotEqual(initialValuesMultipleKey.AlgorithmSeed, initialMultiKey.AlgorithmSeed);
+        Assert.NotEqual(initialValuesMultipleKey.HashSeed, initialMultiKey.HashSeed);
+        Assert.NotEqual(initialValuesMultipleKey.Key, initialMultiKey.Key);
+        Assert.NotEqual(initialValuesMultipleKey.IV, initialMultiKey.IV);
+        Assert.NotEqual(initialValuesMultipleKey.Salt, initialMultiKey.Salt);
+        Assert.NotEqual(initialValuesMultipleKey.Lye, initialMultiKey.Lye);
+    }
 }
