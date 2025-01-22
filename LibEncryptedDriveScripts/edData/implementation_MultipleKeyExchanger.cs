@@ -16,3 +16,13 @@ public class InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IM
         IV = iv;
     }
 }
+
+public class BasicExemplaryMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IMultipleKeyExchanger
+{
+
+}
+
+public class BasicKeyBlendedMultipleKeyExchanger : KeyBlendedMultipleKeyExchangerBase, IMultipleKeyExchanger
+{
+
+}
