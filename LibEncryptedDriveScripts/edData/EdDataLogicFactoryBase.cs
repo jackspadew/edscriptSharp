@@ -60,7 +60,9 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     }
     public IMultipleKeyExchanger CreateKeyBlendedMultipleKeyExchanger(IEdDataWorker thisInstance)
     {
-        return KeyBlendedMultipleKeyExchanger;
+        IMultipleKeyExchanger keyBlendedMultiKey = KeyBlendedMultipleKeyExchanger;
+        keyBlendedMultiKey.Key = Key;
+        return keyBlendedMultiKey;
     }
     protected abstract IMultipleKeyExchanger InitialMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger {get;}
