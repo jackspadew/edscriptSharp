@@ -3,7 +3,7 @@ namespace LibEncryptedDriveScripts.EdData;
 using System.Security.Cryptography;
 using LibEncryptedDriveScripts.Converter;
 
-public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
+public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
 {
     private int _keySeed = 0;
     public override int KeySeed {
