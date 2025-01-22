@@ -124,4 +124,14 @@ public class EdDataLogicFactoryBase_Tests
         }
         Assert.Fail();
     }
+
+    [Fact]
+    public void CreateMultipleKeyExchangerForWorkerChainZero_ItHasKey()
+    {
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        var initialWorker = new ConcreteInitializer(logicFactory);
+        var workerChainZero = new ConcreteChainWorker(logicFactory,initialWorker);
+        var multiKey = logicFactory.CreateKeyBlendedMultipleKeyExchanger(workerChainZero);
+        Assert.Equal(exampleKey, multiKey.Key);
+    }
 }
