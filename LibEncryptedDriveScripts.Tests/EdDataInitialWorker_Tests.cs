@@ -11,34 +11,37 @@ public class EdDataInitialWorker_Tests
 
     public class Concrete_InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
     public class Concrete_KeyBlendedMultipleKeyExchanger : KeyBlendedMultipleKeyExchangerBase {}
-    public class Concrete_LogicFactory : IEdDataLogicFactory
+    public class Concrete_LogicFactory : EdDataLogicFactoryBase, IEdDataLogicFactory
     {
-        public IEdDataCryptor CreateCryptor(IEdDataWorker thisInstance)
+        public Concrete_LogicFactory()
         {
-            return new EdDataCryptor();
+            Key = new byte[KeyBlendedMultipleKeyExchanger.Key.Length];
         }
-        public IDatabaseOperator CreateDatabaseOperator(IEdDataWorker thisInstance)
+        protected override string DbPath { get => dbPath; set => throw new NotImplementedException(); }
+        protected override byte[] Key { get; set; }
+
+        protected override IEdDataCryptor InitialCryptor => new EdDataCryptor();
+        protected override IEdDataCryptor DefaultCryptor => new EdDataCryptor();
+        protected override IDatabaseOperator DefaultDatabaseOperator => new EdDatabaseOperator(DbPath, true);
+        protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
+        protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new Concrete_KeyBlendedMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
+        protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
         {
-            return new EdDatabaseOperator(dbPath, true);
+            return new Concrete_ChainWorker(this, parentWorker);
         }
-        public IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
+        protected override IEdDataWorkerInitializer CreateInitialWorker()
         {
-            var mockObj = new Mock<IEdDataHashCalculator>();
-            byte[] hash = new byte[512];
-            mockObj.Setup(x => x.ComputeHash(It.IsAny<byte[]>(), It.IsAny<IMultipleKeyExchanger>())).Returns(hash);
-            return mockObj.Object;
+            return new EdDataInitialWorker(this);
         }
-        public IMultipleKeyExchanger CreateKeyBlendedMultipleKeyExchanger(IEdDataWorker thisInstance)
+    }
+
+    public class Concrete_ChainWorker : EdDataWorkerChainBase
+    {
+        public Concrete_ChainWorker(IEdDataLogicFactory logicFactory, IEdDataWorker parentWorker) : base(logicFactory, parentWorker)
         {
-            return new Concrete_KeyBlendedMultipleKeyExchanger();
-        }
-        public IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
-        {
-            return new Concrete_InitialMultipleKeyExchanger();
-        }
-        public IEdDataWorker CreateWorker()
-        {
-            throw new NotImplementedException();
         }
     }
 
