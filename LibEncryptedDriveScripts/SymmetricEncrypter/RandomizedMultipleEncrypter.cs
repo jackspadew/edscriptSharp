@@ -8,7 +8,7 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
 {
     protected int _keySeed;
     protected int _ivSeed;
-    private static List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
+    protected virtual List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
     {
         new SymmetricAlgorithmAdapter.SystemCryptography.AES(),
         new SymmetricAlgorithmAdapter.BouncyCastle.AES(),
