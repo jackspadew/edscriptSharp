@@ -16,4 +16,14 @@ public class IntegrationTests_EdData
         var worker = logic.CreateWorker();
         return worker;
     }
+
+    [Fact]
+    public void StashData_ItCanBeExtracted()
+    {
+        var workerForStash = DoCreateWorkerForTest();
+        workerForStash.Stash(exampleIndex, exampleBytes);
+        var workerForExtract = DoCreateWorkerForTest();
+        byte[] extractedBytes = workerForExtract.Extract(exampleIndex);
+        Assert.Equal(exampleBytes, extractedBytes);
+    }
 }
