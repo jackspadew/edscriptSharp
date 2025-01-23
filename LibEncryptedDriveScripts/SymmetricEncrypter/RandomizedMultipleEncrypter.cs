@@ -20,7 +20,7 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
     {
         _keySeed = keySeed;
         _ivSeed = ivSeed;
-        _algorithm = CreateSymmetricAlgorithmComboList(AlgorithmCandidateList, algoSeed, multiple);
+        _algorithm = CreateSymmetricAlgorithmComboList(algoSeed, multiple);
     }
     public RandomizedMultipleEncrypter() : this(0,0,0,10) {}
 
@@ -39,7 +39,7 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
         var listGenerator = new SequentialGenerator<byte[]>(converter, bytes);
         return listGenerator.Generate(count);
     }
-    private List<ISymmetricAlgorithmAdapter> CreateSymmetricAlgorithmComboList(List<ISymmetricAlgorithmAdapter> validAlgorithmList, int seed, int count)
+    private List<ISymmetricAlgorithmAdapter> CreateSymmetricAlgorithmComboList(int seed, int count)
     {
         var generator = new RandomPickedListGenerator<ISymmetricAlgorithmAdapter>(AlgorithmCandidateList, seed);
         return generator.Generate(count);
