@@ -15,6 +15,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     public static IEnumerable<object[]> EncryptAlgorithObjects()
     {
         yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.AES(), "BouncyCastleAdapter.AES" };
+        yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.Camellia(), "BouncyCastleAdapter.Camellia" };
         yield return new object[] { new SymmetricAlgorithmAdapter.SystemCryptography.AES(), "CryptographyAdapter.AES" };
     }
 
