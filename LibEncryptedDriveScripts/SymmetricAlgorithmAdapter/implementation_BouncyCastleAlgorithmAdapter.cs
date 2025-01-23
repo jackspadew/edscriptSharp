@@ -7,3 +7,8 @@ public class Camellia : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapte
 {
     protected override IBlockCipher BCCryptoEngine => new CamelliaEngine();
 }
+
+public class Twofish : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
+{
+    protected override IBlockCipher BCCryptoEngine => new TwofishEngine();
+}
