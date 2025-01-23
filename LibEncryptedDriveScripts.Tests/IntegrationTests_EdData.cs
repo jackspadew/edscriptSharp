@@ -54,6 +54,16 @@ public class IntegrationTests_EdData
     }
 
     [Fact]
+    public void ExtractWithNotExistsIndex_Throw()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var workerForStash = DoCreateWorkerForTest();
+        workerForStash.Stash(exampleIndex, exampleBytes);
+        var workerForExtract = DoCreateWorkerForTest();
+        Assert.Throws<InvalidOperationException>(() => workerForExtract.Extract(notExistsIndex));
+    }
+
+    [Fact]
     public void StashMultiplePiecesData_NotThrow()
     {
         int stashingCount = 10;
