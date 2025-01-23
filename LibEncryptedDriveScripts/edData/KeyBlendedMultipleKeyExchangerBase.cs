@@ -31,7 +31,7 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         set {
             if(value.Length != _key.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(Key), _key, value);
             }
             _key = (byte[])value.Clone();
         }
@@ -42,7 +42,7 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         set {
             if(value.Length != _iv.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(IV), _iv, value);
             }
             _iv = (byte[])value.Clone();
         }
@@ -53,7 +53,7 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         set {
             if(value.Length != _salt.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(Salt), _salt, value);
             }
             _salt = (byte[])value.Clone();
         }
@@ -64,7 +64,7 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         set {
             if(value.Length != _lye.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(Lye), _lye, value);
             }
             _lye = (byte[])value.Clone();
         }
@@ -105,5 +105,9 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         ];
         var converter = new BytesListToCombinedBytesConverter();
         return converter.Convert(list);
+    }
+    private Exception ThrowWrongLengthBytesError(string valueName, byte[] currentValue, byte[] inputedValue)
+    {
+        return new IndexOutOfRangeException($"Index was outside the bounds of the array. The length of {valueName} is {currentValue.Length}. But inputted bytes length is {inputedValue.Length}.");
     }
 }
