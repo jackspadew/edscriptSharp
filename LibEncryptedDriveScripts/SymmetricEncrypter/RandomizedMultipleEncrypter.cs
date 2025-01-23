@@ -11,7 +11,10 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
     private static List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
     {
         new SymmetricAlgorithmAdapter.SystemCryptography.AES(),
-        new SymmetricAlgorithmAdapter.BouncyCastle.AES()
+        new SymmetricAlgorithmAdapter.BouncyCastle.AES(),
+        new SymmetricAlgorithmAdapter.BouncyCastle.Camellia(),
+        new SymmetricAlgorithmAdapter.BouncyCastle.Serpent(),
+        new SymmetricAlgorithmAdapter.BouncyCastle.Twofish(),
     };
     public RandomizedMultipleEncrypter(int keySeed, int ivSeed, int algoSeed, int multiple)
     {
