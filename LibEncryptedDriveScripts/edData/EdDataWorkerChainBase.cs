@@ -16,6 +16,11 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             _depth = worker.Depth + 1;
         }
     }
+    public override void Stash(string index, byte[] data)
+    {
+        ExtractOwnMultipleKey(index);
+        base.Stash(index, data);
+    }
     public virtual void StashChildMultipleKey(string index)
     {
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
