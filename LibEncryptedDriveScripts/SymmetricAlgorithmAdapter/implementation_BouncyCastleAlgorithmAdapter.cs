@@ -12,3 +12,8 @@ public class Twofish : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
 {
     protected override IBlockCipher BCCryptoEngine => new TwofishEngine();
 }
+
+public class Serpent : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
+{
+    protected override IBlockCipher BCCryptoEngine => new SerpentEngine();
+}
