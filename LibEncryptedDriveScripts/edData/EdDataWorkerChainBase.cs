@@ -47,6 +47,7 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         {
             var myChildMultiKey = chainworker.ExtractChildMultipleKey(index);
             _multipleKey = myChildMultiKey;
+            return;
         }
         else if(_parentWorker is IEdDataWorkerInitializer initializer)
         {
@@ -56,6 +57,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             initialMultiKey.CopyTo(keyBlendedMultiKey);
             keyBlendedMultiKey.Key = key;
             _multipleKey = keyBlendedMultiKey;
+            return;
         }
+        throw new InvalidOperationException("Can not extract own multiple key. The parent worker dotes not have valid interface.");
     }
 }
