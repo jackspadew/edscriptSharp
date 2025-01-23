@@ -18,6 +18,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
         yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.Camellia(), "BouncyCastleAdapter.Camellia" };
         yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.Twofish(), "BouncyCastleAdapter.Twofish" };
         yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.Serpent(), "BouncyCastleAdapter.Serpent" };
+        yield return new object[] { new SymmetricAlgorithmAdapter.BouncyCastle.SM4(), "BouncyCastleAdapter.SM4" };
         yield return new object[] { new SymmetricAlgorithmAdapter.SystemCryptography.AES(), "CryptographyAdapter.AES" };
     }
 
