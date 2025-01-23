@@ -12,6 +12,22 @@ public class RandomizedHashCalculator_Tests
     private byte[] exampleSalt = new byte[]{1,1};
     private byte[] exampleLye = new byte[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 
+    public static IEnumerable<object[]> TestingSeeds()
+    {
+        for(int i=0; i<10; i++)
+        {
+            yield return new object[] { i };
+        }
+    }
+
+    public static IEnumerable<object[]> TestingTwoSeeds()
+    {
+        for(int i=0; i<10; i+=2)
+        {
+            yield return new object[] { i, i+1 };
+        }
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -26,11 +42,7 @@ public class RandomizedHashCalculator_Tests
     }
 
     [Theory(Skip = "Algorithm randomizers do not work because there is only one algorithm employed.")]
-    [InlineData(0,1)]
-    [InlineData(1,2)]
-    [InlineData(2,3)]
-    [InlineData(3,4)]
-    [InlineData(4,5)]
+    [MemberData(nameof(TestingTwoSeeds))]
     public void GenerateHashAnotherSeed_ReturnAnotherHash(int seedOne, int seedTwo)
     {
         var calculatorOne = new RandomizedHashCalculator(seedOne);
@@ -41,11 +53,7 @@ public class RandomizedHashCalculator_Tests
     }
 
     [Theory]
-    [InlineData(0,1)]
-    [InlineData(1,2)]
-    [InlineData(2,3)]
-    [InlineData(3,4)]
-    [InlineData(4,5)]
+    [MemberData(nameof(TestingTwoSeeds))]
     public void GenerateHashWithLye_ReturnAnotherHash(int lyeOne, int lyeTwo)
     {
         int sameSeed = 0;
@@ -59,11 +67,7 @@ public class RandomizedHashCalculator_Tests
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    [InlineData(4)]
+    [MemberData(nameof(TestingSeeds))]
     public void GenerateHashWithoutStretchingByThisAndBasicCalculator_ReturnSameHash(int seed)
     {
         var randomizedHashCalculator = new RandomizedHashCalculator(seed);
@@ -74,11 +78,7 @@ public class RandomizedHashCalculator_Tests
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    [InlineData(4)]
+    [MemberData(nameof(TestingSeeds))]
     public void GenerateHashWithSaltWithoutStretchingByThisAndBasicCalculator_ReturnSameHash(int seed)
     {
         var randomizedHashCalculator = new RandomizedHashCalculator(seed);
@@ -89,11 +89,7 @@ public class RandomizedHashCalculator_Tests
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    [InlineData(4)]
+    [MemberData(nameof(TestingSeeds))]
     public void GenerateHashWithStretchingWithoutLye_ReturnSameHash(int seed)
     {
         var randomizedHashCalculator = new RandomizedHashCalculator(seed);
