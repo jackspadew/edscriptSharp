@@ -10,7 +10,6 @@ using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.SystemCryptography;
 public class ISymmetricAlgorithmAdapterCommonTests
 {
     public static byte[] exampleBytes = new byte[]{0,1,2,3};
-    public static byte[] exampleKey = new byte[32];
     public static byte[] exampleIV = new byte[16];
     public static IEnumerable<object[]> EncryptAlgorithObjects()
     {
@@ -26,6 +25,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void Encrypt_ThenOutputSomething(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         byte[] outputBytes = encryptAlgo.EncryptBytes(exampleBytes,exampleKey,exampleIV);
         Assert.NotEmpty(outputBytes);
     }
@@ -34,6 +34,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void EncryptThenDecrypt_BeforeAndAfterIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         byte[] encryptedBytes = encryptAlgo.EncryptBytes(exampleBytes,exampleKey,exampleIV);
         byte[] decryptedBytes = encryptAlgo.DecryptBytes(encryptedBytes,exampleKey,exampleIV);
         Assert.Equal(exampleBytes, decryptedBytes);
@@ -43,6 +44,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void EncryptWithStream_BeforeAndAfterIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         MemoryStream inputEncryptStream = new MemoryStream(exampleBytes);
         MemoryStream encryptedStream = new MemoryStream();
         encryptAlgo.Encrypt(inputEncryptStream, encryptedStream, exampleKey, exampleIV);
@@ -58,6 +60,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void WriteToCreatedWritableEncryptStream_NotThrowAndOutSomething(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         MemoryStream outputStream = new MemoryStream();
         using(Stream writableStream = encryptAlgo.CreateWritableEncryptStream(outputStream, exampleKey, exampleIV))
         {
@@ -70,6 +73,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void WriteToCreatedWritableDecryptStream_NotThrowAndOutSomething(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         byte[] encryptedBytes = encryptAlgo.EncryptBytes(exampleBytes,exampleKey,exampleIV);
         MemoryStream outputStream = new MemoryStream();
         using(Stream writableStream = encryptAlgo.CreateWritableDecryptStream(outputStream, exampleKey, exampleIV))
@@ -83,6 +87,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void EncryptThenDecryptByCreatedWritableEncryptStream_InputAndOutputIsEqual(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         byte[] exampleBytes = new byte[102400];
         byte[] encrypted;
         byte[] decrypted;
@@ -105,6 +110,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void EncryptWithAnotherArgumentType_ReturnSameValue(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         byte[] outputBytesByBytes = encryptAlgo.EncryptBytes(exampleBytes,exampleKey,exampleIV);
         MemoryStream encryptOutputStream = new MemoryStream();
         Stream writableEncryptStream = encryptAlgo.CreateWritableEncryptStream(encryptOutputStream, exampleKey, exampleIV);
@@ -123,6 +129,7 @@ public class ISymmetricAlgorithmAdapterCommonTests
     [MemberData(nameof(EncryptAlgorithObjects))]
     public void MultiEncryptionStream_DecryptedIsInput(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
+        byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
         byte[] encryptedBytes = [];
         byte[] decryptedBytes = [];
         int multiple = 3;
