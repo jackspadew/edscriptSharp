@@ -17,3 +17,8 @@ public class Serpent : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
 {
     protected override IBlockCipher BCCryptoEngine => new SerpentEngine();
 }
+
+public class SM4 : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
+{
+    protected override IBlockCipher BCCryptoEngine => new SM4Engine();
+}
