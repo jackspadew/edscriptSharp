@@ -11,10 +11,8 @@ using Org.BouncyCastle.Crypto;
 public abstract class BouncyCastleEngineAdapterBase : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
 {
     protected abstract IBlockCipher BCCryptoEngine {get;}
-    public override int LegalIVSize {
-        get { return BCCryptoEngine.GetBlockSize(); }
-    }
-    public override int LegalKeySize { get {return 32;}}
+    public override int LegalIVSize => BCCryptoEngine.GetBlockSize();
+    public override int LegalKeySize => 32;
 
     public override void Decrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
