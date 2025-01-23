@@ -23,10 +23,10 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
     protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
     protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
     {
-        throw new NotImplementedException();
+        return new EdDataWorkerChain(this, parentWorker);
     }
     protected override IEdDataWorkerInitializer CreateInitialWorker()
     {
-        throw new NotImplementedException();
+        return new EdDataInitialWorker(this);
     }
 }
