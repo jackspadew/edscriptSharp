@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts;
+namespace LibEncryptedDriveScripts.Tests;
 
 using LibEncryptedDriveScripts.EdData;
 
