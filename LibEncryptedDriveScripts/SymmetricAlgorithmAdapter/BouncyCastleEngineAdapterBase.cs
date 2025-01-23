@@ -3,15 +3,16 @@ namespace LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.BouncyCastle;
 using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
 
 using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.IO;
 using Org.BouncyCastle.Crypto.Paddings;
+using Org.BouncyCastle.Crypto;
 
 public abstract class BouncyCastleEngineAdapterBase : SymmetricAlgorithmAdapterBase,ISymmetricAlgorithmAdapter
 {
+    protected abstract IBlockCipher BCCryptoEngine {get;}
     public override int LegalIVSize {
-        get { return (new AesEngine()).GetBlockSize(); }
+        get { return BCCryptoEngine.GetBlockSize(); }
     }
     public override int LegalKeySize { get {return 32;}}
 
@@ -31,7 +32,7 @@ public abstract class BouncyCastleEngineAdapterBase : SymmetricAlgorithmAdapterB
     }
     private Stream CreateStream(bool forEncryption, Stream outputStream, byte[] key, byte[] iv)
     {
-        var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new AesEngine()));
+        var cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(BCCryptoEngine));
         cipher.Init(forEncryption, new ParametersWithIV(new KeyParameter(key), iv));
 
         return new CipherStream(outputStream, cipher, cipher);
