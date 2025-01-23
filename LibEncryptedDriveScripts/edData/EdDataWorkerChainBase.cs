@@ -36,6 +36,10 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
         ExtractOwnMultipleKey(index);
+        if(!IsIndexExists(index))
+        {
+            StashChildMultipleKey(index);
+        }
         byte[] childMultipleKeyBytes = base.Extract(index);
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.SetBytes(childMultipleKeyBytes);
