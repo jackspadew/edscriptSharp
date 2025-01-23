@@ -9,4 +9,11 @@ public class IntegrationTests_EdData
     private string dbPath = "IntegrationTests_EdData.db";
     private string exampleIndex = "IndexNameOfStashedData";
     private string notExistsIndex = "NonExistentIndexName";
+
+    private IEdDataWorker DoCreateWorkerForTest()
+    {
+        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var worker = logic.CreateWorker();
+        return worker;
+    }
 }
