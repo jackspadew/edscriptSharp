@@ -20,5 +20,6 @@ public class Serpent : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
 
 public class SM4 : BouncyCastleEngineAdapterBase, ISymmetricAlgorithmAdapter
 {
+    public override int LegalKeySize => 16;
     protected override IBlockCipher BCCryptoEngine => new SM4Engine();
 }
