@@ -16,6 +16,16 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             _depth = worker.Depth + 1;
         }
     }
+    public override void Stash(string index, byte[] data)
+    {
+        ExtractOwnMultipleKey(index);
+        base.Stash(index, data);
+    }
+    public override byte[] Extract(string index)
+    {
+        ExtractOwnMultipleKey(index);
+        return base.Extract(index);
+    }
     public virtual void StashChildMultipleKey(string index)
     {
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
@@ -31,6 +41,10 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
         ExtractOwnMultipleKey(index);
+        if(!IsIndexExists(index))
+        {
+            StashChildMultipleKey(index);
+        }
         byte[] childMultipleKeyBytes = base.Extract(index);
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.SetBytes(childMultipleKeyBytes);
@@ -42,6 +56,7 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         {
             var myChildMultiKey = chainworker.ExtractChildMultipleKey(index);
             _multipleKey = myChildMultiKey;
+            return;
         }
         else if(_parentWorker is IEdDataWorkerInitializer initializer)
         {
@@ -51,6 +66,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             initialMultiKey.CopyTo(keyBlendedMultiKey);
             keyBlendedMultiKey.Key = key;
             _multipleKey = keyBlendedMultiKey;
+            return;
         }
+        throw new InvalidOperationException("Can not extract own multiple key. The parent worker dotes not have valid interface.");
     }
 }

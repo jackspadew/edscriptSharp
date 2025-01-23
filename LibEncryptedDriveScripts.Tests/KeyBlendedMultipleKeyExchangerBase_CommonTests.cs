@@ -8,10 +8,9 @@ using LibEncryptedDriveScripts.EdData;
 public class KeyBlendedMultipleKeyExchangerBase_CommonTests
 {
     public class Concrete_ExemplaryMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
-    public class KeyBlendedMultipleKeyExchangerBase_Concrete : KeyBlendedMultipleKeyExchangerBase {}
     public static IEnumerable<object[]> IMultipleKeyExchangerObjects()
     {
-        yield return new object[] { new KeyBlendedMultipleKeyExchangerBase_Concrete(), "KeyBlendedMultipleKeyExchangerBase_Concrete" };
+        yield return new object[] { new BasicKeyBlendedMultipleKeyExchanger(), "BasicKeyBlendedMultipleKeyExchanger" };
     }
 
     [Theory]

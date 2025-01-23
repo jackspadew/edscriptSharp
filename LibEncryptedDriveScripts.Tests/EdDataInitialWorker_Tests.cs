@@ -10,7 +10,7 @@ public class EdDataInitialWorker_Tests
     public static string dbPath = "EdDataInitialWorker_Tests.db";
 
     public class Concrete_InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
-    public class Concrete_KeyBlendedMultipleKeyExchanger : KeyBlendedMultipleKeyExchangerBase {}
+    public class Concrete_KeyBlendedMultipleKeyExchanger : BasicKeyBlendedMultipleKeyExchanger {}
     public class Concrete_LogicFactory : EdDataLogicFactoryBase, IEdDataLogicFactory
     {
         public Concrete_LogicFactory()

@@ -3,7 +3,7 @@ namespace LibEncryptedDriveScripts.EdData;
 using System.Security.Cryptography;
 using LibEncryptedDriveScripts.Converter;
 
-public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
+public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
 {
     private int _keySeed = 0;
     public override int KeySeed {
@@ -31,7 +31,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
         set {
             if(value.Length != _key.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(Key), _key, value);
             }
             _key = (byte[])value.Clone();
         }
@@ -42,7 +42,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
         set {
             if(value.Length != _iv.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(IV), _iv, value);
             }
             _iv = (byte[])value.Clone();
         }
@@ -53,7 +53,7 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
         set {
             if(value.Length != _salt.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(Salt), _salt, value);
             }
             _salt = (byte[])value.Clone();
         }
@@ -64,16 +64,17 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
         set {
             if(value.Length != _lye.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw ThrowWrongLengthBytesError(nameof(Lye), _lye, value);
             }
             _lye = (byte[])value.Clone();
         }
         }
     protected override int BytesLength => (INTEGER_BYTES_LENGTH * 4) + KEY_BYTES_LENGTH + IV_BYTES_LENGTH + (SALT_BYTES_LENGTH * 2);
 
+    protected abstract IConverter<byte[], byte[]> CreateKeyBlendConverter(byte[] additiveBytes);
     protected byte[] BlendBytes(byte[] originBytes, byte[] additiveBytes)
     {
-        var converter = new BytesXorBlendConverter(additiveBytes);
+        IConverter<byte[], byte[]> converter = CreateKeyBlendConverter(additiveBytes);
         return converter.Convert(originBytes);
     }
     protected int KeyBlendedInt(int originValue)
@@ -104,5 +105,9 @@ public class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMul
         ];
         var converter = new BytesListToCombinedBytesConverter();
         return converter.Convert(list);
+    }
+    private Exception ThrowWrongLengthBytesError(string valueName, byte[] currentValue, byte[] inputedValue)
+    {
+        return new IndexOutOfRangeException($"Index was outside the bounds of the array. The length of {valueName} is {currentValue.Length}. But inputted bytes length is {inputedValue.Length}.");
     }
 }
