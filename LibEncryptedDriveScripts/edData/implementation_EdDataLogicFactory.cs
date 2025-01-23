@@ -10,6 +10,7 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
     public BasicEdDataLogicFactory(string dbPath, string password)
     {
         DbPath = dbPath;
+        Key = new byte[KeyBlendedMultipleKeyExchanger.Key.Length];
         SetPassword(password);
     }
 
