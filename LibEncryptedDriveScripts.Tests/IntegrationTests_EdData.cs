@@ -20,6 +20,7 @@ public class IntegrationTests_EdData
     [Fact]
     public void StashData_ItCanBeExtracted()
     {
+        CommonFunctions.DeleteFileIfExists(dbPath);
         var workerForStash = DoCreateWorkerForTest();
         workerForStash.Stash(exampleIndex, exampleBytes);
         var workerForExtract = DoCreateWorkerForTest();
