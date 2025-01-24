@@ -11,7 +11,6 @@ public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator
         };
     protected virtual IEnumerator<IHashAlgorithmAdapter> AlgorithmEnumratorLogic => new RandomEnumerator<IHashAlgorithmAdapter>(AvailableAlgorithmList, _seed);
     private IEnumerator<IHashAlgorithmAdapter> _algorithmEnumrator;
-    private List<IHashAlgorithmAdapter> _algorithmSequentialList = new();
     protected override IHashAlgorithmAdapter Algorithm {
         get {
             var value = _algorithmEnumrator.Current;
@@ -54,13 +53,6 @@ public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator
     {
         _algorithmEnumrator = AlgorithmEnumratorLogic;
         return base.ComputeHash(inputStream, stretchCount);
-    }
-    private void ResetAlgorithmSequentialList(int length)
-    {
-        var generator = new RandomPickedListGenerator<IHashAlgorithmAdapter>(AvailableAlgorithmList, _seed);
-        _algorithmSequentialList = generator.Generate(length);
-        _algorithmEnumrator = _algorithmSequentialList.GetEnumerator();
-        _algorithmEnumrator.MoveNext();
     }
     private void GenerateLyeSequentialList(int length)
     {
