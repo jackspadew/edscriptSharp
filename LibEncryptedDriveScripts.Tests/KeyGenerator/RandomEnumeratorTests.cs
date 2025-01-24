@@ -35,4 +35,31 @@ public class RandomEnumerator_Tests
         bool AllValuesAreInlist = candidatesList.All(a => valueList.Contains(a));
         Assert.True(AllValuesAreInlist);
     }
+
+    [Fact]
+    public void TakeManyCurrentValue_OccurrenceRateOfAllCandidateValue​​IsWithinAcceptableRange()
+    {
+        var candidatesList = exampleList;
+        var valueList = new List<int>();
+        var randomEnum = new RandomEnumerator<int>(candidatesList,0);
+        for(int i=0; i<10000; i++)
+        {
+            valueList.Add(randomEnum.Current);
+            randomEnum.MoveNext();
+        }
+        var frequencies = candidatesList.ToDictionary(b => b, b => valueList.Count(a => a == b));
+        bool IsOccurrenceRateWithinAcceptableRange = true;
+        double tolerance = 0.1;
+        double idealRate = 1 / candidatesList.Count;
+        foreach(var keyValuePair in frequencies)
+        {
+            double actualRate = keyValuePair.Value / valueList.Count;
+            double difference = Math.Abs(actualRate - idealRate);
+            if(difference > tolerance)
+            {
+                Assert.Fail($"The rate of value {keyValuePair.Key} was {actualRate} (Difference from ideal rate {difference}).");
+            }
+        }
+        Assert.True(IsOccurrenceRateWithinAcceptableRange);
+    }
 }
