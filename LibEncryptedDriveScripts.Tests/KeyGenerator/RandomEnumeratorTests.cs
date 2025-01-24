@@ -20,4 +20,19 @@ public class RandomEnumerator_Tests
         bool AllValuesAreInlist = valueList.All(a => candidatesList.Contains(a));
         Assert.True(AllValuesAreInlist);
     }
+
+    [Fact]
+    public void TakeManyCurrentValue_AllCandidatesAppeared()
+    {
+        var candidatesList = exampleList;
+        var valueList = new List<int>();
+        var randomEnum = new RandomEnumerator<int>(candidatesList,0);
+        for(int i=0; i<1000; i++)
+        {
+            valueList.Add(randomEnum.Current);
+            randomEnum.MoveNext();
+        }
+        bool AllValuesAreInlist = candidatesList.All(a => valueList.Contains(a));
+        Assert.True(AllValuesAreInlist);
+    }
 }
