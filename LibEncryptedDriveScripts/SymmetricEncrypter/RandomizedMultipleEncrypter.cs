@@ -8,16 +8,19 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
 {
     protected int _keySeed;
     protected int _ivSeed;
-    private static List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
+    protected virtual List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
     {
         new SymmetricAlgorithmAdapter.SystemCryptography.AES(),
-        new SymmetricAlgorithmAdapter.BouncyCastle.AES()
+        new SymmetricAlgorithmAdapter.BouncyCastle.AES(),
+        new SymmetricAlgorithmAdapter.BouncyCastle.Camellia(),
+        new SymmetricAlgorithmAdapter.BouncyCastle.Serpent(),
+        new SymmetricAlgorithmAdapter.BouncyCastle.Twofish(),
     };
     public RandomizedMultipleEncrypter(int keySeed, int ivSeed, int algoSeed, int multiple)
     {
         _keySeed = keySeed;
         _ivSeed = ivSeed;
-        _algorithm = CreateSymmetricAlgorithmComboList(AlgorithmCandidateList, algoSeed, multiple);
+        _algorithm = CreateSymmetricAlgorithmComboList(algoSeed, multiple);
     }
     public RandomizedMultipleEncrypter() : this(0,0,0,10) {}
 
@@ -36,7 +39,7 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
         var listGenerator = new SequentialGenerator<byte[]>(converter, bytes);
         return listGenerator.Generate(count);
     }
-    private List<ISymmetricAlgorithmAdapter> CreateSymmetricAlgorithmComboList(List<ISymmetricAlgorithmAdapter> validAlgorithmList, int seed, int count)
+    private List<ISymmetricAlgorithmAdapter> CreateSymmetricAlgorithmComboList(int seed, int count)
     {
         var generator = new RandomPickedListGenerator<ISymmetricAlgorithmAdapter>(AlgorithmCandidateList, seed);
         return generator.Generate(count);
