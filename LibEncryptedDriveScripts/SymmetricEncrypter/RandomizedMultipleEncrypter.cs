@@ -4,11 +4,13 @@ using LibEncryptedDriveScripts.Converter;
 using LibEncryptedDriveScripts.KeyGenerator;
 using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
 
-public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEncrypter
+public class RandomizedMultipleEncrypter : MultipleSymmetricEncrypterBase, ISymmetricEncrypter
 {
     protected int _keySeed;
     protected int _ivSeed;
-    protected virtual List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
+    protected int _algorithmSeed;
+    protected override int MultipleCryptionCount {get;}
+    protected override List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;} = new()
     {
         new SymmetricAlgorithmAdapter.SystemCryptography.AES(),
         new SymmetricAlgorithmAdapter.BouncyCastle.AES(),
@@ -20,7 +22,8 @@ public class RandomizedMultipleEncrypter : SymmetricEncrypterBase, ISymmetricEnc
     {
         _keySeed = keySeed;
         _ivSeed = ivSeed;
-        _algorithm = CreateSymmetricAlgorithmComboList(algoSeed, multiple);
+        _algorithmSeed = algoSeed;
+        MultipleCryptionCount = multiple;
     }
     public RandomizedMultipleEncrypter() : this(0,0,0,10) {}
 
