@@ -26,18 +26,20 @@ public abstract class MultipleSymmetricEncrypterBase : SymmetricEncrypterBase, I
     }
     public override byte[] Encrypt(byte[] inputBytes, byte[] key, byte[] iv)
     {
+        var algorithmEnum = GenerateAlgorithmList(MultipleCryptionCount).AsEnumerable().GetEnumerator();
         var keyEnum = GenerateKeyList(key, MultipleCryptionCount).AsEnumerable().GetEnumerator();
         var ivEnum = GenerateIVList(iv, MultipleCryptionCount).AsEnumerable().GetEnumerator();
-        byte[] encryptedBytes = MultipleCryptionWithEnumKeys(base.Encrypt, inputBytes, _algorithmEnum, keyEnum, ivEnum);
+        byte[] encryptedBytes = MultipleCryptionWithEnumKeys(base.Encrypt, inputBytes, algorithmEnum, keyEnum, ivEnum);
         keyEnum.Dispose();
         ivEnum.Dispose();
         return encryptedBytes;
     }
     public override byte[] Decrypt(byte[] encryptedBytes, byte[] key, byte[] iv)
     {
+        var algorithmEnum = GenerateAlgorithmList(MultipleCryptionCount).AsEnumerable().Reverse().GetEnumerator();
         var keyEnum = GenerateKeyList(key, MultipleCryptionCount).AsEnumerable().Reverse().GetEnumerator();
         var ivEnum = GenerateIVList(iv, MultipleCryptionCount).AsEnumerable().Reverse().GetEnumerator();
-        byte[] decryptedBytes = MultipleCryptionWithEnumKeys(base.Decrypt, encryptedBytes, _algorithmEnum, keyEnum, ivEnum);
+        byte[] decryptedBytes = MultipleCryptionWithEnumKeys(base.Decrypt, encryptedBytes, algorithmEnum, keyEnum, ivEnum);
         keyEnum.Dispose();
         ivEnum.Dispose();
         return decryptedBytes;
