@@ -35,6 +35,10 @@ public class RandomizedMultipleEncrypter : MultipleSymmetricEncrypterBase, ISymm
     {
         return GenerateRandomBlendedSequentialBytesList(iv,count,_ivSeed);
     }
+    protected override List<ISymmetricAlgorithmAdapter> GenerateAlgorithmList(int count)
+    {
+        return CreateSymmetricAlgorithmComboList(_algorithmSeed, count);
+    }
     private List<byte[]> GenerateRandomBlendedSequentialBytesList(byte[] bytes, int count, int seed)
     {
         Random random = new Random(seed);
