@@ -21,9 +21,13 @@ public class RandomPickedListGenerator<T> : IListGenerator<T>
     }
     private List<T> CreateRandomizedPickedList(int count)
     {
-        Random random = new Random(_seed);
-        return Enumerable.Range(1, count)
-                         .Select(_ => _availableElementList[random.Next(_availableElementList.Count)])
-                         .ToList();
+        List<T> resultList = new();
+        IEnumerator<T> randomEnum = new RandomEnumerator<T>(_availableElementList, _seed);
+        for(int i=0; i<count; i++)
+        {
+            resultList.Add(randomEnum.Current);
+            randomEnum.MoveNext();
+        }
+        return resultList;
     }
 }
