@@ -2,6 +2,7 @@ namespace LibEncryptedDriveScripts.Tests;
 
 using Xunit;
 using LibEncryptedDriveScripts.SymmetricEncrypter;
+using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
 
 #pragma warning disable xUnit1026 // Unused arguments
 
@@ -9,37 +10,27 @@ public class ISymmetricEncrypter_CommonTests
 {
     public class SymmetricEncrypter_ForTestSystemCryptographyAES : SymmetricEncrypterBase
     {
-        public SymmetricEncrypter_ForTestSystemCryptographyAES()
-        {
-            _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
-        }
+        protected override ISymmetricAlgorithmAdapter Algorithm => new SymmetricAlgorithmAdapter.SystemCryptography.AES();
     }
-    public class SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES : SymmetricEncrypterBase
+    public class SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES : MultipleSymmetricEncrypterBase
     {
-        public SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES()
-        {
-            _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
-            _algorithm.Add(new SymmetricAlgorithmAdapter.SystemCryptography.AES());
-        }
+        protected override int MultipleCryptionCount => 10;
+        protected override List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList => new(){
+            new SymmetricAlgorithmAdapter.SystemCryptography.AES(),
+            new SymmetricAlgorithmAdapter.SystemCryptography.AES(),
+        };
     }
     public class SymmetricEncrypter_ForTestBouncyCastleAES : SymmetricEncrypterBase
     {
-        public SymmetricEncrypter_ForTestBouncyCastleAES()
-        {
-            _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
-        }
+        protected override ISymmetricAlgorithmAdapter Algorithm => new SymmetricAlgorithmAdapter.BouncyCastle.AES();
     }
-    public class SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES : SymmetricEncrypterBase
+    public class SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES : MultipleSymmetricEncrypterBase
     {
-        public SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES()
-        {
-            _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
-            _algorithm.Add(new SymmetricAlgorithmAdapter.BouncyCastle.AES());
-        }
-        protected override void DisposeCreatedStreams(List<Stream> streamList)
-        {
-            streamList[0].Dispose();
-        }
+        protected override int MultipleCryptionCount => 10;
+        protected override List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList => new(){
+            new SymmetricAlgorithmAdapter.BouncyCastle.AES(),
+            new SymmetricAlgorithmAdapter.BouncyCastle.AES(),
+        };
     }
     public static IEnumerable<object[]> ISymmetricEncrypterObjects()
     {
@@ -47,7 +38,6 @@ public class ISymmetricEncrypter_CommonTests
         yield return new object[] { new SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES(), "SymmetricEncrypter_ForTestMultipleEncryptionBySystemCryptographyAES" };
         yield return new object[] { new SymmetricEncrypter_ForTestBouncyCastleAES(), "SymmetricEncrypter_ForTestBouncyCastleAES" };
         yield return new object[] { new SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES(), "SymmetricEncrypter_ForTestMultipleEncryptionByBouncyCastleAES" };
-        yield return new object[] { new RandomizedMultipleEncrypter(), "RandomizedMultipleEncrypter_default" };
         yield return new object[] { new RandomizedMultipleEncrypter(1,1,1,1), "RandomizedMultipleEncrypter_OneAlgo" };
         yield return new object[] { new RandomizedMultipleEncrypter(1,1,1,2), "RandomizedMultipleEncrypter_Two" };
         yield return new object[] { new RandomizedMultipleEncrypter(1,1,1,3), "RandomizedMultipleEncrypter_Three" };
