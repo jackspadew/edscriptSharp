@@ -74,7 +74,7 @@ public abstract class MultipleSymmetricEncrypterBase : SymmetricEncrypterBase, I
     }
     public override void Encrypt(Stream inputStream, Stream outputStream, byte[] key, byte[] iv)
     {
-        var algorithmEnum = GenerateAlgorithmList(MultipleCryptionCount).AsEnumerable().GetEnumerator();
+        var algorithmEnum = GenerateAlgorithmList(MultipleCryptionCount).AsEnumerable().Reverse().GetEnumerator();
         var keyEnum = GenerateKeyList(key, MultipleCryptionCount).AsEnumerable().Reverse().GetEnumerator();
         var ivEnum = GenerateIVList(iv, MultipleCryptionCount).AsEnumerable().Reverse().GetEnumerator();
         MultipleCryptionWithEnumKeys(CallCreateWritableEncryptStreamWithDynamicAlgorithm, inputStream, outputStream, algorithmEnum, keyEnum, ivEnum);
