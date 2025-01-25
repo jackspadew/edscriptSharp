@@ -8,8 +8,8 @@ public abstract class MultipleSymmetricEncrypterBase : SymmetricEncrypterBase, I
 {
     protected abstract int MultipleCryptionCount {get;}
     protected abstract List<ISymmetricAlgorithmAdapter> AlgorithmCandidateList {get;}
-    private IEnumerator<ISymmetricAlgorithmAdapter> _algorithmEnum = (IEnumerator<ISymmetricAlgorithmAdapter>)Array.Empty<ISymmetricAlgorithmAdapter>().GetEnumerator();
-    protected override ISymmetricAlgorithmAdapter Algorithm => _algorithmEnum.Current;
+    private IEnumerator<ISymmetricAlgorithmAdapter>? _algorithmEnum;
+    protected override ISymmetricAlgorithmAdapter Algorithm => _algorithmEnum?.Current ?? throw new NullReferenceException();
 
     protected byte[] MultipleCryptionWithEnumKeys(Func<byte[], byte[], byte[], byte[]> cryptionFunc, byte[] inputBytes, IEnumerator<ISymmetricAlgorithmAdapter> algorithmEnum, IEnumerator<byte[]> keyEnum, IEnumerator<byte[]> ivEnum)
     {
