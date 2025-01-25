@@ -25,7 +25,6 @@ public class RandomizedMultipleEncrypter : MultipleSymmetricEncrypterBase, ISymm
         _algorithmSeed = algoSeed;
         MultipleCryptionCount = multiple;
     }
-    public RandomizedMultipleEncrypter() : this(0,0,0,10) {}
 
     protected override List<byte[]> GenerateKeyList(byte[] key, int count)
     {
