@@ -109,9 +109,3 @@ public abstract class MultipleSymmetricEncrypterBase : SymmetricEncrypterBase, I
         return list;
     }
 }
-
-public class SameElementListGenerator<T> : SequentialGenerator<T>, IListGenerator<T>
-{
-    public SameElementListGenerator(T element) : base(new JustReturnConverter<T>(), element)
-    {}
-}

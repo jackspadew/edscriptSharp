@@ -24,3 +24,9 @@ public class SequentialGenerator<T> : IListGenerator<T>
         return resultList;
     }
 }
+
+public class SameElementListGenerator<T> : SequentialGenerator<T>, IListGenerator<T>
+{
+    public SameElementListGenerator(T element) : base(new JustReturnConverter<T>(), element)
+    {}
+}
