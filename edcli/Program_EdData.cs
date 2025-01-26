@@ -5,6 +5,8 @@ using System.Text;
 
 public partial class Program
 {
+    private const string ErrorDbFileDoesNotExists = "The specified database file does not exist.";
+    private const string ErrorStashTargetFileDoesNotExists = "The specified stash target file does not exist.";
     public static IEdDataWorker CreateEdDataWorker(string dbPath, string password)
     {
         IEdDataLogicFactory logic = new BasicEdDataLogicFactory(dbPath, password);
@@ -25,5 +27,11 @@ public partial class Program
         byte[] data = CreateEdDataWorker(dbFileInfo.FullName, password).Extract(indexName);
         string rawString = Encoding.UTF8.GetString(data);
         Console.WriteLine(rawString);
+    }
+    public static bool IsExists(string path, string errorMessage)
+    {
+        if(File.Exists(path)) return true;
+        Console.WriteLine($"{errorMessage} (\"{path}\")");
+        return false;
     }
 }
