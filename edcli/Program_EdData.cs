@@ -1,7 +1,15 @@
 namespace edcli;
 
+using LibEncryptedDriveScripts.EdData;
+
 public partial class Program
 {
+    public static IEdDataWorker CreateEdDataWorker(string dbPath, string password)
+    {
+        IEdDataLogicFactory logic = new BasicEdDataLogicFactory(dbPath, password);
+        IEdDataWorker worker = logic.CreateWorker();
+        return worker;
+    }
     public static void Stash(string indexName, FileInfo fileInfo, string? nullablePassword)
     {
         string password = nullablePassword ?? ReadPassword();
