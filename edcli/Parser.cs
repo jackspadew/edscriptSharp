@@ -21,35 +21,44 @@ public partial class Program
 
     public static List<Command> SubcommandList()
     {
-        return new List<Command>(){
-            StashSubCommand(),
-            ExtractSubCommand(),
+        var indexNameOpt = new Option<string>(new string[]{"--name","-n"}, "Index name of the stashed data."){IsRequired = true};
+        var pathOpt = new Option<FileInfo>(new string[]{"--file","-f"}, "File path for stashing."){IsRequired = true};
+        var passwordOpt = new Option<string?>(new string[]{"--password","-p"}, () => {return null;} ,"Password for encryption/decryption.");
+        var list = new List<Command>(){
+            StashSubCommand(indexNameOpt, pathOpt, passwordOpt),
+            ExtractSubCommand(indexNameOpt, passwordOpt),
         };
+        return list;
     }
 
-    public static Command StashSubCommand()
+    public static Command StashSubCommand(Option<string> nameOpt, Option<FileInfo> pathOpt, Option<string?> passwordOpt)
     {
         var subcommand =  new Command("stash", "Stash data to Database.");
-        subcommand.SetHandler(() => {
-            Stash();
-        });
+        subcommand.AddOption(nameOpt);
+        subcommand.AddOption(pathOpt);
+        subcommand.AddOption(passwordOpt);
+        subcommand.SetHandler((name, fileInfo, password) => {
+            Stash(name, fileInfo, password);
+        }, nameOpt, pathOpt, passwordOpt);
         return subcommand;
     }
-    public static void Stash()
+    public static void Stash(string indexName, FileInfo fileInfo, string? password)
     {
-        Console.WriteLine($"Do stash");
+        Console.WriteLine($"Do stash with name=\"{indexName}\", file=\"{fileInfo.FullName}\" password=\"{password}\".");
     }
 
-    public static Command ExtractSubCommand()
+    public static Command ExtractSubCommand(Option<string> nameOpt, Option<string?> passwordOpt)
     {
         var subcommand =  new Command("extract", "Extract data from Database.");
-        subcommand.SetHandler(() => {
-            Extract();
-        });
+        subcommand.AddOption(nameOpt);
+        subcommand.AddOption(passwordOpt);
+        subcommand.SetHandler((name, password) => {
+            Extract(name, password);
+        }, nameOpt, passwordOpt);
         return subcommand;
     }
-    public static void Extract()
+    public static void Extract(string indexName, string? password)
     {
-        Console.WriteLine($"Do extract");
+        Console.WriteLine($"Do extract with name=\"{indexName}\", password=\"{password}\".");
     }
 }
