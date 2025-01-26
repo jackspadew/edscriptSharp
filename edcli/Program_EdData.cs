@@ -10,12 +10,12 @@ public partial class Program
         IEdDataWorker worker = logic.CreateWorker();
         return worker;
     }
-    public static void Stash(string indexName, FileInfo fileInfo, string? nullablePassword)
+    public static void Stash(FileInfo dbFileInfo, string indexName, FileInfo stashTargetFileInfo, string? nullablePassword)
     {
         string password = nullablePassword ?? ReadPassword();
-        Console.WriteLine($"Do stash with name=\"{indexName}\", file=\"{fileInfo.FullName}\" password=\"{password}\".");
+        Console.WriteLine($"Do stash with name=\"{indexName}\", file=\"{stashTargetFileInfo.FullName}\" password=\"{password}\".");
     }
-    public static void Extract(string indexName, string? nullablePassword)
+    public static void Extract(FileInfo dbFileInfo, string indexName, string? nullablePassword)
     {
         string password = nullablePassword ?? ReadPassword();
         Console.WriteLine($"Do extract with name=\"{indexName}\", password=\"{password}\".");
