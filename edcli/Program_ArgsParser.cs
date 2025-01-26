@@ -42,12 +42,6 @@ public partial class Program
         }, nameOpt, pathOpt, passwordOpt);
         return subcommand;
     }
-    public static void Stash(string indexName, FileInfo fileInfo, string? nullablePassword)
-    {
-        string password = nullablePassword ?? ReadPassword();
-        Console.WriteLine($"Do stash with name=\"{indexName}\", file=\"{fileInfo.FullName}\" password=\"{password}\".");
-    }
-
     public static Command ExtractSubCommand(Option<string> nameOpt, Option<string?> passwordOpt)
     {
         var subcommand =  new Command("extract", "Extract data from Database.");
@@ -57,10 +51,5 @@ public partial class Program
             Extract(name, password);
         }, nameOpt, passwordOpt);
         return subcommand;
-    }
-    public static void Extract(string indexName, string? nullablePassword)
-    {
-        string password = nullablePassword ?? ReadPassword();
-        Console.WriteLine($"Do extract with name=\"{indexName}\", password=\"{password}\".");
     }
 }
