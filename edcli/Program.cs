@@ -4,6 +4,6 @@ public partial class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        RunByCommandParser(args);
     }
 }
