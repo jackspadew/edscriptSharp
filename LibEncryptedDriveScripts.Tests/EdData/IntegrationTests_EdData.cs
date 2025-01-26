@@ -7,6 +7,7 @@ public class IntegrationTests_EdData
 {
     private byte[] exampleBytes = new byte[]{0,1,2,3};
     private string examplePassword = "Example#Password";
+    private string anotherPassword = "Another!!Password";
     private string dbPath = "IntegrationTests_EdData.db";
     private string exampleIndex = "IndexNameOfStashedData";
     private string notExistsIndex = "NonExistentIndexName";
@@ -74,5 +75,15 @@ public class IntegrationTests_EdData
         {
             workerForStash.Stash(str, exampleBytes);
         }
+    }
+
+    [Fact]
+    public void StashBySameIndexNameAndDifferentPassword_IndexDoesNotCollide()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var worker = DoCreateWorkerForTest(examplePassword);
+        worker.Stash(exampleIndex, exampleBytes);
+        var workerWithAnotherPassword = DoCreateWorkerForTest(anotherPassword);
+        workerWithAnotherPassword.Stash(exampleIndex, exampleBytes);
     }
 }
