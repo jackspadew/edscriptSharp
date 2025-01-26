@@ -15,6 +15,7 @@ public partial class Program
     }
     public static void Stash(FileInfo dbFileInfo, string indexName, FileInfo stashTargetFileInfo, string? nullablePassword)
     {
+        if(!IsExists(stashTargetFileInfo.FullName, ErrorStashTargetFileDoesNotExists)) return;
         string password = nullablePassword ?? ReadPassword();
         Console.WriteLine($"Do stash with name=\"{indexName}\", file=\"{stashTargetFileInfo.FullName}\" password=\"{password}\".");
         byte[] fileBytes = Encoding.UTF8.GetBytes(File.ReadAllText(stashTargetFileInfo.FullName));
@@ -22,6 +23,7 @@ public partial class Program
     }
     public static void Extract(FileInfo dbFileInfo, string indexName, string? nullablePassword)
     {
+        if(!IsExists(dbFileInfo.FullName, ErrorDbFileDoesNotExists)) return;
         string password = nullablePassword ?? ReadPassword();
         Console.WriteLine($"Do extract with name=\"{indexName}\", password=\"{password}\".");
         byte[] data = CreateEdDataWorker(dbFileInfo.FullName, password).Extract(indexName);
