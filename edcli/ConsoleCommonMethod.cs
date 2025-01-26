@@ -2,6 +2,13 @@ namespace edcli;
 
 public partial class Program
 {
+    private const string promptForReadPassword = "password";
+    private const bool flagShowMaskForReadPassword = false;
+    private const bool flagClearLineForReadPassword = true;
+    public static string ReadPassword()
+    {
+        return ReadMaskinput(promptForReadPassword, flagShowMaskForReadPassword, flagClearLineForReadPassword);
+    }
     public static string ReadMaskinput(string prompt, bool showMask = true, bool clearFlag = false)
     {
         string result = string.Empty;
