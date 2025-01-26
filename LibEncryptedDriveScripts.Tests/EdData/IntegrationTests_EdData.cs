@@ -86,4 +86,25 @@ public class IntegrationTests_EdData
         var workerWithAnotherPassword = DoCreateWorkerForTest(anotherPassword);
         workerWithAnotherPassword.Stash(exampleIndex, exampleBytes);
     }
+
+    [Fact]
+    public void ExtractWithAnotherPassword_Throw()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var workerForStash = DoCreateWorkerForTest(examplePassword);
+        workerForStash.Stash(exampleIndex, exampleBytes);
+        var workerForExtract = DoCreateWorkerForTest(anotherPassword);
+        Assert.Throws<InvalidOperationException>(() => workerForExtract.Extract(exampleIndex));
+    }
+
+    [Fact]
+    public void ExtractWithAnotherPassword_ExtractedDataIsNotEqual()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var workerForStash = DoCreateWorkerForTest(examplePassword);
+        workerForStash.Stash(exampleIndex, exampleBytes);
+        var workerForExtract = DoCreateWorkerForTest(anotherPassword);
+        byte[] extractedBytes = workerForExtract.Extract(exampleIndex);
+        Assert.NotEqual(exampleBytes, extractedBytes);
+    }
 }
