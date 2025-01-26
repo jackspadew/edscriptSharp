@@ -2,6 +2,7 @@ namespace edcli;
 
 public partial class Program
 {
+    private const string ENVIRONMENT_DBPATH = "EDCLI_DBPATH";
     private const string promptForReadPassword = "password";
     private const bool flagShowMaskForReadPassword = false;
     private const bool flagClearLineForReadPassword = true;
@@ -39,5 +40,11 @@ public partial class Program
         Console.SetCursorPosition(0, currentLine);
         Console.Write(new string(' ', Console.WindowWidth));
         Console.SetCursorPosition(0, currentLine);
+    }
+
+    public static string GetDatabaseFilePathEnvironmentValue()
+    {
+        var value = Environment.GetEnvironmentVariable(ENVIRONMENT_DBPATH);
+        return value ?? "";
     }
 }
