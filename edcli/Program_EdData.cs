@@ -7,6 +7,7 @@ public partial class Program
 {
     private const string ErrorDbFileDoesNotExists = "The specified database file does not exist.";
     private const string ErrorStashTargetFileDoesNotExists = "The specified stash target file does not exist.";
+    private const string ErrorPathStringIsIncorrect = "The specified path string is invalid.";
     public static IEdDataWorker CreateEdDataWorker(string dbPath, string password)
     {
         IEdDataLogicFactory logic = new BasicEdDataLogicFactory(dbPath, password);
@@ -35,5 +36,9 @@ public partial class Program
         if(File.Exists(path)) return true;
         Console.WriteLine($"{errorMessage} (\"{path}\")");
         return false;
+    }
+    public static bool IsCorrectPath(string path)
+    {
+        return true;
     }
 }
