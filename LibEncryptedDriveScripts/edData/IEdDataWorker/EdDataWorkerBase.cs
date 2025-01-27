@@ -20,7 +20,15 @@ public abstract class EdDataWorkerBase : IEdDataWorker
     {
         byte[] encryptedBytes = EdCryptor.EncryptBytes(data, MultipleKey);
         byte[] indexBytes = GenerateIndexBytes(index);
-        DbOperator.InsertData(indexBytes, encryptedBytes);
+        try{
+            DbOperator.InsertData(indexBytes, encryptedBytes);
+        }
+        catch (Exception ex)
+        {
+            string IndexBytesString = BitConverter.ToString(GenerateIndexBytes(index));
+            string OwnMultipleKeyString = MultipleKey.ToString();
+            throw new Exception($"{this.GetType().Name}: IndexString={index}, IndexBytes={IndexBytesString}, MultipleKey={OwnMultipleKeyString}", ex);
+        }
     }
     public virtual byte[] Extract(string index)
     {
