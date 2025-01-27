@@ -3,10 +3,12 @@ namespace LibEncryptedDriveScripts.Tests;
 using Xunit;
 using LibEncryptedDriveScripts.EdData;
 using LibEncryptedDriveScripts.Database;
+using System.Text;
 
 public class EdDataLogicFactoryBase_Tests
 {
     private static byte[] exampleKey = new byte[32]{0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1};
+    private static string examplePassword = "abcd";
     public class ConcreteCryptor_ForInitializer : EdDataCryptor {}
     public class ConcreteCryptor_Default : EdDataCryptor {}
     public class ConcreteDataOperator_Default : DatabaseOperatorBase
@@ -24,9 +26,11 @@ public class EdDataLogicFactoryBase_Tests
         protected override string DbPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         protected override byte[] Key { get; set; }
 
-        public Iplemented_EdDataLogicFactory()
+        public Iplemented_EdDataLogicFactory() : this(examplePassword) {}
+        public Iplemented_EdDataLogicFactory(string password)
         {
-            Key = exampleKey;
+            Key = new byte[KeyBlendedMultipleKeyExchanger.Key.Length];
+            SetPassword(password);
         }
 
         protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
@@ -118,12 +122,16 @@ public class EdDataLogicFactoryBase_Tests
     }
 
     [Fact]
-    public void CreateMultipleKeyExchangerForWorkerChainZero_ItHasKey()
+    public void CreateMultipleKeyExchangerForWorkerChainZero_TheKeyIsHashedBytes()
     {
+        var hashCalculator = new ConcreteHashCalculator_Default();
+        var passBytes = Encoding.UTF8.GetBytes(examplePassword);
+        byte[] hash = hashCalculator.ComputeHash(passBytes, new ConcreteMultipleKeyExchanger_Default());
         var logicFactory = new Iplemented_EdDataLogicFactory();
         var initialWorker = new ConcreteInitializer(logicFactory);
         var workerChainZero = new ConcreteChainWorker(logicFactory,initialWorker);
         var multiKey = logicFactory.CreateKeyBlendedMultipleKeyExchanger(workerChainZero);
-        Assert.Equal(exampleKey, multiKey.Key);
+        Assert.Equal(hash[0..32].Length, multiKey.Key.Length);
+        Assert.Equal(hash[0..32], multiKey.Key);
     }
 }

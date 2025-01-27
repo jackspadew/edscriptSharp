@@ -7,13 +7,14 @@ public class IntegrationTests_EdData
 {
     private byte[] exampleBytes = new byte[]{0,1,2,3};
     private string examplePassword = "Example#Password";
+    private string anotherPassword = "Another!!Password";
     private string dbPath = "IntegrationTests_EdData.db";
     private string exampleIndex = "IndexNameOfStashedData";
     private string notExistsIndex = "NonExistentIndexName";
 
-    private IEdDataWorker DoCreateWorkerForTest()
+    private IEdDataWorker DoCreateWorkerForTest(string password)
     {
-        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var logic = new BasicEdDataLogicFactory(dbPath, password);
         var worker = logic.CreateWorker();
         return worker;
     }
@@ -46,9 +47,9 @@ public class IntegrationTests_EdData
     public void StashData_ItCanBeExtracted()
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var workerForStash = DoCreateWorkerForTest();
+        var workerForStash = DoCreateWorkerForTest(examplePassword);
         workerForStash.Stash(exampleIndex, exampleBytes);
-        var workerForExtract = DoCreateWorkerForTest();
+        var workerForExtract = DoCreateWorkerForTest(examplePassword);
         byte[] extractedBytes = workerForExtract.Extract(exampleIndex);
         Assert.Equal(exampleBytes, extractedBytes);
     }
@@ -57,9 +58,9 @@ public class IntegrationTests_EdData
     public void ExtractWithNotExistsIndex_Throw()
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var workerForStash = DoCreateWorkerForTest();
+        var workerForStash = DoCreateWorkerForTest(examplePassword);
         workerForStash.Stash(exampleIndex, exampleBytes);
-        var workerForExtract = DoCreateWorkerForTest();
+        var workerForExtract = DoCreateWorkerForTest(examplePassword);
         Assert.Throws<InvalidOperationException>(() => workerForExtract.Extract(notExistsIndex));
     }
 
@@ -69,10 +70,30 @@ public class IntegrationTests_EdData
         int stashingCount = 10;
         CommonFunctions.DeleteFileIfExists(dbPath);
         var randomIndexNameList = GenerateRandomStringList(256, stashingCount);
-        var workerForStash = DoCreateWorkerForTest();
+        var workerForStash = DoCreateWorkerForTest(examplePassword);
         foreach(string str in randomIndexNameList)
         {
             workerForStash.Stash(str, exampleBytes);
         }
+    }
+
+    [Fact]
+    public void StashBySameIndexNameAndDifferentPassword_IndexDoesNotCollide()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var worker = DoCreateWorkerForTest(examplePassword);
+        worker.Stash(exampleIndex, exampleBytes);
+        var workerWithAnotherPassword = DoCreateWorkerForTest(anotherPassword);
+        workerWithAnotherPassword.Stash(exampleIndex, exampleBytes);
+    }
+
+    [Fact]
+    public void ExtractWithAnotherPassword_Throw()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var workerForStash = DoCreateWorkerForTest(examplePassword);
+        workerForStash.Stash(exampleIndex, exampleBytes);
+        var workerForExtract = DoCreateWorkerForTest(anotherPassword);
+        Assert.Throws<InvalidOperationException>(() => workerForExtract.Extract(exampleIndex));
     }
 }
