@@ -19,7 +19,13 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     public override void Stash(string index, byte[] data)
     {
         ExtractOwnMultipleKey(index);
-        base.Stash(index, data);
+        try{
+            base.Stash(index, data);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"{this.GetType().Name}: _depth={_depth}", ex);
+        }
     }
     public override byte[] Extract(string index)
     {
@@ -32,11 +38,10 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         {
             parentChainWorker.StashChildMultipleKey(index);
         }
-        ExtractOwnMultipleKey(index);
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.Randomize();
         byte[] childMultiKeyBytes = childMultiKey.GetBytes();
-        base.Stash(index, childMultiKeyBytes);
+        this.Stash(index, childMultiKeyBytes);
     }
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
