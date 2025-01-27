@@ -28,62 +28,92 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
 
     public Stream GetDataStream(byte[] index)
     {
-        _sqliteConnection.Open();
-        string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
-        Stream result;
-        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
+        try
         {
-            command.Parameters.AddWithValue($"@{_indexName}", index);
-            using (var reader = command.ExecuteReader())
+            _sqliteConnection.Open();
+            string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+            Stream result;
+            using (var command = new SqliteCommand(sqltext, _sqliteConnection))
             {
-                if (reader.Read())
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                using (var reader = command.ExecuteReader())
                 {
-                    result = reader.GetStream(0);
-                    _sqliteConnection.Close();
-                    SqliteConnection.ClearPool(_sqliteConnection);
-                    return result;
+                    if (reader.Read())
+                    {
+                        result = reader.GetStream(0);
+                        _sqliteConnection.Close();
+                        SqliteConnection.ClearPool(_sqliteConnection);
+                        return result;
+                    }
                 }
             }
         }
-        _sqliteConnection.Close();
-        SqliteConnection.ClearPool(_sqliteConnection);
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
         throw new InvalidOperationException($"There was no row with the specified index value.");
     }
     public byte[] GetDataBytes(byte[] index)
     {
-        _sqliteConnection.Open();
-        string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
-        byte[] result;
-        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
+        try
         {
-            command.Parameters.AddWithValue($"@{_indexName}", index);
-            using (var reader = command.ExecuteReader())
+            _sqliteConnection.Open();
+            string sqltext = $"SELECT {_dataName} FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+            byte[] result;
+            using (var command = new SqliteCommand(sqltext, _sqliteConnection))
             {
-                if (reader.Read())
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                using (var reader = command.ExecuteReader())
                 {
-                    result = (byte[])reader[_dataName];
-                    _sqliteConnection.Close();
-                    SqliteConnection.ClearPool(_sqliteConnection);
-                    return result;
+                    if (reader.Read())
+                    {
+                        result = (byte[])reader[_dataName];
+                        _sqliteConnection.Close();
+                        SqliteConnection.ClearPool(_sqliteConnection);
+                        return result;
+                    }
                 }
             }
         }
-        _sqliteConnection.Close();
-        SqliteConnection.ClearPool(_sqliteConnection);
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
         throw new InvalidOperationException($"There was no row with the specified index value.");
     }
     public void InsertData(byte[] index, byte[] data)
     {
-        _sqliteConnection.Open();
-        string sqltext = $"INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
-        using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+        try
         {
-            command.Parameters.AddWithValue($"@{_indexName}", index);
-            command.Parameters.AddWithValue($"@{_dataName}", data);
-            command.ExecuteNonQuery();
+            _sqliteConnection.Open();
+            string sqltext = $"INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
+            using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+            {
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                command.Parameters.AddWithValue($"@{_dataName}", data);
+                command.ExecuteNonQuery();
+            }
         }
-        _sqliteConnection.Close();
-        SqliteConnection.ClearPool(_sqliteConnection);
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
     }
 
     protected void InitDatabase()
@@ -95,24 +125,34 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     public void InsertData(byte[] index, Stream readableStream)
     {
-        _sqliteConnection.Open();
-        long streamLength = readableStream.Length - readableStream.Position;
-        string sqltext = $@"
-            INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, zeroblob({streamLength}));
-            SELECT last_insert_rowid();
-        ";
-        using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+        try
         {
-            command.Parameters.AddWithValue($"@{_indexName}", index);
-            long rowid = (long)(command.ExecuteScalar() ??
-                throw new InvalidOperationException("Could not read the value of \"last_insert_rowid()\"."));
-            using (var writeStream = new SqliteBlob(_sqliteConnection, "data", "b_data", rowid))
+            _sqliteConnection.Open();
+            long streamLength = readableStream.Length - readableStream.Position;
+            string sqltext = $@"
+                INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, zeroblob({streamLength}));
+                SELECT last_insert_rowid();
+            ";
+            using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
             {
-                readableStream.CopyTo(writeStream);
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                long rowid = (long)(command.ExecuteScalar() ??
+                    throw new InvalidOperationException("Could not read the value of \"last_insert_rowid()\"."));
+                using (var writeStream = new SqliteBlob(_sqliteConnection, "data", "b_data", rowid))
+                {
+                    readableStream.CopyTo(writeStream);
+                }
             }
         }
-        _sqliteConnection.Close();
-        SqliteConnection.ClearPool(_sqliteConnection);
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
     }
     private void CreatedDataTable()
     {
@@ -125,23 +165,33 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
 
     public bool IsIndexExists(byte[] index)
     {
-        _sqliteConnection.Open();
-        string sqltext = $"SELECT _ROWID_ FROM {_tableName} WHERE {_indexName} = @{_indexName};";
-        using (var command = new SqliteCommand(sqltext, _sqliteConnection))
+        try
         {
-            command.Parameters.AddWithValue($"@{_indexName}", index);
-            using (var reader = command.ExecuteReader())
+            _sqliteConnection.Open();
+            string sqltext = $"SELECT _ROWID_ FROM {_tableName} WHERE {_indexName} = @{_indexName};";
+            using (var command = new SqliteCommand(sqltext, _sqliteConnection))
             {
-                if (reader.Read())
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                using (var reader = command.ExecuteReader())
                 {
-                    _sqliteConnection.Close();
-                    SqliteConnection.ClearPool(_sqliteConnection);
-                    return true;
+                    if (reader.Read())
+                    {
+                        _sqliteConnection.Close();
+                        SqliteConnection.ClearPool(_sqliteConnection);
+                        return true;
+                    }
                 }
             }
         }
-        _sqliteConnection.Close();
-        SqliteConnection.ClearPool(_sqliteConnection);
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
         return false;
     }
 }
