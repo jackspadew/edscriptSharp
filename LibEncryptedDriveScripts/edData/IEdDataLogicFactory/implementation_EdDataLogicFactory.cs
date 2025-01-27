@@ -7,8 +7,11 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
     protected override string DbPath {get;set;}
     protected override byte[] Key {get;set;} = new byte[0];
 
-    public BasicEdDataLogicFactory(string dbPath, string password)
+    public BasicEdDataLogicFactory(string dbPath, string password) : this(dbPath, password, 1)
+    {}
+    public BasicEdDataLogicFactory(string dbPath, string password, int depth)
     {
+        TargetWorkerChainDepth = depth;
         DbPath = dbPath;
         Key = new byte[KeyBlendedMultipleKeyExchanger.Key.Length];
         SetPassword(password);
