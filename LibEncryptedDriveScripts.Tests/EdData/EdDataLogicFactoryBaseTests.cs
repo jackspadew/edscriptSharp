@@ -3,6 +3,7 @@ namespace LibEncryptedDriveScripts.Tests;
 using Xunit;
 using LibEncryptedDriveScripts.EdData;
 using LibEncryptedDriveScripts.Database;
+using System.Text;
 
 public class EdDataLogicFactoryBase_Tests
 {
@@ -118,5 +119,19 @@ public class EdDataLogicFactoryBase_Tests
             return;
         }
         Assert.Fail();
+    }
+
+    [Fact]
+    public void CreateMultipleKeyExchangerForWorkerChainZero_TheKeyIsHashedBytes()
+    {
+        var hashCalculator = new ConcreteHashCalculator_Default();
+        var passBytes = Encoding.UTF8.GetBytes(examplePassword);
+        byte[] hash = hashCalculator.ComputeHash(passBytes, new ConcreteMultipleKeyExchanger_Default());
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        var initialWorker = new ConcreteInitializer(logicFactory);
+        var workerChainZero = new ConcreteChainWorker(logicFactory,initialWorker);
+        var multiKey = logicFactory.CreateKeyBlendedMultipleKeyExchanger(workerChainZero);
+        Assert.Equal(hash[0..32].Length, multiKey.Key.Length);
+        Assert.Equal(hash[0..32], multiKey.Key);
     }
 }
