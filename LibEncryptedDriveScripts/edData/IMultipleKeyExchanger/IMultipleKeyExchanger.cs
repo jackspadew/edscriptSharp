@@ -14,4 +14,5 @@ public interface IMultipleKeyExchanger
     byte[] Salt {get; set;}
     byte[] Lye {get; set;}
     void Randomize();
+    string ToString();
 }
