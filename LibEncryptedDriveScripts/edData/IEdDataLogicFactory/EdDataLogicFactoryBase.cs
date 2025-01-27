@@ -85,9 +85,9 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     public virtual void SetPassword(string password)
     {
         int keyLength = KeyBlendedMultipleKeyExchanger.Key.Length;
-        byte[] resultKey = new byte[keyLength];
+        this.Key = new byte[keyLength];
         var converter = new StringToHashConverter(HashCalculatorForHashPassword, MultipleKeyExchangerForHashPassword);
         byte[] hash = converter.Convert(password);
-        Array.Copy(hash, 0, resultKey, 0, resultKey.Length);
+        Array.Copy(hash, 0, this.Key, 0, this.Key.Length);
     }
 }
