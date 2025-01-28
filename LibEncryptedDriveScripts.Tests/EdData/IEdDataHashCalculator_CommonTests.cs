@@ -2,6 +2,8 @@ namespace LibEncryptedDriveScripts.Tests;
 
 using LibEncryptedDriveScripts.EdData;
 
+#pragma warning disable xUnit1026 // Unused arguments
+
 public class IEdDataHashCalculator_CommonTests
 {
     private static byte[] exampleBytes = new byte[]{0,1,2,3};
