@@ -57,4 +57,16 @@ public class IEdDataHashCalculator_CommonTests
         byte[] hashAnother = hashCalculator.ComputeHash(anotherBytes, multiKey);
         Assert.NotEqual(hash, hashAnother);
     }
+
+    [Theory]
+    [MemberData(nameof(IEdDataHashCalculator_Objects))]
+    public void ComputeHashWithCopiedMultipleKey_ReturnSameBytes(IEdDataHashCalculator hashCalculator, string className)
+    {
+        IMultipleKeyExchanger multiKey = GetRandomizedMultipleKey();
+        IMultipleKeyExchanger anotherMultiKey = new BasicExemplaryMultipleKeyExchanger();
+        multiKey.CopyTo(anotherMultiKey);
+        byte[] hash = hashCalculator.ComputeHash(exampleBytes, multiKey);
+        byte[] hashAnother = hashCalculator.ComputeHash(exampleBytes, anotherMultiKey);
+        Assert.Equal(hash, hashAnother);
+    }
 }
