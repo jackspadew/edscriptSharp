@@ -36,4 +36,15 @@ public class IEdDataHashCalculator_CommonTests
         byte[] hash = hashCalculator.ComputeHash(stream, multiKey);
         Assert.Equal(512, hash.Length * 8);
     }
+
+    [Theory]
+    [MemberData(nameof(IEdDataHashCalculator_Objects))]
+    public void ComputeHashByBytesAndStream_ReturnSameBytes(IEdDataHashCalculator hashCalculator, string className)
+    {
+        IMultipleKeyExchanger multiKey = GetRandomizedMultipleKey();
+        var stream = new MemoryStream(exampleBytes);
+        byte[] hashByBytes = hashCalculator.ComputeHash(exampleBytes, multiKey);
+        byte[] hashByStream = hashCalculator.ComputeHash(stream, multiKey);
+        Assert.Equal(hashByBytes, hashByStream);
+    }
 }
