@@ -67,7 +67,7 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             if(IsIndexExists(index))
             {
                 string IndexBytesString = BitConverter.ToString(GenerateIndexBytes(index));
-                throw new ArgumentException($"The generated index collided. May be using the same INDEX string. If the INDEX string is different, this error may be resolved by reconstructing a database because it is based on a hash value collision. (index=\"{index})\" indexBytes=\"{IndexBytesString}\")");
+                throw new ArgumentException($"The generated index collided. May be using the same INDEX string. If the INDEX string is different, this error may be resolved by reconstructing a database because it is based on a hash value collision. (index=\"{index})\" indexBytes=\"{IndexBytesString}\" this={nameof(this.GetType)} this._depth={_depth})");
             }
         }
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
