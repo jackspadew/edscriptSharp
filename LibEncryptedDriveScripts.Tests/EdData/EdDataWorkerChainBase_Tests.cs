@@ -9,12 +9,6 @@ public class EdDataWorkerChainBase_Tests
     private static string exampleIndex = "example";
     private static string examplePassword = "password";
     private static byte[] exampleByte = new byte[]{0,1,2,3};
-    public class Concrete_EdDataWorkerChain : EdDataWorkerChainBase
-    {
-        public Concrete_EdDataWorkerChain(IEdDataLogicFactory logicFactory, IEdDataWorker parentWorker) : base(logicFactory, parentWorker)
-        {
-        }
-    }
 
     [Fact]
     public void StashThenExtractWithTwoChain_ReturnSameBytes()
