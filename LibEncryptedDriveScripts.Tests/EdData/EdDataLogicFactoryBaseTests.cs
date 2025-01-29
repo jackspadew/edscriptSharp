@@ -19,7 +19,7 @@ public class EdDataLogicFactoryBase_Tests
     public class ConcreteHashCalculator_Default : EdDataHashCalculator {}
     public class ConcreteMultipleKeyExchanger_Default : ExemplaryMultipleKeyExchangerBase {}
     public class ConcreteMultipleKeyExchanger_ForInitializer: ExemplaryMultipleKeyExchangerBase {}
-    public class ConcreteMultipleKeyExchanger_ForChainZero : ExemplaryMultipleKeyExchangerBase {}
+    public class ConcreteMultipleKeyExchanger_ForKeyBlending : ExemplaryMultipleKeyExchangerBase {}
     public class ConcreteMultipleKeyExchanger_ForChain : ExemplaryMultipleKeyExchangerBase {}
     public class Iplemented_EdDataLogicFactory : EdDataLogicFactoryBase
     {
@@ -38,7 +38,7 @@ public class EdDataLogicFactoryBase_Tests
         protected override IDatabaseOperator DefaultDatabaseOperator => new ConcreteDataOperator_Default();
         protected override IEdDataHashCalculator DefaultHashCalculator => new ConcreteHashCalculator_Default();
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForInitializer();
-        protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChainZero();
+        protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForKeyBlending();
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChain();
         protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_Default();
         protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
@@ -84,7 +84,7 @@ public class EdDataLogicFactoryBase_Tests
         IEdDataCryptor cryptor = logicFactory.CreateCryptor(worker);
         IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(worker);
         Assert.True( cryptor is ConcreteCryptor_Default );
-        Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChainZero );
+        Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
     }
 
     [Fact]

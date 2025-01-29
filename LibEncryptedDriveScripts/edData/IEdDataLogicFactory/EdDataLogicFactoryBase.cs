@@ -55,7 +55,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
             thisInstance,
             DefaultMultipleKeyExchanger,
             InitialMultipleKeyExchanger,
-            KeyBlendedMultipleKeyExchanger,
+            ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger);
     }
     public IMultipleKeyExchanger CreateKeyBlendedMultipleKeyExchanger(IEdDataWorker thisInstance)

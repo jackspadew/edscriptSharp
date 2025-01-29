@@ -116,6 +116,35 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
     }
 
+    public void UpdateData(byte[] index, byte[] data)
+    {
+        try
+        {
+            _sqliteConnection.Open();
+            string sqltext = $"UPDATE {_tableName} SET {_dataName} = @{_dataName} WHERE {_indexName} = @{_indexName};";
+            using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+            {
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                command.Parameters.AddWithValue($"@{_dataName}", data);
+                int affectedRowCount = command.ExecuteNonQuery();
+                if( affectedRowCount == 0 )
+                {
+                    string indexBytesString = BitConverter.ToString(index);
+                    throw new ArgumentException($"The Update command was successfully executed, but there was no updated row. (given index:\"{indexBytesString}\")");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
+    }
+
     protected void InitDatabase()
     {
         _sqliteConnection.Open();
@@ -138,6 +167,35 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
                 command.Parameters.AddWithValue($"@{_indexName}", index);
                 long rowid = (long)(command.ExecuteScalar() ??
                     throw new InvalidOperationException("Could not read the value of \"last_insert_rowid()\"."));
+                using (var writeStream = new SqliteBlob(_sqliteConnection, "data", "b_data", rowid))
+                {
+                    readableStream.CopyTo(writeStream);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
+    }
+    public void UpdateData(byte[] index, Stream readableStream)
+    {
+        try
+        {
+            _sqliteConnection.Open();
+            long streamLength = readableStream.Length - readableStream.Position;
+            string sqltext = $@"
+                UPDATE {_tableName} SET {_dataName} = zeroblob({streamLength}) WHERE {_indexName} = @{_indexName} RETURNING _rowid_;";
+            using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+            {
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                long rowid = (long)(command.ExecuteScalar() ??
+                    throw new InvalidOperationException("Could not read the value of \"_rowid_\"."));
                 using (var writeStream = new SqliteBlob(_sqliteConnection, "data", "b_data", rowid))
                 {
                     readableStream.CopyTo(writeStream);
