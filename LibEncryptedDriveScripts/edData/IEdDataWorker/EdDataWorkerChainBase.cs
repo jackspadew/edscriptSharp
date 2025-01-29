@@ -5,6 +5,7 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     private int _depth;
     public int Depth { get => _depth; }
     protected IEdDataWorker _parentWorker;
+    protected string? _lastExtractedMultipleKeyIndex;
     private IMultipleKeyExchanger? _multipleKey;
     protected override IMultipleKeyExchanger MultipleKey => _multipleKey ?? throw new NullReferenceException();
 
@@ -95,8 +96,10 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         childMultiKey.SetBytes(childMultipleKeyBytes);
         return childMultiKey;
     }
-    protected virtual void ExtractOwnMultipleKey(string index)
+    protected virtual void ExtractOwnMultipleKey(string index, bool force=false)
     {
+        if(_lastExtractedMultipleKeyIndex == index && !force) return;
+        _lastExtractedMultipleKeyIndex = index;
         if(_parentWorker is IEdDataWorkerChain chainworker)
         {
             var myChildMultiKey = chainworker.ExtractChildMultipleKey(index);
@@ -125,6 +128,6 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         {
             parentChainWorker.RegenerateChildMultipleKey(index);
         }
-        ExtractOwnMultipleKey(index);
+        ExtractOwnMultipleKey(index, true);
     }
 }
