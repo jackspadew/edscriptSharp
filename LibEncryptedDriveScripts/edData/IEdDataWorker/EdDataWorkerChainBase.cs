@@ -21,6 +21,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
         {
             parentChainWorker.StashChildMultipleKey(index);
+            ExtractOwnMultipleKey(index);
+            if(IsIndexExists(index)) this.RegenerateOwnMultipleKey(index);
         }
         ExtractOwnMultipleKey(index);
         try{
@@ -56,6 +58,17 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
         {
             parentChainWorker.StashChildMultipleKey(index);
+            ExtractOwnMultipleKey(index);
+            if(IsIndexExists(index)) this.RegenerateOwnMultipleKey(index);
+        }
+        else
+        {
+            ExtractOwnMultipleKey(index);
+            if(IsIndexExists(index))
+            {
+                string IndexBytesString = BitConverter.ToString(GenerateIndexBytes(index));
+                throw new ArgumentException($"The generated index collided. May be using the same INDEX string. If the INDEX string is different, this error may be resolved by reconstructing a database because it is based on a hash value collision. (index=\"{index})\" indexBytes=\"{IndexBytesString}\")");
+            }
         }
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.Randomize();
