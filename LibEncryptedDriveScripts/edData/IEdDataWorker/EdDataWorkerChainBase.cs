@@ -18,6 +18,10 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     }
     public override void Stash(string index, byte[] data)
     {
+        if(_parentWorker is IEdDataWorkerChain parentChainWorker)
+        {
+            parentChainWorker.StashChildMultipleKey(index);
+        }
         ExtractOwnMultipleKey(index);
         try{
             base.Stash(index, data);
@@ -67,10 +71,6 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
         ExtractOwnMultipleKey(index);
-        if(!IsIndexExists(index))
-        {
-            StashChildMultipleKey(index);
-        }
         byte[] childMultipleKeyBytes = base.Extract(index);
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.SetBytes(childMultipleKeyBytes);
