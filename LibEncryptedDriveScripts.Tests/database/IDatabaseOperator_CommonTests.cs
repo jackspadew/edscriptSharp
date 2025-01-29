@@ -15,6 +15,7 @@ public class IDatabaseOperator_CommonTests : IDisposable
 
     public static string dbPathDbOpeBaseForTestPath = "example.db";
     public static byte[] exampleBytes = {0,1,2,3};
+    public static byte[] anotherBytes = {4,5,6,7};
     public static IEnumerable<object[]> IDatabaseOperatorObjects()
     {
         yield return new object[] { new DatabaseOperator_ForTest(dbPathDbOpeBaseForTestPath, true), "DatabaseOperator_ForTest" };
@@ -107,6 +108,25 @@ public class IDatabaseOperator_CommonTests : IDisposable
         byte[] nonExistentIndex = {255,0,0,7};
         bool result = dbOperator.IsIndexExists(nonExistentIndex);
         Assert.False(result);
+    }
+
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void UpdateDataThenReadBytes_ReturnUpdatedValue(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] exampleIndex = {0,0,0,8};
+        dbOperator.InsertData(exampleIndex, exampleBytes);
+        dbOperator.UpdateData(exampleIndex, anotherBytes);
+        byte[] readBytes = dbOperator.GetDataBytes(exampleIndex);
+        Assert.Equal(anotherBytes, readBytes);
+    }
+
+    [Theory]
+    [MemberData(nameof(IDatabaseOperatorObjects))]
+    public void UpdateDataNonExistentIndex_Throw(IDatabaseOperator dbOperator, string className)
+    {
+        byte[] nonExistentIndex = {255,0,0,9};
+        Assert.ThrowsAny<Exception>(() => dbOperator.UpdateData(nonExistentIndex, exampleBytes));
     }
 
     public void Dispose()
