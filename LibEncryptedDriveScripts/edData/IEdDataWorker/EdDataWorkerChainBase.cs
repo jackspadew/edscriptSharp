@@ -73,7 +73,13 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.Randomize();
         byte[] childMultiKeyBytes = childMultiKey.GetBytes();
-        this.Stash(index, childMultiKeyBytes);
+        try{
+            base.Stash(index, childMultiKeyBytes);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"{this.GetType().Name}: _depth={_depth}", ex);
+        }
     }
     public virtual void RegenerateChildMultipleKey(string index)
     {
