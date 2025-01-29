@@ -58,6 +58,12 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         byte[] childMultiKeyBytes = childMultiKey.GetBytes();
         this.Stash(index, childMultiKeyBytes);
     }
+    public virtual void RegenerateChildMultipleKey(string index)
+    {
+        var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
+        childMultiKey.Randomize();
+        this.UpdateStashedData(index, childMultiKey.GetBytes());
+    }
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
         ExtractOwnMultipleKey(index);
