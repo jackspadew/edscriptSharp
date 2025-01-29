@@ -32,6 +32,21 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         ExtractOwnMultipleKey(index);
         return base.Extract(index);
     }
+    protected virtual void UpdateStashedData(string index, byte[] data)
+    {
+        ExtractOwnMultipleKey(index);
+        byte[] encryptedBytes = EdCryptor.EncryptBytes(data, MultipleKey);
+        byte[] indexBytes = GenerateIndexBytes(index);
+        try{
+            DbOperator.UpdateData(indexBytes, encryptedBytes);
+        }
+        catch (Exception ex)
+        {
+            string IndexBytesString = BitConverter.ToString(GenerateIndexBytes(index));
+            string OwnMultipleKeyString = MultipleKey.ToString();
+            throw new Exception($"{this.GetType().Name}: IndexString={index}, IndexBytes={IndexBytesString}, MultipleKey={OwnMultipleKeyString}", ex);
+        }
+    }
     public virtual void StashChildMultipleKey(string index)
     {
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
