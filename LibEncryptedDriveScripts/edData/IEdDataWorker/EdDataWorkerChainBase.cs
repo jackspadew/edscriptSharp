@@ -90,4 +90,16 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         }
         throw new InvalidOperationException("Can not extract own multiple key. The parent worker dotes not have valid interface.");
     }
+    protected virtual void RegenerateOwnMultipleKey(string index)
+    {
+        if(!(_parentWorker is IEdDataWorkerChain parentChainWorker))
+        {
+            throw new Exception($"If {nameof(_parentWorker)} is not {nameof(IEdDataWorkerChain)}, this method should not be called.");
+        }
+        while(IsIndexExists(index))
+        {
+            parentChainWorker.RegenerateChildMultipleKey(index);
+        }
+        ExtractOwnMultipleKey(index);
+    }
 }
