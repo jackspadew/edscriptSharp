@@ -183,6 +183,35 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
             SqliteConnection.ClearPool(_sqliteConnection);
         }
     }
+    public void UpdateData(byte[] index, Stream readableStream)
+    {
+        try
+        {
+            _sqliteConnection.Open();
+            long streamLength = readableStream.Length - readableStream.Position;
+            string sqltext = $@"
+                UPDATE {_tableName} SET {_dataName} = zeroblob({streamLength}) WHERE {_indexName} = @{_indexName} RETURNING _rowid_;";
+            using (var command = new SqliteCommand(sqltext ,_sqliteConnection))
+            {
+                command.Parameters.AddWithValue($"@{_indexName}", index);
+                long rowid = (long)(command.ExecuteScalar() ??
+                    throw new InvalidOperationException("Could not read the value of \"_rowid_\"."));
+                using (var writeStream = new SqliteBlob(_sqliteConnection, "data", "b_data", rowid))
+                {
+                    readableStream.CopyTo(writeStream);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
+    }
     private void CreatedDataTable()
     {
         string sqltext = $"CREATE TABLE {_tableName} ({_indexName} BLOB PRIMARY KEY, {_dataName} BLOB)";
