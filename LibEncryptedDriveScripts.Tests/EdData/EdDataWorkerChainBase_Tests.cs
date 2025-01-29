@@ -1,12 +1,15 @@
 namespace LibEncryptedDriveScripts.Tests;
 
+using System.Text;
 using LibEncryptedDriveScripts.EdData;
 using Moq;
+using Moq.Protected;
 
 public class EdDataWorkerChainBase_Tests
 {
     private static string dbPath = "EdDataWorkerChainBase_Tests.db";
     private static string exampleIndex = "example";
+    private static string anotherIndex = "anotherIndex";
     private static string examplePassword = "password";
     private static byte[] exampleByte = new byte[]{0,1,2,3};
 
@@ -98,5 +101,41 @@ public class EdDataWorkerChainBase_Tests
             var extracted = workerLast.Extract(exampleIndex);
             Assert.Equal(exampleByte, extracted);
         });
+    }
+
+    [Fact]
+    public void WhenIndexbytesCollides_RegeneratedMultipleKey()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        byte[] ItWillBeCollided = new byte[]{1,0,0,0};
+        byte[] NotCollided = new byte[]{2,0,0,0};
+        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var mockedHashCalculator = new Mock<IEdDataHashCalculator>();
+        mockedHashCalculator.Setup(a => a.ComputeHash(Encoding.UTF8.GetBytes(exampleIndex),It.IsAny<IMultipleKeyExchanger>()))
+            .Returns(ItWillBeCollided); // IndexBytes for first Stashing.
+        mockedHashCalculator.SetupSequence(a => a.ComputeHash(Encoding.UTF8.GetBytes(anotherIndex),It.IsAny<IMultipleKeyExchanger>()))
+            .Returns(ItWillBeCollided) // Call within IsIndexExists in StashChildMultipleKey
+            .Returns(ItWillBeCollided) // Call within IsIndexExists of while conditional formula in RegenerateOwnMultipleKey
+            .Returns(ItWillBeCollided) // Call in RegenerateOwnMultipleKey after Regenerate (duplicate again)
+            .Returns(NotCollided) // Call in RegenerateOwnMultipleKey after Regenerate
+            .Returns(NotCollided); // Call in base.Stash
+        var mockedLogic = new Mock<BasicEdDataLogicFactory>(dbPath, examplePassword){ CallBase = true };
+        mockedLogic.Setup(a => a.CreateHashCalculator(It.IsAny<IEdDataWorker>())).Returns(mockedHashCalculator.Object);
+        IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
+        var workerChainZero = new Mock<EdDataWorkerChainBase>(logic, initialWorker){ CallBase = true };
+        int expectedCount_RegenerateChildMultipleKey = 0;
+        workerChainZero.Setup(s => s.RegenerateChildMultipleKey(anotherIndex)).Callback(() => {
+            expectedCount_RegenerateChildMultipleKey += 1;
+        });
+        var workerSecond = new Mock<EdDataWorkerChainBase>(mockedLogic.Object, workerChainZero.Object){ CallBase = true };
+        workerSecond.Object.Stash(exampleIndex, exampleByte);
+        workerSecond.Object.Stash(anotherIndex, exampleByte);
+        int actualCount_RegenerateOwnMultipleKeys = 1;
+        workerSecond.Protected().Verify("RegenerateOwnMultipleKey", Times.Exactly(actualCount_RegenerateOwnMultipleKeys), new object[]{ItExpr.IsAny<string>()});
+        int actualCount_RegenerateChildMultipleKey = 2;
+        workerChainZero.Verify(s => s.RegenerateChildMultipleKey(It.IsAny<string>()), Times.Exactly(actualCount_RegenerateChildMultipleKey));
+        Assert.Equal(actualCount_RegenerateChildMultipleKey, expectedCount_RegenerateChildMultipleKey);
+        int actualCount_GenerateIndexBytesForAnotherIndex = 5;
+        workerSecond.Protected().Verify("GenerateIndexBytes", Times.Exactly(actualCount_GenerateIndexBytesForAnotherIndex), anotherIndex);
     }
 }
