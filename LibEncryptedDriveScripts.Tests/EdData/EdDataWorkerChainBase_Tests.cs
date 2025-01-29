@@ -51,17 +51,31 @@ public class EdDataWorkerChainBase_Tests
         Assert.Equal(exampleByte, extracted);
     }
 
-    [Fact]
-    public void CallStashOfLastWorker_CountOfCallingStashChildMultipleKeyIsCorrect()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void CallStashOfLastWorker_CountOfCallingStashChildMultipleKeyIsCorrect(int targetChainDepth)
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
         var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
         IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
         var mockedWorkerChainZero = new Mock<EdDataWorkerChainBase>(logic, initialWorker){ CallBase = true };
-        var mockedWorkerLast = new Mock<EdDataWorkerChainBase>(logic, mockedWorkerChainZero.Object){ CallBase = true };
+        List<Mock<EdDataWorkerChainBase>> mockedWorkerList = new();
+        Mock<EdDataWorkerChainBase> workerNextParent = mockedWorkerChainZero;
+        for(int i=0; i<targetChainDepth-1; i++)
+        {
+            workerNextParent = new Mock<EdDataWorkerChainBase>(logic, workerNextParent.Object){ CallBase = true };
+            mockedWorkerList.Add(workerNextParent);
+        }
+        var mockedWorkerLast = new Mock<EdDataWorkerChainBase>(logic, workerNextParent.Object){ CallBase = true };
         mockedWorkerLast.Object.Stash(exampleIndex, exampleByte);
         var extracted = mockedWorkerLast.Object.Extract(exampleIndex);
         mockedWorkerChainZero.Verify(s => s.StashChildMultipleKey(It.IsAny<string>()), Times.Once);
         mockedWorkerLast.Verify(s => s.StashChildMultipleKey(It.IsAny<string>()), Times.Never);
+        foreach(var mockedWorker in mockedWorkerList)
+        {
+            mockedWorker.Verify(s => s.StashChildMultipleKey(It.IsAny<string>()), Times.Once);
+        }
     }
 }
