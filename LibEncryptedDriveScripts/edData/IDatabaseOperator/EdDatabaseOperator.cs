@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 {
-    protected int InsertingFakeRowCount = 99;
+    protected int InsertingFakeRowCount = 19;
     protected IActionExecutor RandomExecutor => new RandomizedExecutor([1,InsertingFakeRowCount]);
     public EdDatabaseOperator(string dbPath, bool createFlag) : base(dbPath, createFlag)
     {}
