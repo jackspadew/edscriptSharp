@@ -3,6 +3,7 @@ namespace LibEncryptedDriveScripts.EdData;
 using System.IO;
 using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.Executor;
+using System.Security.Cryptography;
 
 public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 {
@@ -31,8 +32,21 @@ public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
     }
     protected virtual void InsertFakeData(byte[] imitatedIndex, byte[] imitatedData)
     {
+        byte[] fakeIndex = GeneratedRandomBytes(imitatedIndex.Length);
+        byte[] fakeData = GeneratedRandomBytes(imitatedData.Length);
+        base.InsertData(fakeIndex, fakeData);
     }
     protected virtual void InsertFakeData(byte[] imitatedIndex, Stream readableStream)
     {
+        byte[] fakeIndex = GeneratedRandomBytes(imitatedIndex.Length);
+        byte[] fakeData = GeneratedRandomBytes(readableStream.Length);
+        base.InsertData(fakeIndex, fakeData);
+    }
+    protected byte[] GeneratedRandomBytes(long length)
+    {
+        byte[] result = new byte[length];
+        RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        rng.GetBytes(result);
+        return result;
     }
 }
