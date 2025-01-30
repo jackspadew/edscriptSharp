@@ -17,11 +17,17 @@ public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 
     public override void InsertData(byte[] index, byte[] data)
     {
-        base.InsertData(index, data);
+        RandomExecutor.Run([
+            () => base.InsertData(index, data),
+            () => InsertFakeData(index, data)
+        ]);
     }
     public override void InsertData(byte[] index, Stream readableStream)
     {
-        base.InsertData(index, readableStream);
+        RandomExecutor.Run([
+            () => base.InsertData(index, readableStream),
+            () => InsertFakeData(index, readableStream)
+        ]);
     }
     protected virtual void InsertFakeData(byte[] imitatedIndex, byte[] imitatedData)
     {
