@@ -5,10 +5,10 @@ using Microsoft.Data.Sqlite;
 
 public abstract class DatabaseOperatorBase : IDatabaseOperator
 {
-    private static string _tableName = "data";
-    private static string _indexName = "b_index";
-    private static string _dataName = "b_data";
-    private SqliteConnection _sqliteConnection;
+    protected static string _tableName = "data";
+    protected static string _indexName = "b_index";
+    protected static string _dataName = "b_data";
+    protected SqliteConnection _sqliteConnection;
 
     public DatabaseOperatorBase(string dbPath, bool createFlag)
     {
@@ -26,7 +26,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
     }
     public DatabaseOperatorBase(string dbPath) : this(dbPath, false) {}
 
-    public Stream GetDataStream(byte[] index)
+    public virtual Stream GetDataStream(byte[] index)
     {
         try
         {
@@ -59,7 +59,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
         throw new InvalidOperationException($"There was no row with the specified index value.");
     }
-    public byte[] GetDataBytes(byte[] index)
+    public virtual byte[] GetDataBytes(byte[] index)
     {
         try
         {
@@ -92,7 +92,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
         throw new InvalidOperationException($"There was no row with the specified index value.");
     }
-    public void InsertData(byte[] index, byte[] data)
+    public virtual void InsertData(byte[] index, byte[] data)
     {
         try
         {
@@ -116,7 +116,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
     }
 
-    public void UpdateData(byte[] index, byte[] data)
+    public virtual void UpdateData(byte[] index, byte[] data)
     {
         try
         {
@@ -145,14 +145,14 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
     }
 
-    protected void InitDatabase()
+    protected virtual void InitDatabase()
     {
         _sqliteConnection.Open();
         CreatedDataTable();
         _sqliteConnection.Close();
         SqliteConnection.ClearPool(_sqliteConnection);
     }
-    public void InsertData(byte[] index, Stream readableStream)
+    public virtual void InsertData(byte[] index, Stream readableStream)
     {
         try
         {
@@ -183,7 +183,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
             SqliteConnection.ClearPool(_sqliteConnection);
         }
     }
-    public void UpdateData(byte[] index, Stream readableStream)
+    public virtual void UpdateData(byte[] index, Stream readableStream)
     {
         try
         {
@@ -212,7 +212,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
             SqliteConnection.ClearPool(_sqliteConnection);
         }
     }
-    private void CreatedDataTable()
+    protected virtual void CreatedDataTable()
     {
         string sqltext = $"CREATE TABLE {_tableName} ({_indexName} BLOB PRIMARY KEY, {_dataName} BLOB)";
         using (var command = new SqliteCommand(sqltext, _sqliteConnection))
@@ -221,7 +221,7 @@ public abstract class DatabaseOperatorBase : IDatabaseOperator
         }
     }
 
-    public bool IsIndexExists(byte[] index)
+    public virtual bool IsIndexExists(byte[] index)
     {
         try
         {
