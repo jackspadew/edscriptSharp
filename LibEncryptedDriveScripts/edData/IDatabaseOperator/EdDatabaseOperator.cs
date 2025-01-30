@@ -23,4 +23,10 @@ public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
     {
         base.InsertData(index, readableStream);
     }
+    protected virtual void InsertFakeData(byte[] imitatedIndex, byte[] imitatedData)
+    {
+    }
+    protected virtual void InsertFakeData(byte[] imitatedIndex, Stream readableStream)
+    {
+    }
 }
