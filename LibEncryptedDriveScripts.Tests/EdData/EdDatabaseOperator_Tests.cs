@@ -21,4 +21,16 @@ public class EdDatabaseOperator_Tests
         int actualCount = executionCount;
         mockedDbOperator.Protected().Verify("InsertFakeData", Times.Exactly(actualCount), [exampleIndexBytes, exampleData]);
     }
+
+    [Fact]
+    public void InsertDataByStream_CallingInsertFakeDataCountIsCorrect()
+    {
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        int executionCount = 9;
+        var mockedDbOperator = new Mock<EdDatabaseOperator>(dbPath, true, executionCount){ CallBase = true };
+        var streamData = new MemoryStream(exampleData);
+        mockedDbOperator.Object.InsertData(exampleIndexBytes, streamData);
+        int actualCount = executionCount;
+        mockedDbOperator.Protected().Verify("InsertFakeData", Times.Exactly(actualCount), [exampleIndexBytes, streamData]);
+    }
 }
