@@ -30,6 +30,7 @@ public class RandomizedExecutor : IActionExecutor
             {
                 actionList.Add(act);
             }
+            currentIndex++;
         }
         return actionList;
     }
