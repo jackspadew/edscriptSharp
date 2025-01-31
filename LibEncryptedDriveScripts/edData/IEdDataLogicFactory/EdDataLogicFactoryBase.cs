@@ -48,7 +48,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
             DefaultDatabaseOperator,
             DefaultDatabaseOperator,
             DefaultDatabaseOperator,
-            DefaultDatabaseOperator);
+            LastWorkerDatabaseOperator);
     }
     protected abstract IDatabaseOperator DefaultDatabaseOperator {get;}
     protected abstract IDatabaseOperator LastWorkerDatabaseOperator {get;}
