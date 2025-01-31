@@ -51,6 +51,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
             DefaultDatabaseOperator);
     }
     protected abstract IDatabaseOperator DefaultDatabaseOperator {get;}
+    protected abstract IDatabaseOperator LastWorkerDatabaseOperator {get;}
     public virtual IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
     {
         return DefaultHashCalculator;
