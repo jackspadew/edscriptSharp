@@ -5,6 +5,13 @@ using LibEncryptedDriveScripts.Database;
 using LibEncryptedDriveScripts.Executor;
 using System.Security.Cryptography;
 
+public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
+{
+    public EdDatabaseOperator(string dbPath, bool createFlag) : base(dbPath, createFlag)
+    {
+    }
+}
+
 public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 {
     protected int InsertingFakeRowCount = 19;
