@@ -42,7 +42,13 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     protected abstract IEdDataCryptor DefaultCryptor {get;}
     public virtual IDatabaseOperator CreateDatabaseOperator(IEdDataWorker thisInstance)
     {
-        return DefaultDatabaseOperator;
+        return DetermineObjectByWorkerType(
+            thisInstance,
+            DefaultDatabaseOperator,
+            DefaultDatabaseOperator,
+            DefaultDatabaseOperator,
+            DefaultDatabaseOperator,
+            DefaultDatabaseOperator);
     }
     protected abstract IDatabaseOperator DefaultDatabaseOperator {get;}
     public virtual IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
