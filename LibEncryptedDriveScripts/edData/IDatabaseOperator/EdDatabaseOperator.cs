@@ -7,11 +7,18 @@ using System.Security.Cryptography;
 
 public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 {
+    public EdDatabaseOperator(string dbPath, bool createFlag) : base(dbPath, createFlag)
+    {
+    }
+}
+
+public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
+{
     protected int InsertingFakeRowCount = 19;
     protected IActionExecutor RandomExecutor => new RandomizedExecutor([1,InsertingFakeRowCount]);
-    public EdDatabaseOperator(string dbPath, bool createFlag) : base(dbPath, createFlag)
+    public FakeInsertionDatabaseOperator(string dbPath, bool createFlag) : base(dbPath, createFlag)
     {}
-    public EdDatabaseOperator(string dbPath, bool createFlag, int insertingFakeCount) : base(dbPath, createFlag)
+    public FakeInsertionDatabaseOperator(string dbPath, bool createFlag, int insertingFakeCount) : base(dbPath, createFlag)
     {
         InsertingFakeRowCount = insertingFakeCount;
     }
