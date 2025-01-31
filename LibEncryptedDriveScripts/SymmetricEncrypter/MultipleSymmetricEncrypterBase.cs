@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.SymmetricEncrypter;
+namespace LibEd.SymmetricEncrypter;
 
-using LibEncryptedDriveScripts.Converter;
-using LibEncryptedDriveScripts.KeyGenerator;
-using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using LibEd.Converter;
+using LibEd.KeyGenerator;
+using LibEd.SymmetricAlgorithmAdapter;
 
 public abstract class MultipleSymmetricEncrypterBase : SymmetricEncrypterBase, ISymmetricEncrypter
 {

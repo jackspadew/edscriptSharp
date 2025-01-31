@@ -1,9 +1,9 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
 using Moq;
-using LibEncryptedDriveScripts.HashCalculator;
-using LibEncryptedDriveScripts.HashAlgorithmAdapter;
+using LibEd.HashCalculator;
+using LibEd.HashAlgorithmAdapter;
 
 #pragma warning disable xUnit1026 // Unused arguments
 

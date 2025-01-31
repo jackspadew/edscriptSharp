@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.SymmetricEncrypter;
+namespace LibEd.SymmetricEncrypter;
 
-using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using LibEd.SymmetricAlgorithmAdapter;
 
 public abstract class SymmetricEncrypterBase : ISymmetricEncrypter
 {

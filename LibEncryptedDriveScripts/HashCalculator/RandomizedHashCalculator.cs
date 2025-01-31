@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.HashCalculator;
+namespace LibEd.HashCalculator;
 
-using LibEncryptedDriveScripts.HashAlgorithmAdapter;
-using LibEncryptedDriveScripts.KeyGenerator;
-using LibEncryptedDriveScripts.Converter;
+using LibEd.HashAlgorithmAdapter;
+using LibEd.KeyGenerator;
+using LibEd.Converter;
 using Pcg;
 
 public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator

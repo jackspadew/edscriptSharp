@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.Database;
+using LibEd.Database;
 
 #pragma warning disable xUnit1026 // Unused arguments
 

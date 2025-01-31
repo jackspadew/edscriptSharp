@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 using System.Security.Cryptography;
-using LibEncryptedDriveScripts.Converter;
+using LibEd.Converter;
 
 public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerBase, IMultipleKeyExchanger
 {

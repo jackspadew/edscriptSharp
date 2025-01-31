@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
-using LibEncryptedDriveScripts.EdData;
+using LibEd.EdData;
 
 public class StringToHashConverter_Tests
 {

@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.EdData;
-using LibEncryptedDriveScripts.Database;
+using LibEd.EdData;
+using LibEd.Database;
 using System.Text;
 
 public class EdDataLogicFactoryBase_Tests

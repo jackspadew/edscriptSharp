@@ -1,7 +1,7 @@
 namespace edcli;
 
 using edcli.CommandLineParser;
-using LibEncryptedDriveScripts.EdData;
+using LibEd.EdData;
 using System.Text;
 
 public class EdDataExecutor : IExecutor

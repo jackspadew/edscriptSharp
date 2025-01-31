@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.KeyGenerator;
-using LibEncryptedDriveScripts.Converter;
+using LibEd.KeyGenerator;
+using LibEd.Converter;
 
 public class SequentialGenerator_Tests
 {

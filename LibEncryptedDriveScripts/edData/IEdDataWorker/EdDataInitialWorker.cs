@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
-using LibEncryptedDriveScripts.Database;
-using LibEncryptedDriveScripts.HashCalculator;
+using LibEd.Database;
+using LibEd.HashCalculator;
 using System.Text;
 
 public class EdDataInitialWorker : EdDataWorkerBase, IEdDataWorker, IEdDataWorkerInitializer

@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
-using LibEncryptedDriveScripts.SaltStream;
+using LibEd.SaltStream;
 
 using System;
 using System.IO;

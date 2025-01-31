@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.HashCalculator;
+namespace LibEd.HashCalculator;
 
 public abstract class LyeHashCalculatorBase : HashCalculatorBase, IHashCalculator
 {

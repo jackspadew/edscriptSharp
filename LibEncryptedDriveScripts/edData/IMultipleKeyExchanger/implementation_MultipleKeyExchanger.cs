@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
-using LibEncryptedDriveScripts.Converter;
+using LibEd.Converter;
 
 public class InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IMultipleKeyExchanger
 {

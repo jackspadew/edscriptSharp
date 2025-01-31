@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.BouncyCastle;
+namespace LibEd.SymmetricAlgorithmAdapter.BouncyCastle;
 
-using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using LibEd.SymmetricAlgorithmAdapter;
 
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Modes;

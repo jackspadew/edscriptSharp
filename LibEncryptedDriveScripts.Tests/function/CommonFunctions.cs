@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 public static class CommonFunctions
 {

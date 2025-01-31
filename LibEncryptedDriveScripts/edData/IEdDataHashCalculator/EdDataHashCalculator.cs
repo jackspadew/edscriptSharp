@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 using System.IO;
-using LibEncryptedDriveScripts.HashCalculator;
+using LibEd.HashCalculator;
 
 public class EdDataHashCalculator : IEdDataHashCalculator
 {

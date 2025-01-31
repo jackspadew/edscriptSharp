@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.Database;
+namespace LibEd.Database;
 
 using System.IO;
 using Microsoft.Data.Sqlite;

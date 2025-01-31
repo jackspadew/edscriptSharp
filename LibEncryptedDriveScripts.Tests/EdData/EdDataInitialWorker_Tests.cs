@@ -1,9 +1,9 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
 using Moq;
-using LibEncryptedDriveScripts.EdData;
-using LibEncryptedDriveScripts.Database;
+using LibEd.EdData;
+using LibEd.Database;
 
 public class EdDataInitialWorker_Tests
 {

@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.KeyGenerator;
-using LibEncryptedDriveScripts.Converter;
+using LibEd.KeyGenerator;
+using LibEd.Converter;
 
 #pragma warning disable xUnit1026 // Unused arguments
 

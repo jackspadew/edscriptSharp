@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.HashAlgorithmAdapter;
+using LibEd.HashAlgorithmAdapter;
 
 public class Adapter_BCHashAlgorithmTests
 {

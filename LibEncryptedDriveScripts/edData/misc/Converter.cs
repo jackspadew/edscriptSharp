@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
-using LibEncryptedDriveScripts.Converter;
+using LibEd.Converter;
 using System.Text;
 
 public class StringToHashConverter : IConverter<string, byte[]>

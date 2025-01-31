@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.Executor;
+namespace LibEd.Executor;
 
 public interface IActionExecutor
 {

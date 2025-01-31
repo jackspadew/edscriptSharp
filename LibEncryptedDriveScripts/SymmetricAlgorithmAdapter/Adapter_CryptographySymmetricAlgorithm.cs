@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.SymmetricAlgorithmAdapter.SystemCryptography;
+namespace LibEd.SymmetricAlgorithmAdapter.SystemCryptography;
 
-using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using LibEd.SymmetricAlgorithmAdapter;
 
 using System.IO;
 using System.Security.Cryptography;

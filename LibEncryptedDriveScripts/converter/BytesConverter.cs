@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.Converter;
+namespace LibEd.Converter;
 
 public class JustReturnConverter<T> : IConverter<T, T>
 {

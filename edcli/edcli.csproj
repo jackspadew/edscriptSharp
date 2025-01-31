@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibEncryptedDriveScripts\LibEncryptedDriveScripts.csproj" />
+    <ProjectReference Include="..\LibEd\LibEd.csproj" />
   </ItemGroup>
 
 </Project>

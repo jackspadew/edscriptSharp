@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.Converter;
+namespace LibEd.Converter;
 
 public interface IConverter<T,U>
 {

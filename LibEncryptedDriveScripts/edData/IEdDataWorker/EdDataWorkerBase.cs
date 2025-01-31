@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
-using LibEncryptedDriveScripts.Database;
+using LibEd.Database;
 using System.Text;
 
 public abstract class EdDataWorkerBase : IEdDataWorker

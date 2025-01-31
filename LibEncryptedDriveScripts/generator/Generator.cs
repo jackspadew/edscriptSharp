@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.KeyGenerator;
+namespace LibEd.KeyGenerator;
 
-using LibEncryptedDriveScripts.Converter;
+using LibEd.Converter;
 
 public class SequentialGenerator<T> : IListGenerator<T>
 {

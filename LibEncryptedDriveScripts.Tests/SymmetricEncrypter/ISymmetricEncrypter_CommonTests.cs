@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.SymmetricEncrypter;
-using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using LibEd.SymmetricEncrypter;
+using LibEd.SymmetricAlgorithmAdapter;
 
 #pragma warning disable xUnit1026 // Unused arguments
 

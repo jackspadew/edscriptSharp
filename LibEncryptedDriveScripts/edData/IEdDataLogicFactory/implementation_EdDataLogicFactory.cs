@@ -1,6 +1,6 @@
-using LibEncryptedDriveScripts.Database;
+using LibEd.Database;
 
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFactory
 {

@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.KeyGenerator;
+namespace LibEd.KeyGenerator;
 
 using System;
 using System.Collections;

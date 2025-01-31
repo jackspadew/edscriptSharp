@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.SaltStream;
+namespace LibEd.SaltStream;
 
 using System.IO;
 

@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.Converter;
+using LibEd.Converter;
 
 public class BytesXorBlendConverter_Tests
 {

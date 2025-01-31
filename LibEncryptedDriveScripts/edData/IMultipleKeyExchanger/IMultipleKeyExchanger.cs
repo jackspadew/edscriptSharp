@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 public interface IMultipleKeyExchanger
 {

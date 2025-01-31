@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
-using LibEncryptedDriveScripts.Executor;
+using LibEd.Executor;
 using Moq;
 
 public class RandomizedExecutor_Tests

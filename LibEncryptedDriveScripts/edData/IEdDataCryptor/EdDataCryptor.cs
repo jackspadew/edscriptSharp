@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 using System.IO;
-using LibEncryptedDriveScripts.SymmetricEncrypter;
+using LibEd.SymmetricEncrypter;
 
 public class EdDataCryptor : IEdDataCryptor
 {

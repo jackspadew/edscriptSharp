@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.HashCalculator;
+namespace LibEd.HashCalculator;
 
-using LibEncryptedDriveScripts.HashAlgorithmAdapter;
-using LibEncryptedDriveScripts.SaltStream;
+using LibEd.HashAlgorithmAdapter;
+using LibEd.SaltStream;
 
 public abstract class HashCalculatorBase : IHashCalculator
 {

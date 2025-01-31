@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.KeyGenerator;
+namespace LibEd.KeyGenerator;
 
 public interface IListGenerator<T>
 {

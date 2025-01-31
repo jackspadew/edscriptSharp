@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using System.Text;
-using LibEncryptedDriveScripts.EdData;
+using LibEd.EdData;
 using Moq;
 using Moq.Protected;
 

@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.HashCalculator;
+namespace LibEd.HashCalculator;
 
-using LibEncryptedDriveScripts.HashAlgorithmAdapter;
+using LibEd.HashAlgorithmAdapter;
 
 public class DynamicHashCalculator : HashCalculatorBase, IHashCalculator
 {

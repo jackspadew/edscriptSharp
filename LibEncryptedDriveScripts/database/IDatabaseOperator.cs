@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.Database;
+namespace LibEd.Database;
 
 public interface IDatabaseOperator
 {

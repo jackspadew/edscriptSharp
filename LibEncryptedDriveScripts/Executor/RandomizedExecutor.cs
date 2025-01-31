@@ -1,5 +1,5 @@
 
-namespace LibEncryptedDriveScripts.Executor;
+namespace LibEd.Executor;
 
 public class RandomizedExecutor : IActionExecutor
 {

@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.SymmetricEncrypter;
+namespace LibEd.SymmetricEncrypter;
 
 public interface ISymmetricEncrypter
 {

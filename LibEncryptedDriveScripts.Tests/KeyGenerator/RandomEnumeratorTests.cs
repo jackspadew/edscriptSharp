@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
-using LibEncryptedDriveScripts.KeyGenerator;
+using LibEd.KeyGenerator;
 
 public class RandomEnumerator_Tests
 {

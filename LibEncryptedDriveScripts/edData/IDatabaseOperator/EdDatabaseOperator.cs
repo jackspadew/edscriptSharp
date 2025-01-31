@@ -1,8 +1,8 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 using System.IO;
-using LibEncryptedDriveScripts.Database;
-using LibEncryptedDriveScripts.Executor;
+using LibEd.Database;
+using LibEd.Executor;
 using System.Security.Cryptography;
 
 public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator

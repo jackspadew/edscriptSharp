@@ -1,4 +1,4 @@
-namespace LibEncryptedDriveScripts.EdData;
+namespace LibEd.EdData;
 
 public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, IEdDataWorkerChain
 {

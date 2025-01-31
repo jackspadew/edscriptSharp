@@ -1,7 +1,7 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
 using Xunit;
-using LibEncryptedDriveScripts.HashCalculator;
+using LibEd.HashCalculator;
 
 public class RandomizedHashCalculator_Tests
 {

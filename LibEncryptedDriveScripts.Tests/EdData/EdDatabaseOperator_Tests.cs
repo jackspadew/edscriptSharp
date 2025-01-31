@@ -1,6 +1,6 @@
-namespace LibEncryptedDriveScripts.Tests;
+namespace LibEd.Tests;
 
-using LibEncryptedDriveScripts.EdData;
+using LibEd.EdData;
 using Xunit;
 using Moq;
 using Moq.Protected;
