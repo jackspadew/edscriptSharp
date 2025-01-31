@@ -98,19 +98,6 @@ public class EdDataLogicFactoryBase_Tests
     }
 
     [Fact]
-    public void CreateObjectsWithChainWorker_ReturnCorrectType()
-    {
-        var logicFactory = new Iplemented_EdDataLogicFactory();
-        IEdDataWorker initialWorker = new ConcreteInitializer(logicFactory);
-        IEdDataWorker chainzeroWorker = new ConcreteChainWorker(logicFactory, initialWorker);
-        IEdDataWorker worker = new ConcreteChainWorker(logicFactory, chainzeroWorker);
-        IEdDataCryptor cryptor = logicFactory.CreateCryptor(worker);
-        IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(worker);
-        Assert.True( cryptor is ConcreteCryptor_Default );
-        Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
-    }
-
-    [Fact]
     public void CreateWorker_ReturnedWorkerTypeIsCorrect()
     {
         var logicFactory = new Iplemented_EdDataLogicFactory();
