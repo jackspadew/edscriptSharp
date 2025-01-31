@@ -3,6 +3,7 @@ namespace LibEncryptedDriveScripts.KeyGenerator;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Pcg;
 
 public class RandomEnumerator<T> : IEnumerator<T>
 {
@@ -11,7 +12,7 @@ public class RandomEnumerator<T> : IEnumerator<T>
     public RandomEnumerator(IList<T> list, int seed)
     {
         _list = list ?? throw new ArgumentNullException(nameof(list));
-        _random = new Random(seed);
+        _random = new PcgRandom(seed);
         MoveNext();
     }
     public RandomEnumerator(IList<T> list) : this(list, 0) {}

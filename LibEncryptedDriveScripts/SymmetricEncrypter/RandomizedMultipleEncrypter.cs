@@ -3,6 +3,7 @@ namespace LibEncryptedDriveScripts.SymmetricEncrypter;
 using LibEncryptedDriveScripts.Converter;
 using LibEncryptedDriveScripts.KeyGenerator;
 using LibEncryptedDriveScripts.SymmetricAlgorithmAdapter;
+using Pcg;
 
 public class RandomizedMultipleEncrypter : MultipleSymmetricEncrypterBase, ISymmetricEncrypter
 {
@@ -40,7 +41,7 @@ public class RandomizedMultipleEncrypter : MultipleSymmetricEncrypterBase, ISymm
     }
     private List<byte[]> GenerateRandomBlendedSequentialBytesList(byte[] bytes, int count, int seed)
     {
-        Random random = new Random(seed);
+        Random random = new PcgRandom(seed);
         var converter = new RandomBlendConverter(random);
         var listGenerator = new SequentialGenerator<byte[]>(converter, bytes);
         return listGenerator.Generate(count);

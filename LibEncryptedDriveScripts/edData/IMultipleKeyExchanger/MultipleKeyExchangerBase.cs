@@ -1,6 +1,7 @@
 namespace LibEncryptedDriveScripts.EdData;
 
 using LibEncryptedDriveScripts.Converter;
+using Pcg;
 using System.Security.Cryptography;
 
 public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
@@ -82,6 +83,27 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
         rng.GetBytes(IV);
         rng.GetBytes(Salt);
         rng.GetBytes(Lye);
+    }
+
+    public void Randomize(int seed)
+    {
+        var random = new PcgRandom(seed);
+        this.KeySeed = random.Next();
+        this.IVSeed = random.Next();
+        this.AlgorithmSeed = random.Next();
+        this.HashSeed = random.Next();
+        byte[] key = new byte[Key.Length];
+        random.NextBytes(key);
+        byte[] iv = new byte[IV.Length];
+        random.NextBytes(iv);
+        byte[] salt = new byte[Salt.Length];
+        random.NextBytes(salt);
+        byte[] lye = new byte[Lye.Length];
+        random.NextBytes(lye);
+        Key = key;
+        IV = iv;
+        Salt = salt;
+        Lye = lye;
     }
 
     public override string ToString()

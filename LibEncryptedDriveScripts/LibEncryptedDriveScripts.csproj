@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.5.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
+    <PackageReference Include="PcgRandom" Version="1.2.0" />
   </ItemGroup>
 
 </Project>
