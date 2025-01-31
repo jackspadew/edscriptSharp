@@ -23,6 +23,7 @@ public class EdDataInitialWorker_Tests
         protected override IEdDataCryptor InitialCryptor => new EdDataCryptor();
         protected override IEdDataCryptor DefaultCryptor => new EdDataCryptor();
         protected override IDatabaseOperator DefaultDatabaseOperator => new EdDatabaseOperator(DbPath, true);
+        protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new Concrete_KeyBlendedMultipleKeyExchanger();
