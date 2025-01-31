@@ -120,7 +120,7 @@ public class EdDataWorkerChainBase_Tests
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        CommonFunctions.CompletesIn(5000, () => {
+        CommonFunctions.CompletesIn(1000, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
