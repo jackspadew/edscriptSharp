@@ -1,5 +1,8 @@
 namespace LibEncryptedDriveScripts.KeyGenerator;
 
+using System.Security.Cryptography;
+using Pcg;
+
 public class RandomPickedListGenerator<T> : IListGenerator<T>
 {
     private int _seed=0;
@@ -11,7 +14,7 @@ public class RandomPickedListGenerator<T> : IListGenerator<T>
     }
     public RandomPickedListGenerator(List<T> availableElementList)
     {
-        Random random = new Random();
+        Random random = new PcgRandom(RandomNumberGenerator.GetInt32(int.MaxValue));
         _seed = random.Next();
         _availableElementList = availableElementList;
     }
