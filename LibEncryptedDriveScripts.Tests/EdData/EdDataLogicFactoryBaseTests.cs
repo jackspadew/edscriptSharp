@@ -98,6 +98,40 @@ public class EdDataLogicFactoryBase_Tests
     }
 
     [Fact]
+    public void CreateObjectsWithMiddleWorker_ReturnCorrectType()
+    {
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        logicFactory.SetterForTest_TargetWorkerChainDepth = 2;
+        IEdDataWorker initialWorker = new ConcreteInitializer(logicFactory);
+        IEdDataWorker chainzeroWorker = new ConcreteChainWorker(logicFactory, initialWorker);
+        IEdDataWorker middleWorker = new ConcreteChainWorker(logicFactory, chainzeroWorker);
+        IEdDataWorker lastWorker = new ConcreteChainWorker(logicFactory, middleWorker);
+        IEdDataCryptor cryptor = logicFactory.CreateCryptor(middleWorker);
+        IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(middleWorker);
+        IDatabaseOperator dbOperator = logicFactory.CreateDatabaseOperator(middleWorker);
+        Assert.True( cryptor is ConcreteCryptor_Default );
+        Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
+        Assert.True( dbOperator is ConcreteDataOperator_Default );
+    }
+
+    [Fact]
+    public void CreateObjectsWithLastChainWorker_ReturnCorrectType()
+    {
+        var logicFactory = new Iplemented_EdDataLogicFactory();
+        logicFactory.SetterForTest_TargetWorkerChainDepth = 2;
+        IEdDataWorker initialWorker = new ConcreteInitializer(logicFactory);
+        IEdDataWorker chainzeroWorker = new ConcreteChainWorker(logicFactory, initialWorker);
+        IEdDataWorker middleWorker = new ConcreteChainWorker(logicFactory, chainzeroWorker);
+        IEdDataWorker lastWorker = new ConcreteChainWorker(logicFactory, middleWorker);
+        IEdDataCryptor cryptor = logicFactory.CreateCryptor(lastWorker);
+        IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(lastWorker);
+        IDatabaseOperator dbOperator = logicFactory.CreateDatabaseOperator(lastWorker);
+        Assert.True( cryptor is ConcreteCryptor_Default );
+        Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
+        Assert.True( dbOperator is ConcreteDataOperator_ForLastChain );
+    }
+
+    [Fact]
     public void CreateWorker_ReturnedWorkerTypeIsCorrect()
     {
         var logicFactory = new Iplemented_EdDataLogicFactory();
