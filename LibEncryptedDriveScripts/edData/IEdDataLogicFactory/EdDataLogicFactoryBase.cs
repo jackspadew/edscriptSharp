@@ -11,13 +11,13 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
 
     private T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer)
     {
-        return DetermineObjectByWorkerType(context, defaultObject, forInitializer, defaultObject, defaultObject);
+        return DetermineObjectByWorkerType(context, defaultObject, forInitializer, defaultObject, defaultObject, defaultObject);
     }
     private T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer, T forChain)
     {
-        return DetermineObjectByWorkerType(context, defaultObject, forInitializer, forChain, forChain);
+        return DetermineObjectByWorkerType(context, defaultObject, forInitializer, forChain, forChain, forChain);
     }
-    protected T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer, T forChainZero, T forChain)
+    protected T DetermineObjectByWorkerType<T>(IEdDataWorker context, T defaultObject, T forInitializer, T forChainZero, T forChain, T forLastChain)
     {
         if(context is IEdDataWorkerInitializer)
         {
@@ -26,6 +26,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
         else if(context is IEdDataWorkerChain chainWorker)
         {
             if(chainWorker.Depth == 0) return forChainZero;
+            if(chainWorker.Depth == TargetWorkerChainDepth) return forLastChain;
             return forChain;
         }
         return defaultObject;
@@ -55,6 +56,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
             thisInstance,
             DefaultMultipleKeyExchanger,
             InitialMultipleKeyExchanger,
+            ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger);
     }
