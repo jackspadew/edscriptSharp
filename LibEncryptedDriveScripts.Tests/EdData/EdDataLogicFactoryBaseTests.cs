@@ -16,6 +16,11 @@ public class EdDataLogicFactoryBase_Tests
         public ConcreteDataOperator_Default() : base("EdDataLogicFactoryBase_Tests.db", true)
         {}
     }
+    public class ConcreteDataOperator_ForLastChain : DatabaseOperatorBase
+    {
+        public ConcreteDataOperator_ForLastChain() : base("EdDataLogicFactoryBase_Tests.db", true)
+        {}
+    }
     public class ConcreteHashCalculator_Default : EdDataHashCalculator {}
     public class ConcreteMultipleKeyExchanger_Default : ExemplaryMultipleKeyExchangerBase {}
     public class ConcreteMultipleKeyExchanger_ForInitializer: ExemplaryMultipleKeyExchangerBase {}
@@ -23,6 +28,10 @@ public class EdDataLogicFactoryBase_Tests
     public class ConcreteMultipleKeyExchanger_ForChain : ExemplaryMultipleKeyExchangerBase {}
     public class Iplemented_EdDataLogicFactory : EdDataLogicFactoryBase
     {
+        public int SetterForTest_TargetWorkerChainDepth {
+            get {return base.TargetWorkerChainDepth;}
+            set {base.TargetWorkerChainDepth = value;}
+        }
         protected override string DbPath { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         protected override byte[] Key { get; set; }
 
@@ -36,6 +45,7 @@ public class EdDataLogicFactoryBase_Tests
         protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
         protected override IEdDataCryptor DefaultCryptor => new ConcreteCryptor_Default();
         protected override IDatabaseOperator DefaultDatabaseOperator => new ConcreteDataOperator_Default();
+        protected override IDatabaseOperator LastWorkerDatabaseOperator => new ConcreteDataOperator_ForLastChain();
         protected override IEdDataHashCalculator DefaultHashCalculator => new ConcreteHashCalculator_Default();
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForInitializer();
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForKeyBlending();
