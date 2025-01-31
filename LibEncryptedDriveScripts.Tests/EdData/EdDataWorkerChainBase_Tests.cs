@@ -86,21 +86,22 @@ public class EdDataWorkerChainBase_Tests
     public void StashThenExtractWithLongChain_CompleteWithinTime()
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
+        int targetChainDepth = 3;
+        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
+        var workerChainZero = new EdDataWorkerChain(logic, initialWorker);
+        IEdDataWorkerChain nextWorker = workerChainZero;
+        for(int i=0; i<targetChainDepth; i++)
+        {
+            nextWorker = new EdDataWorkerChain(logic, nextWorker);
+        }
+        var workerLast = nextWorker;
+        byte[] extracted = new byte[0];
         CommonFunctions.CompletesIn(5000, () => {
-            int targetChainDepth = 3;
-            var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
-            IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
-            var workerChainZero = new EdDataWorkerChain(logic, initialWorker);
-            IEdDataWorkerChain nextWorker = workerChainZero;
-            for(int i=0; i<targetChainDepth; i++)
-            {
-                nextWorker = new EdDataWorkerChain(logic, nextWorker);
-            }
-            var workerLast = nextWorker;
             workerLast.Stash(exampleIndex, exampleByte);
-            var extracted = workerLast.Extract(exampleIndex);
-            Assert.Equal(exampleByte, extracted);
+            extracted = workerLast.Extract(exampleIndex);
         });
+        Assert.Equal(exampleByte, extracted);
     }
 
     [Fact]
