@@ -3,6 +3,7 @@ namespace LibEncryptedDriveScripts.HashCalculator;
 using LibEncryptedDriveScripts.HashAlgorithmAdapter;
 using LibEncryptedDriveScripts.KeyGenerator;
 using LibEncryptedDriveScripts.Converter;
+using Pcg;
 
 public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator
 {
@@ -56,7 +57,7 @@ public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator
     }
     private void GenerateLyeSequentialList(int length)
     {
-        Random random = new Random(_seed);
+        Random random = new PcgRandom(_seed);
         byte[] initialLye = _lyeOriginBytes;
         var converter = new RandomBlendConverter(random);
         var generator = new SequentialGenerator<byte[]>(converter, initialLye);
