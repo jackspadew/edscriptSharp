@@ -36,10 +36,13 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
     }
     public override void InsertData(byte[] index, Stream readableStream)
     {
-        RandomExecutor.Run([
-            () => base.InsertData(index, readableStream),
-            () => InsertFakeData(index, readableStream)
-        ]);
+        InsertWithFakeInsertion(
+            (a,b) => {
+                ExecuteRealInsertionCommand(a, b, index, readableStream);
+            },
+            index.Length,
+            readableStream.Length
+        );
     }
     protected virtual void InsertFakeData(byte[] imitatedIndex, byte[] imitatedData)
     {
