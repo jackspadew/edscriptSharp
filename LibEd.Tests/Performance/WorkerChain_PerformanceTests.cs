@@ -1,7 +1,8 @@
-namespace LibEd.Tests;
+namespace LibEd.PerformanceTests;
 
 using LibEd.EdData;
 using System.Reflection;
+using LibEd.Tests;
 
 #pragma warning disable CS8602
 
