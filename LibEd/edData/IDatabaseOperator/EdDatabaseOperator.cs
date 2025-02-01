@@ -120,4 +120,24 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
             readableStream.CopyTo(writeStream);
         }
     }
+    protected virtual void ExecuteFakeInsertionCommand(SqliteCommand fakeInsertionCommand, SqliteParameter paramIndex, SqliteParameter paramData, byte[] randomIndexBuffer, byte[] randomDataBuffer, RandomNumberGenerator rng)
+    {
+        rng.GetBytes(randomIndexBuffer);
+        paramIndex.Value = randomIndexBuffer;
+        rng.GetBytes(randomDataBuffer);
+        paramData.Value = randomDataBuffer;
+        fakeInsertionCommand.ExecuteNonQuery();
+    }
+    protected virtual (SqliteCommand command, SqliteParameter paramIndex, SqliteParameter paramData) CreateFakeInsertionVariables(SqliteConnection connection, SqliteTransaction transaction)
+    {
+        string fakeInsertionText = $"INSERT OR IGNORE INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
+        var fakeInsertionCommand = new SqliteCommand(fakeInsertionText ,_sqliteConnection, transaction);
+        var paramIndex = fakeInsertionCommand.CreateParameter();
+        paramIndex.ParameterName = $"@{_indexName}";
+        var paramData = fakeInsertionCommand.CreateParameter();
+        paramData.ParameterName = $"@{_dataName}";
+        fakeInsertionCommand.Parameters.Add(paramIndex);
+        fakeInsertionCommand.Parameters.Add(paramData);
+        return (fakeInsertionCommand, paramIndex, paramData);
+    }
 }
