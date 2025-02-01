@@ -4,6 +4,8 @@ using LibEd.EdData;
 using Xunit;
 using Moq;
 using Moq.Protected;
+using Microsoft.Data.Sqlite;
+using System.Security.Cryptography;
 
 public class FakeInsertionDatabaseOperator_Tests
 {
@@ -19,7 +21,7 @@ public class FakeInsertionDatabaseOperator_Tests
         var mockedDbOperator = new Mock<FakeInsertionDatabaseOperator>(dbPath, true, executionCount){ CallBase = true };
         mockedDbOperator.Object.InsertData(exampleIndexBytes, exampleData);
         int actualCount = executionCount;
-        mockedDbOperator.Protected().Verify("InsertFakeData", Times.Exactly(actualCount), [exampleIndexBytes, exampleData]);
+        mockedDbOperator.Protected().Verify("ExecuteFakeInsertionCommand", Times.Exactly(actualCount), false, [ItExpr.IsAny<SqliteCommand>(),ItExpr.IsAny<SqliteParameter>(),ItExpr.IsAny<SqliteParameter>(),ItExpr.IsAny<byte[]>(),ItExpr.IsAny<byte[]>(),ItExpr.IsAny<RandomNumberGenerator>()]);
     }
 
     [Fact]
@@ -31,6 +33,6 @@ public class FakeInsertionDatabaseOperator_Tests
         var streamData = new MemoryStream(exampleData);
         mockedDbOperator.Object.InsertData(exampleIndexBytes, streamData);
         int actualCount = executionCount;
-        mockedDbOperator.Protected().Verify("InsertFakeData", Times.Exactly(actualCount), [exampleIndexBytes, streamData]);
+        mockedDbOperator.Protected().Verify("ExecuteFakeInsertionCommand", Times.Exactly(actualCount), false, [ItExpr.IsAny<SqliteCommand>(),ItExpr.IsAny<SqliteParameter>(),ItExpr.IsAny<SqliteParameter>(),ItExpr.IsAny<byte[]>(),ItExpr.IsAny<byte[]>(),ItExpr.IsAny<RandomNumberGenerator>()]);
     }
 }
