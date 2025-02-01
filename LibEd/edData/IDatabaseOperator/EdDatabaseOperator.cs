@@ -104,4 +104,20 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
         command.Parameters.AddWithValue($"@{_dataName}", data);
         command.ExecuteNonQuery();
     }
+    protected virtual void ExecuteRealInsertionCommand(SqliteConnection connection, SqliteTransaction transaction, byte[] index, Stream readableStream)
+    {
+        long streamLength = readableStream.Length - readableStream.Position;
+        string sqltext = $@"
+            INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, zeroblob({streamLength}));
+            SELECT last_insert_rowid();
+        ";
+        var command = new SqliteCommand(sqltext ,connection, transaction);
+        command.Parameters.AddWithValue($"@{_indexName}", index);
+        long rowid = (long)(command.ExecuteScalar() ??
+                    throw new InvalidOperationException("Could not read the value of \"last_insert_rowid()\"."));
+        using (var writeStream = new SqliteBlob(_sqliteConnection, _tableName, _dataName, rowid))
+        {
+            readableStream.CopyTo(writeStream);
+        }
+    }
 }
