@@ -44,18 +44,6 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
             readableStream.Length
         );
     }
-    protected virtual void InsertFakeData(byte[] imitatedIndex, byte[] imitatedData)
-    {
-        byte[] fakeIndex = GeneratedRandomBytes(imitatedIndex.Length);
-        byte[] fakeData = GeneratedRandomBytes(imitatedData.Length);
-        base.InsertData(fakeIndex, fakeData);
-    }
-    protected virtual void InsertFakeData(byte[] imitatedIndex, Stream readableStream)
-    {
-        byte[] fakeIndex = GeneratedRandomBytes(imitatedIndex.Length);
-        byte[] fakeData = GeneratedRandomBytes(readableStream.Length);
-        base.InsertData(fakeIndex, fakeData);
-    }
     protected virtual void InsertWithFakeInsertion(Action<SqliteConnection,SqliteTransaction> actionRealInsertion, long indexLength, long dataLength)
     {
         _sqliteConnection.Open();
@@ -89,13 +77,6 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
             _sqliteConnection.Close();
             SqliteConnection.ClearPool(_sqliteConnection);
         }
-    }
-    protected byte[] GeneratedRandomBytes(long length)
-    {
-        byte[] result = new byte[length];
-        RandomNumberGenerator rng = RandomNumberGenerator.Create();
-        rng.GetBytes(result);
-        return result;
     }
     protected virtual void ExecuteRealInsertionCommand(SqliteConnection connection, SqliteTransaction transaction, byte[] index, byte[] data)
     {
