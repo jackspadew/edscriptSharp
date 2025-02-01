@@ -26,37 +26,13 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
 
     public override void InsertData(byte[] index, byte[] data)
     {
-        _sqliteConnection.Open();
-        // Fake insertion variables
-        byte[] randomIndexBuffer = new byte[index.Length];
-        byte[] randomDataBuffer = new byte[data.Length];
-        RandomNumberGenerator rng = RandomNumberGenerator.Create();
-        // transaction
-        try{
-            using (var transaction = _sqliteConnection.BeginTransaction())
-            {
-                var fakeInsertionVariables = CreateFakeInsertionVariables(_sqliteConnection, transaction);
-                // Execute commands
-                RandomExecutor.Run([
-                    () => {
-                        ExecuteRealInsertionCommand(_sqliteConnection, transaction, index, data);
-                    },
-                    () => {
-                        ExecuteFakeInsertionCommand(fakeInsertionVariables.command, fakeInsertionVariables.paramIndex, fakeInsertionVariables.paramData, randomIndexBuffer, randomDataBuffer, rng);
-                    }
-                ]);
-                transaction.Commit();
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("", ex);
-        }
-        finally
-        {
-            _sqliteConnection.Close();
-            SqliteConnection.ClearPool(_sqliteConnection);
-        }
+        InsertWithFakeInsertion(
+            (a,b) => {
+                ExecuteRealInsertionCommand(a, b, index, data);
+            },
+            index.Length,
+            data.Length
+        );
     }
     public override void InsertData(byte[] index, Stream readableStream)
     {
