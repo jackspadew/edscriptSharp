@@ -27,7 +27,7 @@ public class PerformanceTests_WorkerChain
         }
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
-        CommonFunctions.CompletesIn(5000, () => {
+        CommonFunctions.CompletesIn(nameof(StashWithLongChain_CompleteWithinTime), 5000, () => {
             workerLast.Stash(exampleIndex, exampleByte);
         });
         extracted = workerLast.Extract(exampleIndex);
@@ -52,7 +52,7 @@ public class PerformanceTests_WorkerChain
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        CommonFunctions.CompletesIn(1000, () => {
+        CommonFunctions.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 1000, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
