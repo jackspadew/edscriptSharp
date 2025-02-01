@@ -27,8 +27,6 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
     public override void InsertData(byte[] index, byte[] data)
     {
         _sqliteConnection.Open();
-        // Real insertion variables
-        string realInsertionText = $"INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
         // Fake insertion variables
         string fakeInsertionText = $"INSERT OR IGNORE INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
         byte[] randomIndexBuffer = new byte[index.Length];
@@ -38,10 +36,6 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
         try{
             using (var transaction = _sqliteConnection.BeginTransaction())
             {
-                // Create real insertion command
-                var realInsertionCommand = new SqliteCommand(realInsertionText ,_sqliteConnection, transaction);
-                realInsertionCommand.Parameters.AddWithValue($"@{_indexName}", index);
-                realInsertionCommand.Parameters.AddWithValue($"@{_dataName}", data);
                 // Create fake insertion command
                 var fakeInsertionCommand = new SqliteCommand(fakeInsertionText ,_sqliteConnection, transaction);
                 var paramIndex = fakeInsertionCommand.CreateParameter();
@@ -53,7 +47,7 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
                 // Execute commands
                 RandomExecutor.Run([
                     () => {
-                        realInsertionCommand.ExecuteNonQuery();
+                        ExecuteRealInsertionCommand(_sqliteConnection, transaction, index, data);
                     },
                     () => {
                         rng.GetBytes(randomIndexBuffer);
@@ -101,5 +95,13 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
         rng.GetBytes(result);
         return result;
+    }
+    protected virtual void ExecuteRealInsertionCommand(SqliteConnection connection, SqliteTransaction transaction, byte[] index, byte[] data)
+    {
+        string realInsertionText = $"INSERT INTO {_tableName} ({_indexName}, {_dataName}) VALUES (@{_indexName}, @{_dataName});";
+        var command = new SqliteCommand(realInsertionText ,connection, transaction);
+        command.Parameters.AddWithValue($"@{_indexName}", index);
+        command.Parameters.AddWithValue($"@{_dataName}", data);
+        command.ExecuteNonQuery();
     }
 }
