@@ -20,4 +20,15 @@ public class FakeInsertionDatabaseOperator_PerformanceTests
             dbOperator.InsertData(exampleIndex, exampleByte);
         });
     }
+    [Fact]
+    public void InsertDataByStream_CompleteWithinTime()
+    {
+        string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        MemoryStream stream = new(exampleByte);
+        var dbOperator = new FakeInsertionDatabaseOperator(dbPath, true, 1000);
+        PerformanceTestCommon.CompletesIn( MethodBase.GetCurrentMethod().Name, 5000, () => {
+            dbOperator.InsertData(exampleIndex, stream);
+        });
+    }
 }
