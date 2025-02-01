@@ -77,6 +77,40 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
         byte[] fakeData = GeneratedRandomBytes(readableStream.Length);
         base.InsertData(fakeIndex, fakeData);
     }
+    protected virtual void InsertWithFakeInsertion(Action<SqliteConnection,SqliteTransaction> actionRealInsertion, long indexLength, long dataLength)
+    {
+        _sqliteConnection.Open();
+        // Fake insertion variables
+        byte[] randomIndexBuffer = new byte[indexLength];
+        byte[] randomDataBuffer = new byte[dataLength];
+        RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        // transaction
+        try{
+            using (var transaction = _sqliteConnection.BeginTransaction())
+            {
+                var fakeInsertionVariables = CreateFakeInsertionVariables(_sqliteConnection, transaction);
+                // Execute commands
+                RandomExecutor.Run([
+                    () => {
+                        actionRealInsertion(_sqliteConnection, transaction);
+                    },
+                    () => {
+                        ExecuteFakeInsertionCommand(fakeInsertionVariables.command, fakeInsertionVariables.paramIndex, fakeInsertionVariables.paramData, randomIndexBuffer, randomDataBuffer, rng);
+                    }
+                ]);
+                transaction.Commit();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("", ex);
+        }
+        finally
+        {
+            _sqliteConnection.Close();
+            SqliteConnection.ClearPool(_sqliteConnection);
+        }
+    }
     protected byte[] GeneratedRandomBytes(long length)
     {
         byte[] result = new byte[length];
