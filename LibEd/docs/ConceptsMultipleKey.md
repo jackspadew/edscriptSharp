@@ -44,11 +44,12 @@ DBへの格納を前提とした`バイト配列`としてのインターフェ�
 
 ## Workerの種類とMultiple Keyの関係表
 
-|           | Default |        Initial        | Key Blended |        Stashed        | Target Data    |
-| --------- | :-----: | :-------------------: | :---------: | :-------------------: | -------------- |
-| Initial   |   use   | create/stash, extract |             |                       |                |
-| ChainZero |         |         read          | create, use | create/stash, extract |                |
-| Chain     |         |                       |             |          use          | stash, extract |
+|           | Default |        Initial        | Key Blended |           Stashed            | Target Data    |
+| --------- | :-----: | :-------------------: | :---------: | :--------------------------: | -------------- |
+| Initial   |   use   | create/stash, extract |             |                              |                |
+| ChainZero |         |         read          | create, use |    create/stash, extract     |                |
+| Chain     |         |                       |             |  use, create/stash, extract  |                |
+| LastChain |         |                       |             |             use              | stash, extract |
 
 - use: 暗号化/復号化に使う。
 - create: 生成する。
