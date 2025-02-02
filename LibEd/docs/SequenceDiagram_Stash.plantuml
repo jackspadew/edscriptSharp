@@ -1,0 +1,97 @@
+@startuml
+Client -> LastChain : Stash
+activate LastChain
+LastChain -> MiddleWorker : StashChildMultipleKey
+activate MiddleWorker
+MiddleWorker -> ChainZero : StashChildMultipleKey
+activate ChainZero
+ChainZero -> InitialWorker : ExtractInitialMultipleKey
+activate ChainZero #FF8888
+activate InitialWorker
+InitialWorker -> InitialWorker : default
+InitialWorker -> InitialWorker : Generate Index
+InitialWorker -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return key
+deactivate ChainZero
+ChainZero -> ChainZero : Blend secret key
+activate ChainZero #558855
+ChainZero -> ChainZero : Generate Index
+ChainZero -> ChainZero : Generate Random Multiple Key
+ChainZero -> DatabaseOperator : insert encryptedData
+activate DatabaseOperator
+return
+deactivate ChainZero
+return
+
+MiddleWorker -> ChainZero : ExtractChildMultipleKey
+note over MiddleWorker
+ExtractOwnMultipleKey
+end note
+activate MiddleWorker #992222
+activate ChainZero
+ChainZero -> InitialWorker : ExtractInitialMultipleKey
+activate InitialWorker
+InitialWorker -> InitialWorker : default
+InitialWorker -> InitialWorker : Generate Index
+InitialWorker -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return key
+ChainZero -> ChainZero : Blend secret key
+ChainZero -> ChainZero : Generate Index
+ChainZero -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return key
+deactivate MiddleWorker
+
+MiddleWorker -> MiddleWorker : Generate Index
+activate MiddleWorker #558855
+MiddleWorker -> MiddleWorker : Generate Random Multiple Key
+MiddleWorker -> DatabaseOperator : insert encryptedData
+activate DatabaseOperator
+return
+deactivate MiddleWorker
+return
+
+LastChain -> MiddleWorker : ExtractChildMultipleKey
+note over LastChain
+ExtractOwnMultipleKey
+end note
+activate LastChain #992222
+activate MiddleWorker
+MiddleWorker -> ChainZero : ExtractChildMultipleKey
+activate ChainZero
+ChainZero -> InitialWorker : ExtractInitialMultipleKey
+activate InitialWorker
+InitialWorker -> InitialWorker : default
+InitialWorker -> InitialWorker : Generate Index
+InitialWorker -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return key
+ChainZero -> ChainZero : Blend secret key
+ChainZero -> ChainZero : Generate Index
+ChainZero -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return key
+MiddleWorker -> MiddleWorker : Generate Index
+MiddleWorker -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return key
+deactivate LastChain
+
+LastChain -> LastChain : Generate Index
+activate LastChain #558855
+LastChain -> LastChain : Encrypt plaintext
+LastChain -> DatabaseOperator : insert encryptedData
+activate DatabaseOperator
+return
+deactivate LastChain
+return
+
+@enduml
