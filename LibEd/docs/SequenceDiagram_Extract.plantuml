@@ -1,0 +1,32 @@
+@startuml
+Client -> LastChain : Extract
+activate LastChain
+LastChain -> MiddleWorker : ExtractChildMultipleKey
+activate MiddleWorker
+MiddleWorker -> ChainZero : ExtractChildMultipleKey
+activate ChainZero
+ChainZero -> InitialWorker : ExtractInitialMultipleKey
+activate InitialWorker
+InitialWorker -> InitialWorker : init Default Multiple Key
+InitialWorker -> InitialWorker : Generate Index
+InitialWorker -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return Multiple Key
+ChainZero -> ChainZero : Blend secret key
+ChainZero -> ChainZero : Generate Index
+ChainZero -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return Multiple Key
+MiddleWorker -> MiddleWorker : Generate Index
+MiddleWorker -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return Multiple Key
+LastChain -> LastChain : Generate Index
+LastChain -> DatabaseOperator : select
+activate DatabaseOperator
+return encryptedData
+return plaintext
+@enduml
