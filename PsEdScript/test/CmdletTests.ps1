@@ -6,7 +6,7 @@ Import-Module $modulePath
 Describe 'PsEdScript_CmdletTests' {
     BeforeAll {
         $dbPath = "example.db";
-        Remove-Item $dbPath
+        Remove-Item $dbPath -ErrorAction SilentlyContinue
         Mock -CommandName "Read-Host" -MockWith { return "Mocked Input" }
     }
 
