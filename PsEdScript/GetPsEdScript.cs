@@ -31,7 +31,11 @@ public class GetPsEdScript : PSCmdlet
             ThrowArgumentNullOrEmptyException(nameof(Path));
         }
 
-        WriteObject($"IndexName: {IndexName}, Path: {Path}");
+        using var ps = PowerShell.Create(RunspaceMode.CurrentRunspace);
+        ps.AddCommand("Read-Host").AddParameter("Prompt", "password").AddParameter("MaskInput");
+        var password = ps.Invoke<string>();
+
+        WriteObject($"IndexName: {IndexName}, Path: {Path}, password: {password}");
     }
 
     protected virtual void ThrowArgumentNullOrEmptyException(string Name)
