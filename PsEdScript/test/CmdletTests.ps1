@@ -4,6 +4,9 @@ $modulePath = Join-Path -Path (Split-Path -Parent $MyInvocation.MyCommand.Path) 
 Import-Module $modulePath
 
 Describe 'PsEdScript_CmdletTests' {
+    BeforeAll {
+        Mock -CommandName "Read-Host" -MockWith { return "Mocked Input" }
+    }
     Context 'GetPsEdScript' {
         It 'Will throw if argument IndexName is empty string.' {
             { Get-PsEdScript -IndexName "" -Path "example.db" } | Should -Throw
