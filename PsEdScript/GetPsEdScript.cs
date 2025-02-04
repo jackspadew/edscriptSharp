@@ -2,6 +2,7 @@ using System;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using LibEd.EdData;
+using System.Text;
 
 namespace PsEdScript;
 
@@ -55,7 +56,10 @@ public class GetPsEdScript : PSCmdlet
             EdDataLogicObject = new BasicEdDataLogicFactory(Path, password);
         }
 
-        WriteObject($"IndexName: {IndexName}, Path: {Path}, password: {password}");
+        var worker = EdDataLogicObject.CreateWorker();
+        var plainBytes = worker.Extract(IndexName);
+        var plainText = Encoding.UTF8.GetString(plainBytes);
+        WriteObject(plainText);
     }
 
     protected virtual void ThrowArgumentNullOrEmptyException(string Name)
