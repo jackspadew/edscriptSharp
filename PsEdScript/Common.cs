@@ -52,3 +52,9 @@ public static class Common
         return EdDataLogicObject.CreateWorker();
     }
 }
+
+public enum SupportedScriptLanguage
+{
+    pwsh,
+    python,
+}
