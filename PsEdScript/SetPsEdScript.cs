@@ -29,40 +29,15 @@ public class SetPsEdScript : PSCmdlet
         )]
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
+    protected IEdDataWorker Worker { get; set; }
+
     [Parameter(ValueFromPipeline = true)]
     public string[] InputStrings { get; set; }
     public string CombinedInputStrings { get; set; }
 
     protected override void BeginProcessing()
     {
-        if(string.IsNullOrWhiteSpace(IndexName))
-        {
-            Common.ThrowArgumentNullOrEmptyException(nameof(IndexName));
-        }
-
-        if(string.IsNullOrWhiteSpace(Path)) Path = Environment.GetEnvironmentVariable("PsEdScriptDatabasePath");
-        if(string.IsNullOrWhiteSpace(Path))
-        {
-            Common.ThrowArgumentNullOrEmptyException(nameof(Path));
-        }
-
-        if(EdDataLogicObject == null)
-        {
-            var tmpObj = SessionState.PSVariable.Get(Common.ScriptScopeLogicObjectName);
-            if(tmpObj is IEdDataLogicFactory logicObj)
-            {
-                EdDataLogicObject = logicObj;
-            }
-        }
-
-        using var ps = PowerShell.Create(RunspaceMode.CurrentRunspace);
-        ps.AddCommand("Read-Host").AddParameter("Prompt", "password").AddParameter("MaskInput");
-        string password = (string)ps.Invoke<string>()[0];
-
-        if(EdDataLogicObject == null)
-        {
-            EdDataLogicObject = new BasicEdDataLogicFactory(Path, password);
-        }
+        Worker = Common.GetEdDataWorker(SessionState, EdDataLogicObject, Path);
     }
 
     protected override void ProcessRecord()
@@ -76,7 +51,6 @@ public class SetPsEdScript : PSCmdlet
     protected override void EndProcessing()
     {
         var bytes = Encoding.UTF8.GetBytes(CombinedInputStrings);
-        var worker = EdDataLogicObject.CreateWorker();
-        worker.Stash(IndexName, bytes);
+        Worker.Stash(IndexName, bytes);
     }
 }
