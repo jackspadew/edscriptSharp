@@ -6,13 +6,19 @@ Import-Module $modulePath
 Describe 'PsEdScript_CmdletTests' {
     BeforeAll {
         $dbPath = "example.db";
-        Remove-Item $dbPath -ErrorAction SilentlyContinue
         Mock -CommandName "Read-Host" -MockWith { return "Mocked Input" }
+        function StashHello {
+            "world" | Set-PsEdScript -IndexName "hello" -Path $dbPath
+        }
+    }
+
+    BeforeEach {
+        Remove-Item $dbPath -ErrorAction SilentlyContinue
     }
 
     Context 'SetPsEdScript' {
         It 'Will not throw' {
-            { "world" | Set-PsEdScript -IndexName "hello" -Path $dbPath } | Should -Not -Throw
+            { StashHello } | Should -Not -Throw
         }
     }
 
@@ -21,9 +27,11 @@ Describe 'PsEdScript_CmdletTests' {
             { Get-PsEdScript -IndexName "" -Path $dbPath } | Should -Throw
         }
         It 'Will return [string].' {
+            StashHello
             Get-PsEdScript -IndexName "hello" -Path $dbPath | Should -BeOfType [string]
         }
         It 'Will return "world".' {
+            StashHello
             Get-PsEdScript -IndexName "hello" -Path $dbPath | Should -Be "world"
         }
     }
