@@ -31,7 +31,7 @@ public class GetPsEdScript : PSCmdlet
             ThrowArgumentNullOrEmptyException(nameof(Path));
         }
 
-        Console.WriteLine($"IndexName: {IndexName}, Path: {Path}");
+        WriteObject($"IndexName: {IndexName}, Path: {Path}");
     }
 
     protected virtual void ThrowArgumentNullOrEmptyException(string Name)
