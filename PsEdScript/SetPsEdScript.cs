@@ -37,13 +37,13 @@ public class SetPsEdScript : PSCmdlet
     {
         if(string.IsNullOrWhiteSpace(IndexName))
         {
-            ThrowArgumentNullOrEmptyException(nameof(IndexName));
+            Common.ThrowArgumentNullOrEmptyException(nameof(IndexName));
         }
 
         if(string.IsNullOrWhiteSpace(Path)) Path = Environment.GetEnvironmentVariable("PsEdScriptDatabasePath");
         if(string.IsNullOrWhiteSpace(Path))
         {
-            ThrowArgumentNullOrEmptyException(nameof(Path));
+            Common.ThrowArgumentNullOrEmptyException(nameof(Path));
         }
 
         if(EdDataLogicObject == null)
@@ -78,10 +78,5 @@ public class SetPsEdScript : PSCmdlet
         var bytes = Encoding.UTF8.GetBytes(CombinedInputStrings);
         var worker = EdDataLogicObject.CreateWorker();
         worker.Stash(IndexName, bytes);
-    }
-
-    protected virtual void ThrowArgumentNullOrEmptyException(string Name)
-    {
-        throw new ArgumentException($"The argument {Name} is null or empty.");
     }
 }
