@@ -23,7 +23,8 @@ public class ShebangParser
         string[] trimedWords = trimedCommand.Split(SPLIT_DELIMITER_WHITESPACES, StringSplitOptions.RemoveEmptyEntries);
         if(trimedWords.Length == 2)
         {
-            return new ShebangParser(true, trimedCommand, trimedWords[1]);
+            string combinedCommand = trimedWords[0] + " " + trimedWords[1];
+            return new ShebangParser(true, combinedCommand, trimedWords[1]);
         }
         else if(trimedWords.Length == 1)
         {
