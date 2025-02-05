@@ -16,7 +16,8 @@ public class ShebangParser
         {
             return new ShebangParser(false, "", "");
         }
-        string trimedCommand = text.Substring(SHEBANG_PREFIX.Length)
+        string firstLine = text.Split('\n')[0];
+        string trimedCommand = firstLine.Substring(SHEBANG_PREFIX.Length)
             .TrimStart()
             .TrimEnd();
         string[] trimedWords = trimedCommand.Split(SPLIT_DELIMITER_WHITESPACES, StringSplitOptions.RemoveEmptyEntries);
