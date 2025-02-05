@@ -22,12 +22,15 @@ public class InvokePsEdScript : PSCmdlet
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
     protected IEdDataWorker Worker { get; set; }
+    protected object previousScriptScopeLogicObject { get; set; }
 
     protected override void BeginProcessing()
     {
+        previousScriptScopeLogicObject = SessionState.PSVariable.Get(Common.ScriptScopeLogicObjectName);
         Worker = Common.GetEdDataWorker(SessionState, EdDataLogicObject, Path);
         var plainBytes = Worker.Extract(IndexName);
         var scriptResult = Common.InvokeScriptByByteArray(plainBytes);
         WriteObject(scriptResult);
+        SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, previousScriptScopeLogicObject);
     }
 }
