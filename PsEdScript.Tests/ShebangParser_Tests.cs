@@ -5,10 +5,12 @@ namespace PsEdScript.Tests;
 
 public class ShebangParser_Tests
 {
-    [Fact]
-    public void ParseExampleShebang_ReturnCorrectValues()
+    [Theory]
+    [InlineData("#! /usr/bin/pwsh")]
+    [InlineData("#!    /usr/bin/pwsh   ")]
+    [InlineData("#! \t /usr/bin/pwsh \t ")]
+    public void ParseExampleShebang_ReturnCorrectValues(string firstLine)
     {
-        string firstLine = "#! /usr/bin/pwsh";
         var parsedInfo = ShebangParser.Parse(firstLine);
         Assert.True(parsedInfo.IsShebang);
         Assert.Equal("/usr/bin/pwsh", parsedInfo.Command);
