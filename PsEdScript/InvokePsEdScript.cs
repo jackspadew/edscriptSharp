@@ -31,5 +31,7 @@ public class InvokePsEdScript : PSCmdlet
         Worker = Common.GetEdDataWorker(SessionState, EdDataLogicObject, Path);
         var plainBytes = Worker.Extract(IndexName);
         var plainText = Encoding.UTF8.GetString(plainBytes);
+        var scriptResult = Common.InvokeScriptByString(plainText);
+        WriteObject(scriptResult);
     }
 }
