@@ -53,13 +53,6 @@ public static class Common
         return EdDataLogicObject.CreateWorker();
     }
 
-    public static object InvokeScriptByString(string scriptText)
-    {
-        object result;
-        result = InvokePowershellScriptByString(scriptText);
-        return result;
-    }
-
     public static object InvokeScriptByByteArray(byte[] scriptTextBytes)
     {
         string firstLine = GetFirstLineFromByteArray(scriptTextBytes);
