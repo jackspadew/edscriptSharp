@@ -1,6 +1,7 @@
 namespace PsEdScript;
 
 using System;
+using System.Text;
 using LibEd.EdData;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
@@ -66,6 +67,20 @@ public static class Common
             ps.AddScript(ps1Text);
             return ps.Invoke();
         }
+    }
+
+    public static string GetFirstLineFromByteArray(byte[] byteArray)
+    {
+        int length = Math.Min(byteArray.Length, 124);
+        byte[] limitedArray = new byte[length];
+        Array.Copy(byteArray, limitedArray, length);
+        string result = Encoding.UTF8.GetString(limitedArray);
+        int newlineIndex = result.IndexOf('\n');
+        if (newlineIndex != -1)
+        {
+            return result.Substring(0, newlineIndex);
+        }
+        throw new InvalidOperationException("The byte array does not contain valid string data.");
     }
 }
 
