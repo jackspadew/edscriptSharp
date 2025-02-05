@@ -4,7 +4,6 @@ using System;
 using System.Text;
 using LibEd.EdData;
 using System.Management.Automation;
-using System.Management.Automation.Runspaces;
 using PsEdScript.Parser;
 
 public static class Common

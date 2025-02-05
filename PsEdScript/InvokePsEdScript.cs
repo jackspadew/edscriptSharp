@@ -1,8 +1,5 @@
-using System;
 using System.Management.Automation;
-using System.Management.Automation.Runspaces;
 using LibEd.EdData;
-using System.Text;
 
 namespace PsEdScript;
 
