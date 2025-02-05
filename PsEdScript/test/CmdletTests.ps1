@@ -35,4 +35,12 @@ Describe 'PsEdScript_CmdletTests' {
             Get-PsEdScript -IndexName "hello" -Path $dbPath | Should -Be "world"
         }
     }
+
+    Context 'InvokePsEdScript' {
+        It 'Will return correct string' {
+            "#! pwsh`rWrite-Output ""world""" | Set-PsEdScript -IndexName "hello.ps1" -Path $dbPath
+            $result = Invoke-PsEdScript -IndexName "hello.ps1" -Path $dbPath
+            $result | Should -Be "world"
+        }
+    }
 }
