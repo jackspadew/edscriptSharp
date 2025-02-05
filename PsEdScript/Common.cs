@@ -5,6 +5,7 @@ using System.Text;
 using LibEd.EdData;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using PsEdScript.Parser;
 
 public static class Common
 {
@@ -58,6 +59,19 @@ public static class Common
         object result;
         result = InvokePowershellScriptByString(scriptText);
         return result;
+    }
+
+    public static object InvokeScriptByByteArray(byte[] scriptTextBytes)
+    {
+        string firstLine = GetFirstLineFromByteArray(scriptTextBytes);
+        var parser = ShebangParser.Parse(firstLine);
+        if(parser.IsShebang) throw new Exception("The first line of script text is not match Shebang format.");
+        var scriptText = Encoding.UTF8.GetString(scriptTextBytes);
+        if(parser.CommandExact == "pwsh")
+        {
+            return InvokePowershellScriptByString(scriptText);
+        }
+        throw new Exception("This is not any valid script text.");
     }
 
     public static object InvokePowershellScriptByString(string ps1Text)
