@@ -42,5 +42,10 @@ Describe 'PsEdScript_CmdletTests' {
             $result = Invoke-PsEdScript -IndexName "hello.ps1" -Path $dbPath
             $result | Should -Be "world"
         }
+        It 'Invoke python script will return correct string.' {
+            "#! /usr/bin/python`nprint(""world"")" | Set-PsEdScript -IndexName "hello.py" -Path $dbPath
+            $result = Invoke-PsEdScript -IndexName "hello.py" -Path $dbPath
+            $result | Should -Be "world"
+        }
     }
 }
