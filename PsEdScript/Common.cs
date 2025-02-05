@@ -65,7 +65,7 @@ public static class Common
     {
         string firstLine = GetFirstLineFromByteArray(scriptTextBytes);
         var parser = ShebangParser.Parse(firstLine);
-        if(parser.IsShebang) throw new Exception("The first line of script text is not match Shebang format.");
+        if(!parser.IsShebang) throw new Exception("The first line of script text is not match Shebang format.");
         var scriptText = Encoding.UTF8.GetString(scriptTextBytes);
         if(parser.CommandExact == "pwsh")
         {
