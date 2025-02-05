@@ -38,7 +38,7 @@ Describe 'PsEdScript_CmdletTests' {
 
     Context 'InvokePsEdScript' {
         It 'Will return correct string' {
-            "#! pwsh`rWrite-Output ""world""" | Set-PsEdScript -IndexName "hello.ps1" -Path $dbPath
+            "#! pwsh`nWrite-Output ""world""" | Set-PsEdScript -IndexName "hello.ps1" -Path $dbPath
             $result = Invoke-PsEdScript -IndexName "hello.ps1" -Path $dbPath
             $result | Should -Be "world"
         }
