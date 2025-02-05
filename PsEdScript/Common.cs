@@ -97,9 +97,3 @@ public static class Common
         throw new InvalidOperationException("The byte array does not contain valid string data.");
     }
 }
-
-public enum SupportedScriptLanguage
-{
-    pwsh,
-    python,
-}
