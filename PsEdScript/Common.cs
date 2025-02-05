@@ -51,6 +51,22 @@ public static class Common
         IEdDataLogicFactory EdDataLogicObject = new BasicEdDataLogicFactory(Path, password);
         return EdDataLogicObject.CreateWorker();
     }
+
+    public static object InvokeScriptByString(string scriptText)
+    {
+        object result;
+        result = InvokePowershellScriptByString(scriptText);
+        return result;
+    }
+
+    public static object InvokePowershellScriptByString(string ps1Text)
+    {
+        using (PowerShell ps = PowerShell.Create(RunspaceMode.CurrentRunspace))
+        {
+            ps.AddScript(ps1Text);
+            return ps.Invoke();
+        }
+    }
 }
 
 public enum SupportedScriptLanguage
