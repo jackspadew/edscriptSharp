@@ -71,6 +71,10 @@ public static class Common
         {
             return InvokePowershellScriptByString(scriptText);
         }
+        else if(parser.CommandExact == "python")
+        {
+            return InvokePythonScript(scriptText);
+        }
         throw new Exception("This is not any valid script text.");
     }
 
@@ -79,6 +83,16 @@ public static class Common
         using (PowerShell ps = PowerShell.Create(RunspaceMode.CurrentRunspace))
         {
             ps.AddScript(ps1Text);
+            return ps.Invoke();
+        }
+    }
+
+    public static object InvokePythonScript(string pyText)
+    {
+        using (PowerShell ps = PowerShell.Create(RunspaceMode.CurrentRunspace))
+        {
+            ps.AddScript("$args[0] | python -");
+            ps.AddArgument(pyText);
             return ps.Invoke();
         }
     }
