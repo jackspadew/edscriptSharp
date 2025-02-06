@@ -28,6 +28,7 @@ public class InvokePsEdScript : PSCmdlet
     {
         previousScriptScopeLogicObject = SessionState.PSVariable.Get(Common.ScriptScopeLogicObjectName);
         LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
+        SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, LogicObj);
         var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
         var scriptResult = Common.InvokeScriptByByteArray(plainBytes);
         WriteObject(scriptResult);
