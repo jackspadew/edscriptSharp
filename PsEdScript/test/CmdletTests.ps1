@@ -16,6 +16,7 @@ Describe 'PsEdScript_CmdletTests' {
             $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
         }
         $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword)
+        $script:PsEdScriptLogic = $null
     }
 
     BeforeEach {
@@ -28,6 +29,10 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Execute with EdDataLogicFactory object then not throw.' {
             { $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
+        }
+        It 'Execute with script scope EdDataLogicFactory object then not throw.' {
+            $script:PsEdScriptLogic = $logic
+            { $exampleData | Set-PsEdScript -IndexName $exampleIndex } | Should -Not -Throw
         }
     }
 
@@ -46,6 +51,11 @@ Describe 'PsEdScript_CmdletTests' {
         It 'Execute with EdDataLogicFactory object then return correct string.' {
             $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $exampleData
+        }
+        It 'Execute with script scope EdDataLogicFactory object return correct string.' {
+            $script:PsEdScriptLogic = $logic
+            $exampleData | Set-PsEdScript -IndexName $exampleIndex
+            Get-PsEdScript -IndexName $exampleIndex | Should -Be $exampleData
         }
     }
 
@@ -69,6 +79,12 @@ Describe 'PsEdScript_CmdletTests' {
             $exampleData | Set-PsEdScript -IndexName "TextData" -EdDataLogicObject $logic
             "#! pwsh`nWrite-Output `$(Get-PsEdScript -IndexName ""TextData"")" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result | Should -Be $exampleData
+        }
+        It 'Execute with script scope EdDataLogicFactory object return correct string.' {
+            $script:PsEdScriptLogic = $logic
+            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex
+            $result = Invoke-PsEdScript -IndexName $exampleIndex
             $result | Should -Be $exampleData
         }
     }
