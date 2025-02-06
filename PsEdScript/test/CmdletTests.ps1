@@ -13,7 +13,7 @@ Describe 'PsEdScript_CmdletTests' {
         $exampleData = "world"
         Mock -CommandName "Read-Host" -MockWith { return $examplePassword }
         function StashHello {
-            "world" | Set-PsEdScript -IndexName "hello" -Path $dbPath
+            $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
         }
         $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword)
     }
@@ -27,7 +27,7 @@ Describe 'PsEdScript_CmdletTests' {
             { StashHello } | Should -Not -Throw
         }
         It 'Execute with EdDataLogicFactory object then not throw.' {
-            { "world" | Set-PsEdScript -IndexName "hello" -EdDataLogicObject $logic } | Should -Not -Throw
+            { $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
         }
     }
 
@@ -37,33 +37,33 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Will return [string].' {
             StashHello
-            Get-PsEdScript -IndexName "hello" -Path $dbPath | Should -BeOfType [string]
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -BeOfType [string]
         }
-        It 'Will return "world".' {
+        It 'Will return correct string.' {
             StashHello
-            Get-PsEdScript -IndexName "hello" -Path $dbPath | Should -Be "world"
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -Be $exampleData
         }
         It 'Execute with EdDataLogicFactory object then return correct string.' {
-            "world" | Set-PsEdScript -IndexName "hello" -EdDataLogicObject $logic
-            Get-PsEdScript -IndexName "hello" -EdDataLogicObject $logic | Should -Be "world"
+            $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $exampleData
         }
     }
 
     Context 'InvokePsEdScript' {
         It 'Will return correct string' {
-            "#! pwsh`nWrite-Output ""world""" | Set-PsEdScript -IndexName "hello.ps1" -Path $dbPath
-            $result = Invoke-PsEdScript -IndexName "hello.ps1" -Path $dbPath
-            $result | Should -Be "world"
+            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $result | Should -Be $exampleData
         }
         It 'Invoke python script will return correct string.' {
-            "#! /usr/bin/python`nprint(""world"")" | Set-PsEdScript -IndexName "hello.py" -Path $dbPath
-            $result = Invoke-PsEdScript -IndexName "hello.py" -Path $dbPath
-            $result | Should -Be "world"
+            "#! /usr/bin/python`nprint(""${exampleData}"")" | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $result | Should -Be $exampleData
         }
         It 'Execute with EdDataLogicFactory object then return correct string.' {
-            "#! pwsh`nWrite-Output ""world""" | Set-PsEdScript -IndexName "hello.ps1" -EdDataLogicObject $logic
-            $result = Invoke-PsEdScript -IndexName "hello.ps1" -EdDataLogicObject $logic
-            $result | Should -Be "world"
+            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result | Should -Be $exampleData
         }
     }
 }
