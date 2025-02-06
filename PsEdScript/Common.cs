@@ -22,37 +22,6 @@ public static class Common
         return (string)ps.Invoke<string>()[0];
     }
 
-    public static IEdDataWorker GetEdDataWorker(SessionState sessionState, IEdDataLogicFactory edDataLogicObject, string Path, string password=null)
-    {
-        if(edDataLogicObject != null)
-        {
-            return edDataLogicObject.CreateWorker();
-        }
-        var globalEdDataLogicObject = sessionState.PSVariable.Get(Common.ScriptScopeLogicObjectName);
-        if(globalEdDataLogicObject is IEdDataLogicFactory logicObj)
-        {
-            return logicObj.CreateWorker();
-        }
-        if(string.IsNullOrWhiteSpace(Path))
-        {
-            Path = Environment.GetEnvironmentVariable("PsEdScriptDatabasePath");
-            if(string.IsNullOrWhiteSpace(Path))
-            {
-                Common.ThrowArgumentNullOrEmptyException(nameof(Path));
-            }
-        }
-        if(string.IsNullOrWhiteSpace(password))
-        {
-            password = Common.ReadHostPassword();
-            if(string.IsNullOrWhiteSpace(password))
-            {
-                Common.ThrowArgumentNullOrEmptyException(nameof(password));
-            }
-        }
-        IEdDataLogicFactory EdDataLogicObject = new BasicEdDataLogicFactory(Path, password);
-        return EdDataLogicObject.CreateWorker();
-    }
-
     public static IEdDataLogicFactory DetermineEdDataLogic(SessionState sessionState, IEdDataLogicFactory specifiedLogicObj, string Path, string password=null)
     {
         // if argument "EdDataLogicObject" is specified directly, use it.
