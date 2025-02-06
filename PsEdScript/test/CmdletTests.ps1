@@ -23,6 +23,10 @@ Describe 'PsEdScript_CmdletTests' {
         Remove-Item $dbPath -ErrorAction SilentlyContinue
     }
 
+    AfterAll {
+        Remove-Item $dbPath -ErrorAction SilentlyContinue
+    }
+
     Context 'SetPsEdScript' {
         It 'Will not throw' {
             { StashHello } | Should -Not -Throw
