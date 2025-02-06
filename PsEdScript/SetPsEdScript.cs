@@ -28,7 +28,7 @@ public class SetPsEdScript : PSCmdlet
         )]
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
-    protected IEdDataWorker Worker { get; set; }
+    protected IEdDataLogicFactory LogicObj { get; set; }
 
     [Parameter(ValueFromPipeline = true)]
     public string[] InputStrings { get; set; }
@@ -36,7 +36,7 @@ public class SetPsEdScript : PSCmdlet
 
     protected override void BeginProcessing()
     {
-        Worker = Common.GetEdDataWorker(SessionState, EdDataLogicObject, Path);
+        LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
     }
 
     protected override void ProcessRecord()
@@ -50,6 +50,6 @@ public class SetPsEdScript : PSCmdlet
     protected override void EndProcessing()
     {
         var bytes = Encoding.UTF8.GetBytes(CombinedInputStrings);
-        Worker.Stash(IndexName, bytes);
+        LogicObj.CreateWorker().Stash(IndexName, bytes);
     }
 }
