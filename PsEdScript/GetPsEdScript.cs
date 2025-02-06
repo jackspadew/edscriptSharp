@@ -23,12 +23,12 @@ public class GetPsEdScript : PSCmdlet
         )]
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
-    protected IEdDataWorker Worker { get; set; }
+    protected IEdDataLogicFactory LogicObj { get; set; }
 
     protected override void BeginProcessing()
     {
-        Worker = Common.GetEdDataWorker(SessionState, EdDataLogicObject, Path);
-        var plainBytes = Worker.Extract(IndexName);
+        LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
+        var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
         var plainText = Encoding.UTF8.GetString(plainBytes);
         WriteObject(plainText);
     }
