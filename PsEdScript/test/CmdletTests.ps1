@@ -26,6 +26,9 @@ Describe 'PsEdScript_CmdletTests' {
         It 'Will not throw' {
             { StashHello } | Should -Not -Throw
         }
+        It 'Execute with EdDataLogicFactory object then not throw.' {
+            { "world" | Set-PsEdScript -IndexName "hello" -EdDataLogicObject $logic } | Should -Not -Throw
+        }
     }
 
     Context 'GetPsEdScript' {
@@ -40,6 +43,10 @@ Describe 'PsEdScript_CmdletTests' {
             StashHello
             Get-PsEdScript -IndexName "hello" -Path $dbPath | Should -Be "world"
         }
+        It 'Execute with EdDataLogicFactory object then return correct string.' {
+            "world" | Set-PsEdScript -IndexName "hello" -EdDataLogicObject $logic
+            Get-PsEdScript -IndexName "hello" -EdDataLogicObject $logic | Should -Be "world"
+        }
     }
 
     Context 'InvokePsEdScript' {
@@ -51,6 +58,11 @@ Describe 'PsEdScript_CmdletTests' {
         It 'Invoke python script will return correct string.' {
             "#! /usr/bin/python`nprint(""world"")" | Set-PsEdScript -IndexName "hello.py" -Path $dbPath
             $result = Invoke-PsEdScript -IndexName "hello.py" -Path $dbPath
+            $result | Should -Be "world"
+        }
+        It 'Execute with EdDataLogicFactory object then return correct string.' {
+            "#! pwsh`nWrite-Output ""world""" | Set-PsEdScript -IndexName "hello.ps1" -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName "hello.ps1" -EdDataLogicObject $logic
             $result | Should -Be "world"
         }
     }
