@@ -53,6 +53,40 @@ public static class Common
         return EdDataLogicObject.CreateWorker();
     }
 
+    public static IEdDataLogicFactory DetermineEdDataLogic(SessionState sessionState, IEdDataLogicFactory specifiedLogicObj, string Path, string password=null)
+    {
+        // if argument "EdDataLogicObject" is specified directly, use it.
+        if(specifiedLogicObj != null)
+        {
+            return specifiedLogicObj;
+        }
+        // Otherwise, use the global variable if it is set.
+        var globalAnyTypeObject = sessionState.PSVariable.Get(Common.ScriptScopeLogicObjectName);
+        if(globalAnyTypeObject is IEdDataLogicFactory globalLogicObj)
+        {
+            return globalLogicObj;
+        }
+        // Otherwise, use the one generated in the cmdlet.
+        if(string.IsNullOrWhiteSpace(Path))
+        {
+            Path = Environment.GetEnvironmentVariable("PsEdScriptDatabasePath");
+            if(string.IsNullOrWhiteSpace(Path))
+            {
+                Common.ThrowArgumentNullOrEmptyException(nameof(Path));
+            }
+        }
+        if(string.IsNullOrWhiteSpace(password))
+        {
+            password = Common.ReadHostPassword();
+            if(string.IsNullOrWhiteSpace(password))
+            {
+                Common.ThrowArgumentNullOrEmptyException(nameof(password));
+            }
+        }
+        IEdDataLogicFactory generatedLogicObj = new BasicEdDataLogicFactory(Path, password);
+        return generatedLogicObj;
+    }
+
     public static object InvokeScriptByByteArray(byte[] scriptTextBytes)
     {
         string firstLine = GetFirstLineFromByteArray(scriptTextBytes);
