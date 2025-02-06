@@ -65,5 +65,11 @@ Describe 'PsEdScript_CmdletTests' {
             $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             $result | Should -Be $exampleData
         }
+        It 'Use "Get-PsEdScript" in encrypted script then return correct string' {
+            $exampleData | Set-PsEdScript -IndexName "TextData" -EdDataLogicObject $logic
+            "#! pwsh`nWrite-Output `$(Get-PsEdScript -IndexName ""TextData"")" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result | Should -Be $exampleData
+        }
     }
 }
