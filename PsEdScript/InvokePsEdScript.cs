@@ -26,7 +26,7 @@ public class InvokePsEdScript : PSCmdlet
 
     protected override void BeginProcessing()
     {
-        previousScriptScopeLogicObject = SessionState.PSVariable.Get(Common.ScriptScopeLogicObjectName);
+        previousScriptScopeLogicObject = SessionState.PSVariable.GetValue(Common.ScriptScopeLogicObjectName);
         LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
         SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, LogicObj);
         var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
