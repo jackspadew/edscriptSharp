@@ -4,6 +4,8 @@ using System.Diagnostics;
 
 public static class PerformanceTestCommon
 {
+    public static bool EnablePerformanceTests = "enable".Equals(Environment.GetEnvironmentVariable("EnablePerformanceTests"), StringComparison.OrdinalIgnoreCase);
+    public static string MessageWhenDisableTests = "Use option \"-p:PerformanceTests=enable\" for enable performance tests.";
     public static void CompletesIn(string testName, int targettime, Action action, int timeout=60000)
     {
         var stopwatch = Stopwatch.StartNew();
