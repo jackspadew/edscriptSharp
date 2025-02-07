@@ -1,10 +1,5 @@
 using module Pester
 
-$modulePath = Join-Path -Path (Split-Path -Parent $MyInvocation.MyCommand.Path) -ChildPath '../bin/Debug/net8.0/PsEdScript.dll'
-Import-Module $modulePath
-$LibEdPath = Join-Path -Path (Split-Path -Parent $MyInvocation.MyCommand.Path) -ChildPath '../bin/Debug/net8.0/LibEd.dll'
-Import-Module $LibEdPath
-
 Describe 'PsEdScript_CmdletTests' {
     BeforeAll {
         $dbPath = "example.db";
