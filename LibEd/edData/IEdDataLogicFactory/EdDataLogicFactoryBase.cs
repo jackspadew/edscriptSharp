@@ -62,7 +62,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
         return DetermineObjectByWorkerType(
             thisInstance,
             GeneralMultipleKeyExchanger,
-            InitialMultipleKeyExchanger,
+            DefaultMultipleKeyExchanger,
             ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger);
@@ -73,7 +73,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
         keyBlendedMultiKey.Key = Key;
         return keyBlendedMultiKey;
     }
-    protected abstract IMultipleKeyExchanger InitialMultipleKeyExchanger {get;}
+    protected abstract IMultipleKeyExchanger DefaultMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger ChainedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger GeneralMultipleKeyExchanger {get;}
