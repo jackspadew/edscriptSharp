@@ -109,6 +109,12 @@ Describe 'PsEdScript_CmdletTests' {
             Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
             Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -BeOfType [string]
         }
+        It 'Set text file then Get return correct data.' {
+            $stringArray = (GenerateStringArray | Out-String) -replace '\r?\n$',''
+            CreateTextFile
+            Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -Be $stringArray
+        }
     }
 
     Context 'InvokePsEdScript' {
