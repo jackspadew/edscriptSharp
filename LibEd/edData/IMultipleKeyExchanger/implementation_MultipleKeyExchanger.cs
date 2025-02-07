@@ -2,9 +2,9 @@ namespace LibEd.EdData;
 
 using LibEd.Converter;
 
-public class InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IMultipleKeyExchanger
+public class DefaultMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase, IMultipleKeyExchanger
 {
-    public InitialMultipleKeyExchanger()
+    public DefaultMultipleKeyExchanger()
     {
         Randomize(20626197);
     }
