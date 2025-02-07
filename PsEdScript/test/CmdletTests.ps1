@@ -11,9 +11,13 @@ Describe 'PsEdScript_CmdletTests' {
         $examplePassword = "password"
         $exampleIndex = "hello"
         $exampleData = "world"
+        [byte[]]$exampleByteArray = 0,1,2,3
         Mock -CommandName "Read-Host" -MockWith { return $examplePassword }
         function StashHello {
             $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+        }
+        function StashBytes {
+            $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
         }
         $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword)
         $script:PsEdScriptLogic = $null
@@ -31,12 +35,22 @@ Describe 'PsEdScript_CmdletTests' {
         It 'Will not throw' {
             { StashHello } | Should -Not -Throw
         }
+        It 'Will not throw' {
+            { StashBytes } | Should -Not -Throw
+        }
         It 'Execute with EdDataLogicFactory object then not throw.' {
             { $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
+        }
+        It 'Execute with EdDataLogicFactory object and byte array then not throw.' {
+            { $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
         }
         It 'Execute with script scope EdDataLogicFactory object then not throw.' {
             $script:PsEdScriptLogic = $logic
             { $exampleData | Set-PsEdScript -IndexName $exampleIndex } | Should -Not -Throw
+        }
+        It 'Execute with script scope EdDataLogicFactory object and byte array then not throw.' {
+            $script:PsEdScriptLogic = $logic
+            { $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex } | Should -Not -Throw
         }
     }
 
