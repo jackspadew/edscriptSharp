@@ -28,7 +28,7 @@ public class EdDataInitialWorker_Tests
         protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new Concrete_KeyBlendedMultipleKeyExchanger();
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
-        protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger GeneralMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
         protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
         {
             return new Concrete_ChainWorker(this, parentWorker);

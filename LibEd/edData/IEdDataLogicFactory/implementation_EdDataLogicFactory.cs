@@ -25,7 +25,7 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
     protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new InitialMultipleKeyExchanger();
     protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new BasicKeyBlendedMultipleKeyExchanger();
     protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
-    protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
+    protected override IMultipleKeyExchanger GeneralMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
     protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
     {
         return new EdDataWorkerChain(this, parentWorker);
