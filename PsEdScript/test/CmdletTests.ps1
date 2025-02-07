@@ -72,7 +72,8 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Will return correct byte array.' {
             StashBytes
-            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary | Should -Be $exampleByteArray
+            $result = Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary
+            $result | Should -Be $exampleByteArray
         }
         It 'Execute with EdDataLogicFactory object then return correct string.' {
             $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
@@ -80,7 +81,8 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Execute with EdDataLogicFactory object and byte array then return correct string.' {
             $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
-            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary | Should -Be $exampleByteArray
+            $result = Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary
+            $result | Should -Be $exampleByteArray
         }
         It 'Execute with script scope EdDataLogicFactory object return correct string.' {
             $script:PsEdScriptLogic = $logic
