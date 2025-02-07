@@ -9,7 +9,7 @@ public class EdDataInitialWorker_Tests
 {
     public static string dbPath = "EdDataInitialWorker_Tests.db";
 
-    public class Concrete_InitialMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
+    public class Concrete_DefaultMultipleKeyExchanger : ExemplaryMultipleKeyExchangerBase {}
     public class Concrete_KeyBlendedMultipleKeyExchanger : BasicKeyBlendedMultipleKeyExchanger {}
     public class Concrete_LogicFactory : EdDataLogicFactoryBase, IEdDataLogicFactory
     {
@@ -25,10 +25,10 @@ public class EdDataInitialWorker_Tests
         protected override IDatabaseOperator DefaultDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
-        protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new Concrete_DefaultMultipleKeyExchanger();
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new Concrete_KeyBlendedMultipleKeyExchanger();
-        protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
-        protected override IMultipleKeyExchanger GeneralMultipleKeyExchanger => new Concrete_InitialMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new Concrete_DefaultMultipleKeyExchanger();
+        protected override IMultipleKeyExchanger GeneralMultipleKeyExchanger => new Concrete_DefaultMultipleKeyExchanger();
         protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
         {
             return new Concrete_ChainWorker(this, parentWorker);
