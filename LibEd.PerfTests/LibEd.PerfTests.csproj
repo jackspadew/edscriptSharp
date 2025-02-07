@@ -26,4 +26,29 @@
     <ProjectReference Include="..\LibEd.Tests\LibEd.Tests.csproj" />
   </ItemGroup>
 
+  <UsingTask
+    TaskName="SetEnvironmentVariableTask"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+
+    <ParameterGroup>
+      <Name ParameterType="System.String" Required="true" />
+      <Value ParameterType="System.String" Required="false" />
+    </ParameterGroup>
+
+    <Task>
+      <Using Namespace="System" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          Environment.SetEnvironmentVariable(Name, Value);
+        ]]>
+      </Code>
+    </Task>
+
+  </UsingTask>
+
+  <Target Name="SetEnvironmentEnablePerformanceTests" BeforeTargets="Build">
+    <SetEnvironmentVariableTask Name="EnablePerformanceTests" Value="$(PerformanceTests)" />
+  </Target>
+
 </Project>
