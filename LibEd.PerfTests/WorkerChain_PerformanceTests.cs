@@ -11,9 +11,10 @@ public class PerformanceTests_WorkerChain
     private static byte[] exampleByte = new byte[]{0,1,2,3};
     private static string exampleIndex = "example";
     private static string examplePassword = "password";
-    [Fact]
+    [SkippableFact]
     public void StashWithLongChain_CompleteWithinTime()
     {
+        Skip.IfNot(PerformanceTestCommon.EnablePerformanceTests, PerformanceTestCommon.MessageWhenDisableTests);
         string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
         CommonFunctions.DeleteFileIfExists(dbPath);
         int targetChainDepth = 3;
@@ -34,10 +35,10 @@ public class PerformanceTests_WorkerChain
         Assert.Equal(exampleByte, extracted);
     }
 
-    [Fact]
+    [SkippableFact]
     public void ExtractWithLongChain_CompleteWithinTime()
     {
-
+        Skip.IfNot(PerformanceTestCommon.EnablePerformanceTests, PerformanceTestCommon.MessageWhenDisableTests);
         string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
         CommonFunctions.DeleteFileIfExists(dbPath);
         int targetChainDepth = 3;
