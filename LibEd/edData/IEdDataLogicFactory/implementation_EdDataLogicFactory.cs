@@ -22,10 +22,10 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
     protected override IDatabaseOperator DefaultDatabaseOperator => new FakeInsertionDatabaseOperator(DbPath, true);
     protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
     protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
-    protected override IMultipleKeyExchanger InitialMultipleKeyExchanger => new InitialMultipleKeyExchanger();
+    protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new DefaultMultipleKeyExchanger();
     protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new BasicKeyBlendedMultipleKeyExchanger();
     protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
-    protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
+    protected override IMultipleKeyExchanger GeneralMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();
     protected override IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker)
     {
         return new EdDataWorkerChain(this, parentWorker);

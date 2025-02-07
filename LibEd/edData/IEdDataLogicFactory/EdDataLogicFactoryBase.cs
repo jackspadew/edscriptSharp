@@ -61,8 +61,8 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     {
         return DetermineObjectByWorkerType(
             thisInstance,
+            GeneralMultipleKeyExchanger,
             DefaultMultipleKeyExchanger,
-            InitialMultipleKeyExchanger,
             ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger,
             ChainedMultipleKeyExchanger);
@@ -73,10 +73,10 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
         keyBlendedMultiKey.Key = Key;
         return keyBlendedMultiKey;
     }
-    protected abstract IMultipleKeyExchanger InitialMultipleKeyExchanger {get;}
+    protected abstract IMultipleKeyExchanger DefaultMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger {get;}
     protected abstract IMultipleKeyExchanger ChainedMultipleKeyExchanger {get;}
-    protected abstract IMultipleKeyExchanger DefaultMultipleKeyExchanger {get;}
+    protected abstract IMultipleKeyExchanger GeneralMultipleKeyExchanger {get;}
     public virtual IEdDataWorker CreateWorker()
     {
         var initialWorker = CreateInitialWorker();
@@ -89,7 +89,7 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     }
     protected abstract IEdDataWorkerInitializer CreateInitialWorker();
     protected abstract IEdDataWorkerChain CreateChainWorker(IEdDataWorker parentWorker);
-    protected virtual IMultipleKeyExchanger MultipleKeyExchangerForHashPassword => DefaultMultipleKeyExchanger;
+    protected virtual IMultipleKeyExchanger MultipleKeyExchangerForHashPassword => GeneralMultipleKeyExchanger;
     protected virtual IEdDataHashCalculator HashCalculatorForHashPassword => DefaultHashCalculator;
     public virtual void SetPassword(string password)
     {

@@ -11,7 +11,7 @@ public class IMultipleKeyExchanger_CommonTests
     public static IEnumerable<object[]> IMultipleKeyExchangerObjects()
     {
         yield return new object[] { new MultipleKeyExchangerBase_Concrete(), "MultipleKeyExchangerBase_Concrete" };
-        yield return new object[] { new InitialMultipleKeyExchanger(), "InitialMultipleKeyExchanger" };
+        yield return new object[] { new DefaultMultipleKeyExchanger(), "DefaultMultipleKeyExchanger" };
     }
 
     [Theory]
