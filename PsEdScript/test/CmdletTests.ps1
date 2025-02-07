@@ -62,13 +62,25 @@ Describe 'PsEdScript_CmdletTests' {
             StashHello
             Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -BeOfType [string]
         }
+        It 'Will return [byte[]].' {
+            StashBytes
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary | Should -BeOfType [byte[]]
+        }
         It 'Will return correct string.' {
             StashHello
             Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -Be $exampleData
         }
+        It 'Will return correct byte array.' {
+            StashBytes
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary | Should -Be $exampleByteArray
+        }
         It 'Execute with EdDataLogicFactory object then return correct string.' {
             $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $exampleData
+        }
+        It 'Execute with EdDataLogicFactory object and byte array then return correct string.' {
+            $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary | Should -Be $exampleByteArray
         }
         It 'Execute with script scope EdDataLogicFactory object return correct string.' {
             $script:PsEdScriptLogic = $logic
