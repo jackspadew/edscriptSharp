@@ -11,6 +11,7 @@ Describe 'PsEdScript_CmdletTests' {
         $examplePassword = "password"
         $exampleIndex = "hello"
         $exampleData = "world"
+        $textPath = "hello.txt"
         [byte[]]$exampleByteArray = 0,1,2,3
         Mock -CommandName "Read-Host" -MockWith { return $examplePassword }
         function StashHello {
@@ -19,16 +20,26 @@ Describe 'PsEdScript_CmdletTests' {
         function StashBytes {
             $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
         }
+        function CreateTextFile {
+            $multipleLineString = GenerateStringArray
+            $multipleLineString | Set-Content $textPath
+        }
+        function GenerateStringArray {
+            $multipleLineString = foreach($num in (0..10)){ "hello${num}" }
+            return $multipleLineString
+        }
         $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword)
         $script:PsEdScriptLogic = $null
     }
 
     BeforeEach {
         Remove-Item $dbPath -ErrorAction SilentlyContinue
+        Remove-Item $textPath -ErrorAction SilentlyContinue
     }
 
     AfterAll {
         Remove-Item $dbPath -ErrorAction SilentlyContinue
+        Remove-Item $textPath -ErrorAction SilentlyContinue
     }
 
     Context 'SetPsEdScript' {
@@ -37,6 +48,10 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Will not throw' {
             { StashBytes } | Should -Not -Throw
+        }
+        It 'Get-Content then execute, then it will not throw.' {
+            CreateTextFile
+            { Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath } | Should -Not -Throw
         }
         It 'Execute with EdDataLogicFactory object then not throw.' {
             { $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
@@ -88,6 +103,11 @@ Describe 'PsEdScript_CmdletTests' {
             $script:PsEdScriptLogic = $logic
             $exampleData | Set-PsEdScript -IndexName $exampleIndex
             Get-PsEdScript -IndexName $exampleIndex | Should -Be $exampleData
+        }
+        It 'Set text file then Get return [string].' {
+            CreateTextFile
+            Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -BeOfType [string]
         }
     }
 
