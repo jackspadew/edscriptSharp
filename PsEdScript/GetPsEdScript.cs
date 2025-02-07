@@ -21,6 +21,11 @@ public class GetPsEdScript : PSCmdlet
     [Parameter(
         Mandatory = false
         )]
+    public SwitchParameter  Binary { get; set; }
+
+    [Parameter(
+        Mandatory = false
+        )]
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
     protected IEdDataLogicFactory LogicObj { get; set; }
@@ -29,6 +34,11 @@ public class GetPsEdScript : PSCmdlet
     {
         LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
         var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
+        if(Binary.IsPresent)
+        {
+            WriteObject(plainBytes);
+            return;
+        }
         var plainText = Encoding.UTF8.GetString(plainBytes);
         WriteObject(plainText);
     }
