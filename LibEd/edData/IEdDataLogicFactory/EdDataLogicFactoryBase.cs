@@ -36,10 +36,16 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
         return DetermineObjectByWorkerType(
             thisInstance,
             DefaultCryptor,
-            InitialCryptor);
+            InitialCryptor,
+            ChainZeroCryptor,
+            MiddleWorkerCryptor,
+            LastWorkerCryptor);
     }
-    protected abstract IEdDataCryptor InitialCryptor {get;}
     protected abstract IEdDataCryptor DefaultCryptor {get;}
+    protected abstract IEdDataCryptor InitialCryptor {get;}
+    protected abstract IEdDataCryptor ChainZeroCryptor {get;}
+    protected abstract IEdDataCryptor MiddleWorkerCryptor {get;}
+    protected abstract IEdDataCryptor LastWorkerCryptor {get;}
     public virtual IDatabaseOperator CreateDatabaseOperator(IEdDataWorker thisInstance)
     {
         return DetermineObjectByWorkerType(

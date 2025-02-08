@@ -17,8 +17,11 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
         SetPassword(password);
     }
 
-    protected override IEdDataCryptor InitialCryptor => new EdDataCryptor(10);
     protected override IEdDataCryptor DefaultCryptor => new EdDataCryptor(1000);
+    protected override IEdDataCryptor InitialCryptor => new EdDataCryptor(10);
+    protected override IEdDataCryptor ChainZeroCryptor => new EdDataCryptor(10000);
+    protected override IEdDataCryptor MiddleWorkerCryptor => new EdDataCryptor(1000);
+    protected override IEdDataCryptor LastWorkerCryptor => new EdDataCryptor(300);
     protected override IDatabaseOperator DefaultDatabaseOperator => new FakeInsertionDatabaseOperator(DbPath, true, 9999);
     protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
     protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator(10000);
