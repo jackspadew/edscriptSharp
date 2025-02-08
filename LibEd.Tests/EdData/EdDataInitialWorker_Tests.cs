@@ -25,6 +25,10 @@ public class EdDataInitialWorker_Tests
         protected override IDatabaseOperator DefaultDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
+        protected override IEdDataHashCalculator InitialWorkerHashCalculator => DefaultHashCalculator;
+        protected override IEdDataHashCalculator ChainZeroWorkerHashCalculator => DefaultHashCalculator;
+        protected override IEdDataHashCalculator MiddleChainWorkerHashCalculator => DefaultHashCalculator;
+        protected override IEdDataHashCalculator LastWorkerHashCalculator => DefaultHashCalculator;
         protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new Concrete_DefaultMultipleKeyExchanger();
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new Concrete_KeyBlendedMultipleKeyExchanger();
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new Concrete_DefaultMultipleKeyExchanger();

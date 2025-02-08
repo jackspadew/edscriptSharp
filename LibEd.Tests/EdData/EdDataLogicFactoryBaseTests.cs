@@ -22,6 +22,10 @@ public class EdDataLogicFactoryBase_Tests
         {}
     }
     public class ConcreteHashCalculator_Default : EdDataHashCalculator {}
+    public class ConcreteHashCalculator_ForInitialWorker : EdDataHashCalculator {}
+    public class ConcreteHashCalculator_ForChainZero : EdDataHashCalculator {}
+    public class ConcreteHashCalculator_ForMiddleWorker : EdDataHashCalculator {}
+    public class ConcreteHashCalculator_ForLastChain : EdDataHashCalculator {}
     public class ConcreteMultipleKeyExchanger_Default : ExemplaryMultipleKeyExchangerBase {}
     public class ConcreteMultipleKeyExchanger_ForInitializer: ExemplaryMultipleKeyExchangerBase {}
     public class ConcreteMultipleKeyExchanger_ForKeyBlending : ExemplaryMultipleKeyExchangerBase {}
@@ -47,6 +51,10 @@ public class EdDataLogicFactoryBase_Tests
         protected override IDatabaseOperator DefaultDatabaseOperator => new ConcreteDataOperator_Default();
         protected override IDatabaseOperator LastWorkerDatabaseOperator => new ConcreteDataOperator_ForLastChain();
         protected override IEdDataHashCalculator DefaultHashCalculator => new ConcreteHashCalculator_Default();
+        protected override IEdDataHashCalculator InitialWorkerHashCalculator => new ConcreteHashCalculator_ForInitialWorker();
+        protected override IEdDataHashCalculator ChainZeroWorkerHashCalculator => new ConcreteHashCalculator_ForChainZero();
+        protected override IEdDataHashCalculator MiddleChainWorkerHashCalculator => new ConcreteHashCalculator_ForMiddleWorker();
+        protected override IEdDataHashCalculator LastWorkerHashCalculator => new ConcreteHashCalculator_ForLastChain();
         protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForInitializer();
         protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForKeyBlending();
         protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new ConcreteMultipleKeyExchanger_ForChain();
