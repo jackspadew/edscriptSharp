@@ -75,10 +75,10 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
     public void Randomize()
     {
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
-        this.KeySeed = RandomNumberGenerator.GetInt32(int.MaxValue);
-        this.IVSeed = RandomNumberGenerator.GetInt32(int.MaxValue);
-        this.AlgorithmSeed = RandomNumberGenerator.GetInt32(int.MaxValue);
-        this.HashSeed = RandomNumberGenerator.GetInt32(int.MaxValue);
+        this.KeySeed = RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue);
+        this.IVSeed = RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue);
+        this.AlgorithmSeed = RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue);
+        this.HashSeed = RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue);
         rng.GetBytes(Key);
         rng.GetBytes(IV);
         rng.GetBytes(Salt);
