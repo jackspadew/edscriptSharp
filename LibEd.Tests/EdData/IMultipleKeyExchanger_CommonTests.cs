@@ -75,4 +75,31 @@ public class IMultipleKeyExchanger_CommonTests
         Assert.NotEqual(multiKey.Salt, oldSalt);
         Assert.NotEqual(multiKey.Lye, oldLye);
     }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void Randomized_Int32ValuesCanBeNegativeNumbers(IMultipleKeyExchanger multiKey, string className)
+    {
+        int tryCount = 10000;
+        int negativeCountForKeySeed = 0;
+        int negativeCountForIVSeed = 0;
+        int negativeCountForAlgoSeed = 0;
+        int negativeCountForHashSeed = 0;
+        for(int i=0; i<tryCount; i++)
+        {
+            multiKey.Randomize();
+            if(multiKey.KeySeed < 0) negativeCountForKeySeed++;
+            if(multiKey.IVSeed < 0) negativeCountForIVSeed++;
+            if(multiKey.AlgorithmSeed < 0) negativeCountForAlgoSeed++;
+            if(multiKey.HashSeed < 0) negativeCountForHashSeed++;
+        }
+        double expectedProbability = 0.5;
+        double tolerance = 0.05;
+        double lowerProbability = expectedProbability - tolerance;
+        double upperProbability = expectedProbability + tolerance;
+        Assert.InRange((double)negativeCountForKeySeed/tryCount, lowerProbability, upperProbability);
+        Assert.InRange((double)negativeCountForIVSeed/tryCount, lowerProbability, upperProbability);
+        Assert.InRange((double)negativeCountForAlgoSeed/tryCount, lowerProbability, upperProbability);
+        Assert.InRange((double)negativeCountForHashSeed/tryCount, lowerProbability, upperProbability);
+    }
 }
