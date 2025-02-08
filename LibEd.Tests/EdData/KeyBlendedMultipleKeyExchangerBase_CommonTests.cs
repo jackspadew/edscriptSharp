@@ -38,6 +38,20 @@ public class KeyBlendedMultipleKeyExchangerBase_CommonTests
 
     [Theory]
     [MemberData(nameof(IMultipleKeyExchangerObjects))]
+    public void Randomized_KeySaltLyeAreNotEqual(IMultipleKeyExchanger multiKey, string className)
+    {
+        // This is a test for a issue where the values ​​of "Key", "Salt" and "Lye" were equal.
+        multiKey.Randomize();
+        Assert.NotEqual(multiKey.Key, multiKey.Salt);
+        Assert.NotEqual(multiKey.Key, multiKey.Lye);
+        Assert.NotEqual(multiKey.Key, multiKey.IV);
+        Assert.NotEqual(multiKey.Salt, multiKey.Lye);
+        Assert.NotEqual(multiKey.Salt, multiKey.IV);
+        Assert.NotEqual(multiKey.Lye, multiKey.IV);
+    }
+
+    [Theory]
+    [MemberData(nameof(IMultipleKeyExchangerObjects))]
     public void ConvertLikeRoundTrip_ReturnSameValues(IMultipleKeyExchanger multiKey, string className)
     {
         multiKey.Randomize();
