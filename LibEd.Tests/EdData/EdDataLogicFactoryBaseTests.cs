@@ -107,7 +107,7 @@ public class EdDataLogicFactoryBase_Tests
         IEdDataWorker worker = new ConcreteChainWorker(logicFactory, initialWorker);
         IEdDataCryptor cryptor = logicFactory.CreateCryptor(worker);
         IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(worker);
-        Assert.True( cryptor is ConcreteCryptor_Default );
+        Assert.True( cryptor is ConcreteCryptor_ForChainZero );
         Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
     }
 
@@ -123,7 +123,7 @@ public class EdDataLogicFactoryBase_Tests
         IEdDataCryptor cryptor = logicFactory.CreateCryptor(middleWorker);
         IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(middleWorker);
         IDatabaseOperator dbOperator = logicFactory.CreateDatabaseOperator(middleWorker);
-        Assert.True( cryptor is ConcreteCryptor_Default );
+        Assert.True( cryptor is ConcreteCryptor_ForMiddleWorker );
         Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
         Assert.True( dbOperator is ConcreteDataOperator_Default );
     }
@@ -140,7 +140,7 @@ public class EdDataLogicFactoryBase_Tests
         IEdDataCryptor cryptor = logicFactory.CreateCryptor(lastWorker);
         IMultipleKeyExchanger multiKey = logicFactory.CreateMultipleKeyExchanger(lastWorker);
         IDatabaseOperator dbOperator = logicFactory.CreateDatabaseOperator(lastWorker);
-        Assert.True( cryptor is ConcreteCryptor_Default );
+        Assert.True( cryptor is ConcreteCryptor_ForLastWorker );
         Assert.True( multiKey is ConcreteMultipleKeyExchanger_ForChain );
         Assert.True( dbOperator is ConcreteDataOperator_ForLastChain );
     }
