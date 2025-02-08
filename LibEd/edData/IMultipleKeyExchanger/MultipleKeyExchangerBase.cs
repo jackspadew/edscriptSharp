@@ -108,6 +108,6 @@ public abstract class MultipleKeyExchangerBase : IMultipleKeyExchanger
 
     public override string ToString()
     {
-        return $"KeySeed={KeySeed} IVSeed={IVSeed} AlgorithmSeed={AlgorithmSeed} HashSeed={HashSeed} Key=[{BitConverter.ToString(Key)} IV=[{BitConverter.ToString(IV)}] Salt=[{BitConverter.ToString(Salt)}] Lye=[{BitConverter.ToString(Lye)}]";
+        return $"KeySeed={KeySeed} IVSeed={IVSeed} AlgorithmSeed={AlgorithmSeed} HashSeed={HashSeed} Key=[{BitConverter.ToString(Key)}] IV=[{BitConverter.ToString(IV)}] Salt=[{BitConverter.ToString(Salt)}] Lye=[{BitConverter.ToString(Lye)}]";
     }
 }
