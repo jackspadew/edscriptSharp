@@ -9,8 +9,11 @@ public class EdDataLogicFactoryBase_Tests
 {
     private static byte[] exampleKey = new byte[32]{0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1};
     private static string examplePassword = "abcd";
-    public class ConcreteCryptor_ForInitializer : EdDataCryptor {}
     public class ConcreteCryptor_Default : EdDataCryptor {}
+    public class ConcreteCryptor_ForInitializer : EdDataCryptor {}
+    public class ConcreteCryptor_ForChainZero : EdDataCryptor {}
+    public class ConcreteCryptor_ForMiddleWorker : EdDataCryptor {}
+    public class ConcreteCryptor_ForLastWorker : EdDataCryptor {}
     public class ConcreteDataOperator_Default : DatabaseOperatorBase
     {
         public ConcreteDataOperator_Default() : base("EdDataLogicFactoryBase_Tests.db", true)
@@ -46,8 +49,11 @@ public class EdDataLogicFactoryBase_Tests
             SetPassword(password);
         }
 
-        protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
         protected override IEdDataCryptor DefaultCryptor => new ConcreteCryptor_Default();
+        protected override IEdDataCryptor InitialCryptor => new ConcreteCryptor_ForInitializer();
+        protected override IEdDataCryptor ChainZeroCryptor => new ConcreteCryptor_ForChainZero();
+        protected override IEdDataCryptor MiddleWorkerCryptor => new ConcreteCryptor_ForMiddleWorker();
+        protected override IEdDataCryptor LastWorkerCryptor => new ConcreteCryptor_ForLastWorker();
         protected override IDatabaseOperator DefaultDatabaseOperator => new ConcreteDataOperator_Default();
         protected override IDatabaseOperator LastWorkerDatabaseOperator => new ConcreteDataOperator_ForLastChain();
         protected override IEdDataHashCalculator DefaultHashCalculator => new ConcreteHashCalculator_Default();

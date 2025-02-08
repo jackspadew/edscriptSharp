@@ -20,8 +20,11 @@ public class EdDataInitialWorker_Tests
         protected override string DbPath { get => dbPath; set => throw new NotImplementedException(); }
         protected override byte[] Key { get; set; }
 
-        protected override IEdDataCryptor InitialCryptor => new EdDataCryptor();
         protected override IEdDataCryptor DefaultCryptor => new EdDataCryptor();
+        protected override IEdDataCryptor InitialCryptor => new EdDataCryptor();
+        protected override IEdDataCryptor ChainZeroCryptor => new EdDataCryptor();
+        protected override IEdDataCryptor MiddleWorkerCryptor => new EdDataCryptor();
+        protected override IEdDataCryptor LastWorkerCryptor => new EdDataCryptor();
         protected override IDatabaseOperator DefaultDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
         protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
