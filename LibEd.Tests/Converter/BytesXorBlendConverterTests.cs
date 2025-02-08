@@ -85,4 +85,21 @@ public class BytesXorBlendConverter_Tests
             Assert.Equal(expected, result);
         }
     }
+
+    [Fact]
+    public void BlendManyRandomCombinations_ReturnValueIsNotAdditiveBytesOrOriginBytes()
+    {
+        Random random = new Random(0);
+        for(int i=0; i < 100000; i++)
+        {
+            int valueOne = random.Next();
+            int valueTwo = random.Next();
+            var bytesOne = BitConverter.GetBytes(valueOne);
+            var bytesTwo = BitConverter.GetBytes(valueTwo);
+            var converter = new BytesXorBlendConverter(bytesTwo);
+            byte[] resultBytes = converter.Convert(bytesOne);
+            Assert.NotEqual(bytesTwo, resultBytes);
+            Assert.NotEqual(bytesOne, resultBytes);
+        }
+    }
 }
