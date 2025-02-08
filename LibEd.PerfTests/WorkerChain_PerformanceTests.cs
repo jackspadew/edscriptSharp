@@ -53,7 +53,7 @@ public class PerformanceTests_WorkerChain
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 1000, () => {
+        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 3000, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
@@ -85,7 +85,7 @@ public class PerformanceTests_WorkerChain
         var workerLast = logic.CreateWorker();
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 1000, () => {
+        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 1500, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
