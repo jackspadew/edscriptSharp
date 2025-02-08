@@ -54,9 +54,19 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     protected abstract IDatabaseOperator LastWorkerDatabaseOperator {get;}
     public virtual IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
     {
-        return DefaultHashCalculator;
+        return DetermineObjectByWorkerType(
+            thisInstance,
+            DefaultHashCalculator,
+            InitialWorkerHashCalculator,
+            ChainZeroWorkerHashCalculator,
+            MiddleChainWorkerHashCalculator,
+            LastWorkerHashCalculator);
     }
     protected abstract IEdDataHashCalculator DefaultHashCalculator {get;}
+    protected abstract IEdDataHashCalculator InitialWorkerHashCalculator {get;}
+    protected abstract IEdDataHashCalculator ChainZeroWorkerHashCalculator {get;}
+    protected abstract IEdDataHashCalculator MiddleChainWorkerHashCalculator {get;}
+    protected abstract IEdDataHashCalculator LastWorkerHashCalculator {get;}
     public virtual IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
     {
         return DetermineObjectByWorkerType(
