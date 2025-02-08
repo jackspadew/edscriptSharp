@@ -26,7 +26,8 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         set => _hashSeed = value;
         }
     protected byte[] _key = new byte[KEY_BYTES_LENGTH];
-    public override byte[] Key {
+    public override byte[] Key { get => _key; set => _key = value; }
+    byte[] IMultipleKeyExchanger.Key {
         get => _key;
         set {
             if(value.Length != _key.Length)
@@ -37,7 +38,8 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         }
         }
     protected byte[] _iv = new byte[IV_BYTES_LENGTH];
-    public override byte[] IV {
+    public override byte[] IV { get => _iv; set => _iv = value; }
+    byte[] IMultipleKeyExchanger.IV {
         get => KeyBlendedBytes(_iv);
         set {
             if(value.Length != _iv.Length)
@@ -48,7 +50,8 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         }
         }
     protected byte[] _salt = new byte[SALT_BYTES_LENGTH];
-    public override byte[] Salt {
+    public override byte[] Salt { get => _salt; set => _salt = value; }
+    byte[] IMultipleKeyExchanger.Salt {
         get => KeyBlendedBytes(_salt);
         set {
             if(value.Length != _salt.Length)
@@ -59,7 +62,8 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         }
         }
     protected byte[] _lye = new byte[SALT_BYTES_LENGTH];
-    public override byte[] Lye {
+    public override byte[] Lye { get => _lye; set => _lye = value; }
+    byte[] IMultipleKeyExchanger.Lye {
         get => KeyBlendedBytes(_lye);
         set {
             if(value.Length != _lye.Length)
