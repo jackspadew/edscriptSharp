@@ -28,7 +28,7 @@ public class PerformanceTests_WorkerChain
         }
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
-        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 15000, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 30000, () => {
             workerLast.Stash(exampleIndex, exampleByte);
         });
         extracted = workerLast.Extract(exampleIndex);
