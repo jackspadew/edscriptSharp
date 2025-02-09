@@ -14,7 +14,7 @@ public class IntegrationTests_EdData
 
     private IEdDataWorker DoCreateWorkerForTest(string password)
     {
-        var logic = new BasicEdDataLogicFactory(dbPath, password);
+        var logic = CommonFunctions.CreateLightweigthLogicFactory(dbPath, password);
         var worker = logic.CreateWorker();
         return worker;
     }

@@ -17,7 +17,7 @@ public class EdDataWorkerChainBase_Tests
     public void StashThenExtractWithTwoChain_ReturnSameBytes()
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var logic = CommonFunctions.CreateLightweigthLogicFactory(dbPath, examplePassword);
         IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
         var workerChainZero = new EdDataWorkerChain(logic, initialWorker);
         var workerLast = new EdDataWorkerChain(logic, workerChainZero);
@@ -30,7 +30,7 @@ public class EdDataWorkerChainBase_Tests
     public void StashChildMultipleKeyThenExtract_MultipleKeyBytesAreNotEqual()
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var logic = CommonFunctions.CreateLightweigthLogicFactory(dbPath, examplePassword);
         IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
         var workerChainZero = new EdDataWorkerChain(logic, initialWorker);
         var workerSecond = new EdDataWorkerChain(logic, workerChainZero);
@@ -44,7 +44,7 @@ public class EdDataWorkerChainBase_Tests
     public void StashThenExtractWithThreeChain_ReturnSameBytes()
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var logic = CommonFunctions.CreateLightweigthLogicFactory(dbPath, examplePassword);
         IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
         var workerChainZero = new EdDataWorkerChain(logic, initialWorker);
         var workerSecond = new EdDataWorkerChain(logic, workerChainZero);
@@ -61,7 +61,7 @@ public class EdDataWorkerChainBase_Tests
     public void CallStashOfLastWorker_CountOfCallingStashChildMultipleKeyIsCorrect(int targetChainDepth)
     {
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var logic = CommonFunctions.CreateLightweigthLogicFactory(dbPath, examplePassword);
         IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
         var mockedWorkerChainZero = new Mock<EdDataWorkerChainBase>(logic, initialWorker){ CallBase = true };
         List<Mock<EdDataWorkerChainBase>> mockedWorkerList = new();
@@ -88,7 +88,7 @@ public class EdDataWorkerChainBase_Tests
         CommonFunctions.DeleteFileIfExists(dbPath);
         byte[] ItWillBeCollided = new byte[]{1,0,0,0};
         byte[] NotCollided = new byte[]{2,0,0,0};
-        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var logic = CommonFunctions.CreateLightweigthLogicFactory(dbPath, examplePassword);
         var mockedHashCalculator = new Mock<IEdDataHashCalculator>();
         mockedHashCalculator.Setup(a => a.ComputeHash(Encoding.UTF8.GetBytes(exampleIndex),It.IsAny<IMultipleKeyExchanger>()))
             .Returns(ItWillBeCollided); // IndexBytes for first Stashing.
@@ -98,7 +98,11 @@ public class EdDataWorkerChainBase_Tests
             .Returns(ItWillBeCollided) // Call in RegenerateOwnMultipleKey after Regenerate (duplicate again)
             .Returns(NotCollided) // Call in RegenerateOwnMultipleKey after Regenerate
             .Returns(NotCollided); // Call in base.Stash
-        var mockedLogic = new Mock<BasicEdDataLogicFactory>(dbPath, examplePassword){ CallBase = true };
+        var mockedLogic = new Mock<BasicEdDataLogicFactory>(dbPath, examplePassword,
+            5, 5, 5, 5, 5,
+            5, 5, 5, 5, 5,
+            5, 1)
+            { CallBase = true };
         mockedLogic.Setup(a => a.CreateHashCalculator(It.IsAny<IEdDataWorker>())).Returns(mockedHashCalculator.Object);
         IEdDataWorker initialWorker = new EdDataInitialWorker(logic);
         var workerChainZero = new Mock<EdDataWorkerChainBase>(logic, initialWorker){ CallBase = true };
