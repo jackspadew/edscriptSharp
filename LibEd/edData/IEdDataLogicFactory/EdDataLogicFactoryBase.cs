@@ -36,10 +36,16 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
         return DetermineObjectByWorkerType(
             thisInstance,
             DefaultCryptor,
-            InitialCryptor);
+            InitialCryptor,
+            ChainZeroCryptor,
+            MiddleWorkerCryptor,
+            LastWorkerCryptor);
     }
-    protected abstract IEdDataCryptor InitialCryptor {get;}
     protected abstract IEdDataCryptor DefaultCryptor {get;}
+    protected abstract IEdDataCryptor InitialCryptor {get;}
+    protected abstract IEdDataCryptor ChainZeroCryptor {get;}
+    protected abstract IEdDataCryptor MiddleWorkerCryptor {get;}
+    protected abstract IEdDataCryptor LastWorkerCryptor {get;}
     public virtual IDatabaseOperator CreateDatabaseOperator(IEdDataWorker thisInstance)
     {
         return DetermineObjectByWorkerType(
@@ -54,9 +60,19 @@ public abstract class EdDataLogicFactoryBase : IEdDataLogicFactory
     protected abstract IDatabaseOperator LastWorkerDatabaseOperator {get;}
     public virtual IEdDataHashCalculator CreateHashCalculator(IEdDataWorker thisInstance)
     {
-        return DefaultHashCalculator;
+        return DetermineObjectByWorkerType(
+            thisInstance,
+            DefaultHashCalculator,
+            InitialWorkerHashCalculator,
+            ChainZeroWorkerHashCalculator,
+            MiddleChainWorkerHashCalculator,
+            LastWorkerHashCalculator);
     }
     protected abstract IEdDataHashCalculator DefaultHashCalculator {get;}
+    protected abstract IEdDataHashCalculator InitialWorkerHashCalculator {get;}
+    protected abstract IEdDataHashCalculator ChainZeroWorkerHashCalculator {get;}
+    protected abstract IEdDataHashCalculator MiddleChainWorkerHashCalculator {get;}
+    protected abstract IEdDataHashCalculator LastWorkerHashCalculator {get;}
     public virtual IMultipleKeyExchanger CreateMultipleKeyExchanger(IEdDataWorker thisInstance)
     {
         return DetermineObjectByWorkerType(

@@ -17,11 +17,18 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
         SetPassword(password);
     }
 
-    protected override IEdDataCryptor InitialCryptor => new EdDataCryptor(10);
     protected override IEdDataCryptor DefaultCryptor => new EdDataCryptor(1000);
-    protected override IDatabaseOperator DefaultDatabaseOperator => new FakeInsertionDatabaseOperator(DbPath, true);
+    protected override IEdDataCryptor InitialCryptor => new EdDataCryptor(10);
+    protected override IEdDataCryptor ChainZeroCryptor => new EdDataCryptor(1000);
+    protected override IEdDataCryptor MiddleWorkerCryptor => new EdDataCryptor(1000);
+    protected override IEdDataCryptor LastWorkerCryptor => new EdDataCryptor(300);
+    protected override IDatabaseOperator DefaultDatabaseOperator => new FakeInsertionDatabaseOperator(DbPath, true, 9999);
     protected override IDatabaseOperator LastWorkerDatabaseOperator => new EdDatabaseOperator(DbPath, true);
-    protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator();
+    protected override IEdDataHashCalculator DefaultHashCalculator => new EdDataHashCalculator(200000);
+    protected override IEdDataHashCalculator InitialWorkerHashCalculator => new EdDataHashCalculator(10);
+    protected override IEdDataHashCalculator ChainZeroWorkerHashCalculator => new EdDataHashCalculator(200000);
+    protected override IEdDataHashCalculator MiddleChainWorkerHashCalculator => new EdDataHashCalculator(200000);
+    protected override IEdDataHashCalculator LastWorkerHashCalculator => new EdDataHashCalculator(200000);
     protected override IMultipleKeyExchanger DefaultMultipleKeyExchanger => new DefaultMultipleKeyExchanger();
     protected override IMultipleKeyExchanger KeyBlendedMultipleKeyExchanger => new BasicKeyBlendedMultipleKeyExchanger();
     protected override IMultipleKeyExchanger ChainedMultipleKeyExchanger => new BasicExemplaryMultipleKeyExchanger();

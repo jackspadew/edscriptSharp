@@ -28,7 +28,7 @@ public class PerformanceTests_WorkerChain
         }
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
-        PerformanceTestCommon.CompletesIn(nameof(StashWithLongChain_CompleteWithinTime), 5000, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 30000, () => {
             workerLast.Stash(exampleIndex, exampleByte);
         });
         extracted = workerLast.Extract(exampleIndex);
@@ -53,7 +53,39 @@ public class PerformanceTests_WorkerChain
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 1000, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 3000, () => {
+            extracted = workerLast.Extract(exampleIndex);
+        });
+        Assert.Equal(exampleByte, extracted);
+    }
+
+    [SkippableFact]
+    public void Stash_CompleteWithinTime()
+    {
+        Skip.IfNot(PerformanceTestCommon.EnablePerformanceTests, PerformanceTestCommon.MessageWhenDisableTests);
+        string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var workerLast = logic.CreateWorker();
+        byte[] extracted = new byte[0];
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 10000, () => {
+            workerLast.Stash(exampleIndex, exampleByte);
+        });
+        extracted = workerLast.Extract(exampleIndex);
+        Assert.Equal(exampleByte, extracted);
+    }
+
+    [SkippableFact]
+    public void Extract_CompleteWithinTime()
+    {
+        Skip.IfNot(PerformanceTestCommon.EnablePerformanceTests, PerformanceTestCommon.MessageWhenDisableTests);
+        string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
+        CommonFunctions.DeleteFileIfExists(dbPath);
+        var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
+        var workerLast = logic.CreateWorker();
+        byte[] extracted = new byte[0];
+        workerLast.Stash(exampleIndex, exampleByte);
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 1500, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
