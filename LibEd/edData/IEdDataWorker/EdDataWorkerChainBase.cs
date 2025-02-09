@@ -21,7 +21,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
     {
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
         {
-            parentChainWorker.StashChildMultipleKey(index);
+            _multipleKey = parentChainWorker.StashChildMultipleKey(index);
+            _lastExtractedMultipleKeyIndex = index;
             ExtractOwnMultipleKey(index);
             if(IsIndexExists(index)) this.RegenerateOwnMultipleKey(index);
         }
@@ -54,12 +55,12 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
             throw new Exception($"{this.GetType().Name}: IndexString={index}, IndexBytes={IndexBytesString}, MultipleKey={OwnMultipleKeyString}", ex);
         }
     }
-    public virtual void StashChildMultipleKey(string index)
+    public virtual IMultipleKeyExchanger StashChildMultipleKey(string index)
     {
         if(_parentWorker is IEdDataWorkerChain parentChainWorker)
         {
-            parentChainWorker.StashChildMultipleKey(index);
-            ExtractOwnMultipleKey(index);
+            _multipleKey = parentChainWorker.StashChildMultipleKey(index);
+            _lastExtractedMultipleKeyIndex = index;
             if(IsIndexExists(index)) this.RegenerateOwnMultipleKey(index);
         }
         else
@@ -81,12 +82,14 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         {
             throw new Exception($"{this.GetType().Name}: _depth={_depth}", ex);
         }
+        return childMultiKey;
     }
-    public virtual void RegenerateChildMultipleKey(string index)
+    public virtual IMultipleKeyExchanger RegenerateChildMultipleKey(string index)
     {
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.Randomize();
         this.UpdateStashedData(index, childMultiKey.GetBytes());
+        return childMultiKey;
     }
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
@@ -126,8 +129,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         }
         while(IsIndexExists(index))
         {
-            parentChainWorker.RegenerateChildMultipleKey(index);
+            _multipleKey = parentChainWorker.RegenerateChildMultipleKey(index);
+            _lastExtractedMultipleKeyIndex = index;
         }
-        ExtractOwnMultipleKey(index, true);
     }
 }
