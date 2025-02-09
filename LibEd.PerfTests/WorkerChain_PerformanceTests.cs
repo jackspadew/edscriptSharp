@@ -28,7 +28,7 @@ public class PerformanceTests_WorkerChain
         }
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
-        PerformanceTestCommon.CompletesIn(nameof(StashWithLongChain_CompleteWithinTime), 15000, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 15000, () => {
             workerLast.Stash(exampleIndex, exampleByte);
         });
         extracted = workerLast.Extract(exampleIndex);
@@ -53,7 +53,7 @@ public class PerformanceTests_WorkerChain
         var workerLast = nextWorker;
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 3000, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 3000, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
@@ -68,7 +68,7 @@ public class PerformanceTests_WorkerChain
         var logic = new BasicEdDataLogicFactory(dbPath, examplePassword);
         var workerLast = logic.CreateWorker();
         byte[] extracted = new byte[0];
-        PerformanceTestCommon.CompletesIn(nameof(StashWithLongChain_CompleteWithinTime), 10000, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 10000, () => {
             workerLast.Stash(exampleIndex, exampleByte);
         });
         extracted = workerLast.Extract(exampleIndex);
@@ -85,7 +85,7 @@ public class PerformanceTests_WorkerChain
         var workerLast = logic.CreateWorker();
         byte[] extracted = new byte[0];
         workerLast.Stash(exampleIndex, exampleByte);
-        PerformanceTestCommon.CompletesIn(nameof(ExtractWithLongChain_CompleteWithinTime), 1500, () => {
+        PerformanceTestCommon.CompletesIn(MethodBase.GetCurrentMethod().Name, 1500, () => {
             extracted = workerLast.Extract(exampleIndex);
         });
         Assert.Equal(exampleByte, extracted);
