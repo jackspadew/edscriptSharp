@@ -84,11 +84,12 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         }
         return childMultiKey;
     }
-    public virtual void RegenerateChildMultipleKey(string index)
+    public virtual IMultipleKeyExchanger RegenerateChildMultipleKey(string index)
     {
         var childMultiKey = _logicFactory.CreateMultipleKeyExchanger(this);
         childMultiKey.Randomize();
         this.UpdateStashedData(index, childMultiKey.GetBytes());
+        return childMultiKey;
     }
     public virtual IMultipleKeyExchanger ExtractChildMultipleKey(string index)
     {
@@ -128,8 +129,8 @@ public abstract class EdDataWorkerChainBase : EdDataWorkerBase, IEdDataWorker, I
         }
         while(IsIndexExists(index))
         {
-            parentChainWorker.RegenerateChildMultipleKey(index);
+            _multipleKey = parentChainWorker.RegenerateChildMultipleKey(index);
+            _lastExtractedMultipleKeyIndex = index;
         }
-        ExtractOwnMultipleKey(index, true);
     }
 }

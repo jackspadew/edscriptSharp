@@ -10,7 +10,7 @@ public interface IEdDataWorkerChain : IEdDataWorker
 {
     int Depth {get;}
     IMultipleKeyExchanger StashChildMultipleKey(string index);
-    void RegenerateChildMultipleKey(string index);
+    IMultipleKeyExchanger RegenerateChildMultipleKey(string index);
     IMultipleKeyExchanger ExtractChildMultipleKey(string index);
 }
 
