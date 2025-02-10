@@ -56,7 +56,7 @@ public static class Common
         return generatedLogicObj;
     }
 
-    public static object InvokeScriptByByteArray(byte[] scriptTextBytes)
+    public static object InvokeScriptByByteArray(byte[] scriptTextBytes, object[] args)
     {
         string firstLine = GetFirstLineFromByteArray(scriptTextBytes);
         var parser = ShebangParser.Parse(firstLine);
@@ -64,7 +64,7 @@ public static class Common
         var scriptText = Encoding.UTF8.GetString(scriptTextBytes);
         if(parser.CommandExact == "pwsh")
         {
-            return InvokePowershellScriptByString(scriptText);
+            return InvokePowershellScriptByString(scriptText, args);
         }
         else if(parser.CommandExact == "python")
         {
@@ -73,11 +73,15 @@ public static class Common
         throw new Exception("This is not any valid script text.");
     }
 
-    public static object InvokePowershellScriptByString(string ps1Text)
+    public static object InvokePowershellScriptByString(string ps1Text, object[] args)
     {
         using (PowerShell ps = PowerShell.Create(RunspaceMode.CurrentRunspace))
         {
             ps.AddScript(ps1Text);
+            foreach(var value in args)
+            {
+                ps.AddArgument(value);
+            }
             return ps.Invoke();
         }
     }

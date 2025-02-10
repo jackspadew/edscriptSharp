@@ -38,7 +38,7 @@ public class InvokePsEdScript : PSCmdlet
             LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
             SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, LogicObj);
             var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
-            var scriptResult = Common.InvokeScriptByByteArray(plainBytes);
+            var scriptResult = Common.InvokeScriptByByteArray(plainBytes, RemainingArguments);
             WriteObject(scriptResult);
         }
         catch (Exception ex)
