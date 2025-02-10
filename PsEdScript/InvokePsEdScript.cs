@@ -22,6 +22,11 @@ public class InvokePsEdScript : PSCmdlet
         )]
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
+    [Parameter(
+        ValueFromRemainingArguments = true
+        )]
+    public object[] RemainingArguments { get; set; } = new object[]{};
+
     protected IEdDataLogicFactory LogicObj { get; set; }
     protected object previousScriptScopeLogicObject { get; set; }
 
@@ -33,7 +38,7 @@ public class InvokePsEdScript : PSCmdlet
             LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
             SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, LogicObj);
             var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
-            var scriptResult = Common.InvokeScriptByByteArray(plainBytes);
+            var scriptResult = Common.InvokeScriptByByteArray(plainBytes, RemainingArguments);
             WriteObject(scriptResult);
         }
         catch (Exception ex)
