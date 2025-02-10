@@ -1,3 +1,4 @@
+using System;
 using System.Management.Automation;
 using LibEd.EdData;
 
@@ -27,11 +28,21 @@ public class InvokePsEdScript : PSCmdlet
     protected override void BeginProcessing()
     {
         previousScriptScopeLogicObject = SessionState.PSVariable.GetValue(Common.ScriptScopeLogicObjectName);
-        LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
-        SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, LogicObj);
-        var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
-        var scriptResult = Common.InvokeScriptByByteArray(plainBytes);
-        WriteObject(scriptResult);
-        SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, previousScriptScopeLogicObject);
+        try
+        {
+            LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
+            SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, LogicObj);
+            var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
+            var scriptResult = Common.InvokeScriptByByteArray(plainBytes);
+            WriteObject(scriptResult);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message, ex);
+        }
+        finally
+        {
+            SessionState.PSVariable.Set(Common.ScriptScopeLogicObjectName, previousScriptScopeLogicObject);
+        }
     }
 }
