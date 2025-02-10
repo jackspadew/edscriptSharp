@@ -63,3 +63,23 @@ public class BLAKE2b : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
         return new Blake2bDigest(bitLength);
     }
 }
+
+public class Skein : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 224, 256, 384, 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public Skein()
+    {
+        this.BitLength = 512;
+    }
+    public Skein(int bitLength)
+    {
+        this.BitLength = bitLength;
+    }
+
+    protected override IDigest CreateIDigestObj(int bitLength)
+    {
+        return new SkeinDigest(1024, bitLength);
+    }
+}
