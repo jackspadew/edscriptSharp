@@ -2,6 +2,8 @@ using module Pester
 
 Describe 'PsEdScript_CmdletTests' {
     BeforeAll {
+        $env:PsEdScriptDatabasePath = $null
+        $script:PsEdScriptLogic = $null
         $dbPath = "example.db";
         $examplePassword = "password"
         $exampleIndex = "hello"
