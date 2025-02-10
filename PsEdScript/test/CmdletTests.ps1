@@ -157,5 +157,25 @@ Describe 'PsEdScript_CmdletTests' {
             }catch {}
             $script:PsEdScriptLogic -eq $null | Should -BeTrue
         }
+        It 'Execute Invoke-PsEdScript with undefined arguments then not throw.' -Tag "args" {
+            $script:PsEdScriptLogic = $null
+            "#! pwsh`nWrite-Output ""This is valid script""" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            { Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic "undefined args" 1 123 "undefined args" } | Should -Not -Throw
+        }
+        It 'Execute Invoke-PsEdScript with undefined arguments then invoked script can use a args.' -Tag "args" {
+            $script:PsEdScriptLogic = $null
+            $messageGivenToStashedScript = "The messages given to encrypted script"
+            "#! pwsh`r`n Param([parameter(mandatory=`$true)][string]`$message)`r`n Write-Output `$message" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic $messageGivenToStashedScript
+            $result | Should -Be $messageGivenToStashedScript
+        }
+        It 'Execute Invoke-PsEdScript with undefined arguments then invoked script can use two args.' -Tag "args" {
+            $script:PsEdScriptLogic = $null
+            $messageGivenToStashedScript_1 = "message1"
+            $messageGivenToStashedScript_2 = "The messages given to encrypted script"
+            "#! pwsh`r`n Param([parameter(mandatory=`$true)][string]`$arg1, [parameter(mandatory=`$true)][string]`$message)`r`n if(`$arg1 -eq ""message1""){ Write-Output `$message }" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic $messageGivenToStashedScript_1 $messageGivenToStashedScript_2
+            $result | Should -Be $messageGivenToStashedScript_2
+        }
     }
 }
