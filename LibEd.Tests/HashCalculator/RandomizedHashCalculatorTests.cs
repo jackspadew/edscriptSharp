@@ -65,4 +65,50 @@ public class RandomizedHashCalculator_Tests
         byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, StandardStretchingCount);
         Assert.NotEqual(hashOne, hashTwo);
     }
+
+    [Theory]
+    [MemberData(nameof(TestingSeeds))]
+    public void GenerateHashSameSeed_ReturnSameHash(int seed)
+    {
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, StandardStretchingCount);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, StandardStretchingCount);
+        Assert.Equal(hashOne, hashTwo);
+    }
+
+    [Theory]
+    [MemberData(nameof(TestingSeeds))]
+    public void GenerateHashSameSeedWithoutStretching_ReturnSameHash(int seed)
+    {
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, 1);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, 1);
+        Assert.Equal(hashOne, hashTwo);
+    }
+
+    [Theory]
+    [MemberData(nameof(TestingSeeds))]
+    public void GenerateHashSameSeedWithSaltWithoutStretching_ReturnSameHash(int seed)
+    {
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] salt = new byte[32];
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, salt, 1);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, salt, 1);
+        Assert.Equal(hashOne, hashTwo);
+    }
+
+    [Theory]
+    [MemberData(nameof(TestingSeeds))]
+    public void GenerateHashSameSeedWithSalt_ReturnSameHash(int seed)
+    {
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] salt = new byte[32];
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, salt, StandardStretchingCount);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, salt, StandardStretchingCount);
+        Assert.Equal(hashOne, hashTwo);
+    }
 }
