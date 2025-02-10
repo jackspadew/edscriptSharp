@@ -22,6 +22,11 @@ public class InvokePsEdScript : PSCmdlet
         )]
     public IEdDataLogicFactory EdDataLogicObject { get; set; }
 
+    [Parameter(
+        ValueFromRemainingArguments = true
+        )]
+    public object[] RemainingArguments { get; set; } = new object[]{};
+
     protected IEdDataLogicFactory LogicObj { get; set; }
     protected object previousScriptScopeLogicObject { get; set; }
 
