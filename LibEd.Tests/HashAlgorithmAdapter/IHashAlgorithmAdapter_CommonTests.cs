@@ -13,6 +13,7 @@ public class IHashAlgorithmAdapter_CommonTests
     {
         yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.SHA3(), "BouncyCastle.SHA3" };
         yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.BLAKE3(), "BouncyCastle.BLAKE3" };
+        yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.BLAKE2b(), "BouncyCastle.BLAKE2b" };
     }
 
     [Theory]
