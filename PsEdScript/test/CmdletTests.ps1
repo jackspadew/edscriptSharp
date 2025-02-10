@@ -140,5 +140,20 @@ Describe 'PsEdScript_CmdletTests' {
             $result = Invoke-PsEdScript -IndexName $exampleIndex
             $result | Should -Be $exampleData
         }
+        It 'Execute Invoke-PsEdScript then script scope obj will back to its previous state.' {
+            $script:PsEdScriptLogic = $null
+            "#! pwsh`nWrite-Output ""This is valid script""" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $script:PsEdScriptLogic -eq $null | Should -BeTrue
+        }
+        It 'Execute Invoke-PsEdScript for invalid data, then after throw error the script scope obj will back to its previous state.' {
+            $script:PsEdScriptLogic = $null
+            "No Shebang to let Cmdlet throw." | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            try
+            {
+                $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            }catch {}
+            $script:PsEdScriptLogic -eq $null | Should -BeTrue
+        }
     }
 }
