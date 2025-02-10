@@ -43,3 +43,23 @@ public class BLAKE3 : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
         return new Blake3Digest(bitLength);
     }
 }
+
+public class BLAKE2b : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 224, 256, 384, 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public BLAKE2b()
+    {
+        this.BitLength = 512;
+    }
+    public BLAKE2b(int bitLength)
+    {
+        this.BitLength = bitLength;
+    }
+
+    protected override IDigest CreateIDigestObj(int bitLength)
+    {
+        return new Blake2bDigest(bitLength);
+    }
+}
