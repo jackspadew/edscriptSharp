@@ -83,3 +83,19 @@ public class Skein : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
         return new SkeinDigest(1024, bitLength);
     }
 }
+
+public class Whirlpool : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public Whirlpool()
+    {
+        this.BitLength = 512;
+    }
+
+    protected override IDigest CreateIDigestObj(int bitLength)
+    {
+        return new WhirlpoolDigest();
+    }
+}
