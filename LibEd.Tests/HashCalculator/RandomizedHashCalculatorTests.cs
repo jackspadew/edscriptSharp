@@ -41,7 +41,7 @@ public class RandomizedHashCalculator_Tests
         Assert.NotInRange(hash.Length, 0, 31);
     }
 
-    [Theory(Skip = "Algorithm randomizers do not work because there is only one algorithm employed.")]
+    [Theory]
     [MemberData(nameof(TestingTwoSeeds))]
     public void GenerateHashAnotherSeed_ReturnAnotherHash(int seedOne, int seedTwo)
     {
@@ -68,34 +68,47 @@ public class RandomizedHashCalculator_Tests
 
     [Theory]
     [MemberData(nameof(TestingSeeds))]
-    public void GenerateHashWithoutStretchingByThisAndBasicCalculator_ReturnSameHash(int seed)
+    public void GenerateHashSameSeed_ReturnSameHash(int seed)
     {
-        var randomizedHashCalculator = new RandomizedHashCalculator(seed);
-        var basicHashCalculator = new BasicHashCalculator();
-        byte[] hashRandomized = randomizedHashCalculator.ComputeHash(exampleBytes, 1);
-        byte[] hashBasic = basicHashCalculator.ComputeHash(exampleBytes, 1);
-        Assert.Equal(hashBasic, hashRandomized);
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, StandardStretchingCount);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, StandardStretchingCount);
+        Assert.Equal(hashOne, hashTwo);
     }
 
     [Theory]
     [MemberData(nameof(TestingSeeds))]
-    public void GenerateHashWithSaltWithoutStretchingByThisAndBasicCalculator_ReturnSameHash(int seed)
+    public void GenerateHashSameSeedWithoutStretching_ReturnSameHash(int seed)
     {
-        var randomizedHashCalculator = new RandomizedHashCalculator(seed);
-        var basicHashCalculator = new BasicHashCalculator();
-        byte[] hashRandomized = randomizedHashCalculator.ComputeHash(exampleBytes, exampleSalt, 1);
-        byte[] hashBasic = basicHashCalculator.ComputeHash(exampleBytes, exampleSalt, 1);
-        Assert.Equal(hashBasic, hashRandomized);
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, 1);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, 1);
+        Assert.Equal(hashOne, hashTwo);
     }
 
     [Theory]
     [MemberData(nameof(TestingSeeds))]
-    public void GenerateHashWithStretchingWithoutLye_ReturnSameHash(int seed)
+    public void GenerateHashSameSeedWithSaltWithoutStretching_ReturnSameHash(int seed)
     {
-        var randomizedHashCalculator = new RandomizedHashCalculator(seed);
-        var basicHashCalculator = new BasicHashCalculator();
-        byte[] hashRandomized = randomizedHashCalculator.ComputeHash(exampleBytes, StandardStretchingCount);
-        byte[] hashBasic = basicHashCalculator.ComputeHash(exampleBytes, StandardStretchingCount);
-        Assert.Equal(hashBasic, hashRandomized);
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] salt = new byte[32];
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, salt, 1);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, salt, 1);
+        Assert.Equal(hashOne, hashTwo);
+    }
+
+    [Theory]
+    [MemberData(nameof(TestingSeeds))]
+    public void GenerateHashSameSeedWithSalt_ReturnSameHash(int seed)
+    {
+        var calculatorOne = new RandomizedHashCalculator(seed);
+        var calculatorTwo = new RandomizedHashCalculator(seed);
+        byte[] salt = new byte[32];
+        byte[] hashOne = calculatorOne.ComputeHash(exampleBytes, salt, StandardStretchingCount);
+        byte[] hashTwo = calculatorTwo.ComputeHash(exampleBytes, salt, StandardStretchingCount);
+        Assert.Equal(hashOne, hashTwo);
     }
 }

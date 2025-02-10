@@ -1,70 +1,101 @@
 namespace LibEd.HashAlgorithmAdapter.BouncyCastle;
 
 using LibEd.HashAlgorithmAdapter;
-
-using System.IO;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 
-public class SHA3 : IHashAlgorithmAdapter
+public class SHA3 : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
 {
-    public static int[] LegalBitLengthList = { 224, 256, 384, 512 };
-    private int _bitLength = 512;
-    public int BitLength {
-        get { return _bitLength; }
-        set {
-            if(!isLegalBitLength(value))
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "");
-            }
-            _bitLength = value;
-        }
+    private int[] _legalBitLengthList = new int[]{ 224, 256, 384, 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public SHA3()
+    {
+        this.BitLength = 512;
     }
-    public SHA3() {}
     public SHA3(int bitLength)
     {
         this.BitLength = bitLength;
     }
-    public byte[] ComputeHash(byte[] inputBytes)
+
+    protected override IDigest CreateIDigestObj(int bitLength)
     {
-        return ComputeBCSHA3Hash(inputBytes);
+        return new Sha3Digest(bitLength);
     }
-    public byte[] ComputeHash(Stream inputStream)
+}
+
+public class BLAKE3 : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 224, 256, 384, 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public BLAKE3()
     {
-        return ComputeBCSHA3Hash(inputStream);
+        this.BitLength = 512;
     }
-    private byte[] ComputeBCSHA3Hash(byte[] inputBytes)
+    public BLAKE3(int bitLength)
     {
-        var sha3 = new Sha3Digest(BitLength);
-        
-        sha3.BlockUpdate(inputBytes, 0, inputBytes.Length);
-        
-        byte[] result = new byte[sha3.GetDigestSize()];
-        sha3.DoFinal(result, 0);
-        
-        return result;
+        this.BitLength = bitLength;
     }
-    private byte[] ComputeBCSHA3Hash(Stream inputStream)
+
+    protected override IDigest CreateIDigestObj(int bitLength)
     {
-        var sha3 = new Sha3Digest(BitLength);
-        int bytesRead;
-        byte[] buffer = new byte[1024];
-        while((bytesRead = inputStream.Read(buffer, 0, buffer.Length)) > 0)
-        {
-            sha3.BlockUpdate(buffer, 0, bytesRead);
-        }
-        byte[] result = new byte[sha3.GetDigestSize()];
-        sha3.DoFinal(result, 0);
-        return result;
+        return new Blake3Digest(bitLength);
     }
-    private bool isLegalBitLength(int bitLength)
+}
+
+public class BLAKE2b : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 224, 256, 384, 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public BLAKE2b()
     {
-        foreach(int LegalBitLength in SHA3.LegalBitLengthList)
-        {
-            if(bitLength == LegalBitLength)
-            {
-                return true;
-            }
-        }
-        return false;
+        this.BitLength = 512;
+    }
+    public BLAKE2b(int bitLength)
+    {
+        this.BitLength = bitLength;
+    }
+
+    protected override IDigest CreateIDigestObj(int bitLength)
+    {
+        return new Blake2bDigest(bitLength);
+    }
+}
+
+public class Skein : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 224, 256, 384, 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public Skein()
+    {
+        this.BitLength = 512;
+    }
+    public Skein(int bitLength)
+    {
+        this.BitLength = bitLength;
+    }
+
+    protected override IDigest CreateIDigestObj(int bitLength)
+    {
+        return new SkeinDigest(1024, bitLength);
+    }
+}
+
+public class Whirlpool : BouncyCastleDigestAdaptorBase, IHashAlgorithmAdapter
+{
+    private int[] _legalBitLengthList = new int[]{ 512 };
+    public override int[] LegalBitLengthList => _legalBitLengthList;
+
+    public Whirlpool()
+    {
+        this.BitLength = 512;
+    }
+
+    protected override IDigest CreateIDigestObj(int bitLength)
+    {
+        return new WhirlpoolDigest();
     }
 }

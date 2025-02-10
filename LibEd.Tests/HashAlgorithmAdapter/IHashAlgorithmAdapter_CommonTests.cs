@@ -12,6 +12,10 @@ public class IHashAlgorithmAdapter_CommonTests
     public static IEnumerable<object[]> HashAlgorithObjects()
     {
         yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.SHA3(), "BouncyCastle.SHA3" };
+        yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.BLAKE3(), "BouncyCastle.BLAKE3" };
+        yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.BLAKE2b(), "BouncyCastle.BLAKE2b" };
+        yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.Skein(), "BouncyCastle.Skein" };
+        yield return new object[] { new HashAlgorithmAdapter.BouncyCastle.Whirlpool(), "BouncyCastle.Whirlpool" };
     }
 
     [Theory]
