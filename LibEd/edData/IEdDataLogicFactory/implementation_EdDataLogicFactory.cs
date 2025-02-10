@@ -10,7 +10,7 @@ public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFacto
     private const int DBOPERATOR_FAKEINSERTION_COUNT_HEAVY = 998;
     private const int DBOPERATOR_FAKEINSERTION_COUNT_NORMAL = 98;
     private const int DBOPERATOR_FAKEINSERTION_COUNT_LIGTH = 10;
-    private const int HASH_STRETCHING_COUNT_HEAVY = 200000;
+    private const int HASH_STRETCHING_COUNT_HEAVY = 100000;
     private const int HASH_STRETCHING_COUNT_NORMAL = 10000;
     private const int HASH_STRETCHING_COUNT_LIGTH = 10;
     private const int WORKERCHAIN_DEPTH_LIGTH = 1;
