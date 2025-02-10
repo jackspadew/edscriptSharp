@@ -10,10 +10,10 @@ Describe 'PsEdScript_CmdletTests' {
         [byte[]]$exampleByteArray = 0,1,2,3
         Mock -CommandName "Read-Host" -MockWith { return $examplePassword }
         function StashHello {
-            $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
         }
         function StashBytes {
-            $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
         }
         function CreateTextFile {
             $multipleLineString = GenerateStringArray
@@ -23,7 +23,7 @@ Describe 'PsEdScript_CmdletTests' {
             $multipleLineString = foreach($num in (0..10)){ "hello${num}" }
             return $multipleLineString
         }
-        $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword)
+        $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
         $script:PsEdScriptLogic = $null
     }
 
@@ -46,10 +46,10 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Get-Content then execute, then it will not throw.' {
             CreateTextFile
-            { Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath } | Should -Not -Throw
+            { Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
         }
-        It 'Execute with EdDataLogicFactory object then not throw.' {
-            { $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
+        It 'Execute with default EdDataLogicFactory object then not throw.' {
+            { $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath } | Should -Not -Throw
         }
         It 'Execute with EdDataLogicFactory object and byte array then not throw.' {
             { $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
@@ -66,32 +66,32 @@ Describe 'PsEdScript_CmdletTests' {
 
     Context 'GetPsEdScript' {
         It 'Will throw if argument IndexName is empty string.' {
-            { Get-PsEdScript -IndexName "" -Path $dbPath } | Should -Throw
+            { Get-PsEdScript -IndexName "" -EdDataLogicObject $logic } | Should -Throw
         }
         It 'Will return [string].' {
             StashHello
-            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -BeOfType [string]
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -BeOfType [string]
         }
         It 'Will return [byte[]].' {
             StashBytes
-            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary | Should -BeOfType [byte[]]
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary | Should -BeOfType [byte[]]
         }
         It 'Will return correct string.' {
             StashHello
-            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -Be $exampleData
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $exampleData
         }
         It 'Will return correct byte array.' {
             StashBytes
-            $result = Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary
+            $result = Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary
             $result | Should -Be $exampleByteArray
         }
-        It 'Execute with EdDataLogicFactory object then return correct string.' {
-            $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
-            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $exampleData
+        It 'Execute with default EdDataLogicFactory object then return correct string.' {
+            $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -Be $exampleData
         }
-        It 'Execute with EdDataLogicFactory object and byte array then return correct string.' {
-            $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
-            $result = Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary
+        It 'Execute with default EdDataLogicFactory object and byte array then return correct string.' {
+            $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $result = Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary
             $result | Should -Be $exampleByteArray
         }
         It 'Execute with script scope EdDataLogicFactory object return correct string.' {
@@ -101,31 +101,31 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Set text file then Get return [string].' {
             CreateTextFile
-            Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
-            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -BeOfType [string]
+            Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -BeOfType [string]
         }
         It 'Set text file then Get return correct data.' {
             $stringArray = (GenerateStringArray | Out-String) -replace '\r?\n$',''
             CreateTextFile
-            Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
-            Get-PsEdScript -IndexName $exampleIndex -Path $dbPath | Should -Be $stringArray
+            Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $stringArray
         }
     }
 
     Context 'InvokePsEdScript' {
         It 'Will return correct string' {
-            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
-            $result = Invoke-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             $result | Should -Be $exampleData
         }
         It 'Invoke python script will return correct string.' {
-            "#! /usr/bin/python`nprint(""${exampleData}"")" | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
-            $result = Invoke-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            "#! /usr/bin/python`nprint(""${exampleData}"")" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             $result | Should -Be $exampleData
         }
-        It 'Execute with EdDataLogicFactory object then return correct string.' {
-            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
-            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+        It 'Execute with default EdDataLogicFactory object then return correct string.' {
+            "#! pwsh`nWrite-Output ""${exampleData}""" | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -Path $dbPath
             $result | Should -Be $exampleData
         }
         It 'Use "Get-PsEdScript" in encrypted script then return correct string' {
