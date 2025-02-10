@@ -16,7 +16,7 @@ public class FakeInsertionDatabaseOperator_PerformanceTests
         Skip.IfNot(PerformanceTestCommon.EnablePerformanceTests, PerformanceTestCommon.MessageWhenDisableTests);
         string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
         CommonFunctions.DeleteFileIfExists(dbPath);
-        var dbOperator = new FakeInsertionDatabaseOperator(dbPath, true, 1000);
+        var dbOperator = new FakeInsertionDatabaseOperator(dbPath, true, 998);
         PerformanceTestCommon.CompletesIn( MethodBase.GetCurrentMethod().Name, 5000, () => {
             dbOperator.InsertData(exampleIndex, exampleByte);
         });
@@ -28,7 +28,7 @@ public class FakeInsertionDatabaseOperator_PerformanceTests
         string dbPath = MethodBase.GetCurrentMethod().Name + ".db";
         CommonFunctions.DeleteFileIfExists(dbPath);
         MemoryStream stream = new(exampleByte);
-        var dbOperator = new FakeInsertionDatabaseOperator(dbPath, true, 1000);
+        var dbOperator = new FakeInsertionDatabaseOperator(dbPath, true, 998);
         PerformanceTestCommon.CompletesIn( MethodBase.GetCurrentMethod().Name, 5000, () => {
             dbOperator.InsertData(exampleIndex, stream);
         });
