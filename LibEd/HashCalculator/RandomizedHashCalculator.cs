@@ -12,7 +12,6 @@ public class RandomizedHashCalculator : LyeHashCalculatorBase, IHashCalculator
         new HashAlgorithmAdapter.BouncyCastle.BLAKE3(),
         new HashAlgorithmAdapter.BouncyCastle.BLAKE2b(),
         new HashAlgorithmAdapter.BouncyCastle.Skein(),
-        new HashAlgorithmAdapter.BouncyCastle.Whirlpool(),
         };
     protected virtual IEnumerator<IHashAlgorithmAdapter> AlgorithmEnumratorLogic => new RandomEnumerator<IHashAlgorithmAdapter>(AvailableAlgorithmList, _seed);
     private IEnumerator<IHashAlgorithmAdapter> _algorithmEnumrator;
