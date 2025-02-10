@@ -41,7 +41,7 @@ public class RandomizedHashCalculator_Tests
         Assert.NotInRange(hash.Length, 0, 31);
     }
 
-    [Theory(Skip = "Algorithm randomizers do not work because there is only one algorithm employed.")]
+    [Theory]
     [MemberData(nameof(TestingTwoSeeds))]
     public void GenerateHashAnotherSeed_ReturnAnotherHash(int seedOne, int seedTwo)
     {
