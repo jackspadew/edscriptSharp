@@ -21,7 +21,7 @@ public class GetPsEdScript : PSCmdlet
     [Parameter(
         Mandatory = false
         )]
-    public SwitchParameter  Binary { get; set; }
+    public SwitchParameter AsByteStream { get; set; }
 
     [Parameter(
         Mandatory = false
@@ -34,7 +34,7 @@ public class GetPsEdScript : PSCmdlet
     {
         LogicObj = Common.DetermineEdDataLogic(SessionState, EdDataLogicObject, Path);
         var plainBytes = LogicObj.CreateWorker().Extract(IndexName);
-        if(Binary.IsPresent)
+        if(AsByteStream.IsPresent)
         {
             WriteObject(plainBytes);
             return;
