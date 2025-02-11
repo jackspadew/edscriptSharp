@@ -76,7 +76,7 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Will return [byte[]].' {
             StashBytes
-            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary | Should -BeOfType [byte[]]
+            Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -AsByteStream | Should -BeOfType [byte[]]
         }
         It 'Will return correct string.' {
             StashHello
@@ -84,7 +84,7 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Will return correct byte array.' {
             StashBytes
-            $result = Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -Binary
+            $result = Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -AsByteStream
             $result | Should -Be $exampleByteArray
         }
         It 'Execute with default EdDataLogicFactory object then return correct string.' {
@@ -93,7 +93,7 @@ Describe 'PsEdScript_CmdletTests' {
         }
         It 'Execute with default EdDataLogicFactory object and byte array then return correct string.' {
             $exampleByteArray | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath
-            $result = Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -Binary
+            $result = Get-PsEdScript -IndexName $exampleIndex -Path $dbPath -AsByteStream
             $result | Should -Be $exampleByteArray
         }
         It 'Execute with script scope EdDataLogicFactory object return correct string.' {
