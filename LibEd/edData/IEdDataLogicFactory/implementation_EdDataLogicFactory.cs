@@ -4,14 +4,14 @@ namespace LibEd.EdData;
 
 public class BasicEdDataLogicFactory : EdDataLogicFactoryBase, IEdDataLogicFactory
 {
-    private const int MULTIPLE_ENCRYPT_COUNT_HEAVY = 1000;
+    private const int MULTIPLE_ENCRYPT_COUNT_HEAVY = 500;
     private const int MULTIPLE_ENCRYPT_COUNT_NORMAL = 300;
     private const int MULTIPLE_ENCRYPT_COUNT_LIGTH = 10;
-    private const int DBOPERATOR_FAKEINSERTION_COUNT_HEAVY = 998;
-    private const int DBOPERATOR_FAKEINSERTION_COUNT_NORMAL = 98;
+    private const int DBOPERATOR_FAKEINSERTION_COUNT_HEAVY = 98;
+    private const int DBOPERATOR_FAKEINSERTION_COUNT_NORMAL = 48;
     private const int DBOPERATOR_FAKEINSERTION_COUNT_LIGTH = 10;
-    private const int HASH_STRETCHING_COUNT_HEAVY = 100000;
-    private const int HASH_STRETCHING_COUNT_NORMAL = 10000;
+    private const int HASH_STRETCHING_COUNT_HEAVY = 10000;
+    private const int HASH_STRETCHING_COUNT_NORMAL = 1000;
     private const int HASH_STRETCHING_COUNT_LIGTH = 10;
     private const int WORKERCHAIN_DEPTH_LIGTH = 1;
     private const int WORKERCHAIN_DEPTH_HEAVY = 3;
