@@ -68,7 +68,7 @@ public static class Common
         }
         else if(parser.CommandExact == "python")
         {
-            return InvokePythonScript(scriptText);
+            return InvokePythonScript(scriptText, args);
         }
         throw new Exception("This is not any valid script text.");
     }
@@ -86,12 +86,13 @@ public static class Common
         }
     }
 
-    public static object InvokePythonScript(string pyText)
+    public static object InvokePythonScript(string pyText, object[] args)
     {
         using (PowerShell ps = PowerShell.Create(RunspaceMode.CurrentRunspace))
         {
-            ps.AddScript("$args[0] | python -");
+            ps.AddScript("$args[0] | python - $args[1]");
             ps.AddArgument(pyText);
+            ps.AddArgument(args);
             return ps.Invoke();
         }
     }

@@ -177,5 +177,20 @@ Describe 'PsEdScript_CmdletTests' {
             $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic $messageGivenToStashedScript_1 $messageGivenToStashedScript_2
             $result | Should -Be $messageGivenToStashedScript_2
         }
+        It 'Execute Invoke-PsEdScript with undefined arguments then invoked PYTHON script can use a args.' -Tag "args" {
+            $script:PsEdScriptLogic = $null
+            $messageGivenToStashedScript = "The messages given to encrypted script"
+            "#! python`r`nimport sys`n`nif __name__ == ""__main__"":`n`tprint(sys.argv[1])" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic $messageGivenToStashedScript
+            $result | Should -Be $messageGivenToStashedScript
+        }
+        It 'Execute Invoke-PsEdScript with undefined arguments then invoked PYTHON script can use two args.' -Tag "args" {
+            $script:PsEdScriptLogic = $null
+            $messageGivenToStashedScript_1 = "message1"
+            $messageGivenToStashedScript_2 = "The messages given to encrypted script"
+            "#! python`r`nimport sys`n`nif __name__ == ""__main__"":`n`tprint(sys.argv[2])" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic $messageGivenToStashedScript_1 $messageGivenToStashedScript_2
+            $result | Should -Be $messageGivenToStashedScript_2
+        }
     }
 }
