@@ -7,6 +7,10 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Version>1.0.0</Version>
     <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <PublishRootDir>bin\_publish</PublishRootDir>
+    <PublishDir>$(PublishRootDir)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
+    <ZipTargetDir>bin\tmpzip</ZipTargetDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,5 +22,31 @@
   <ItemGroup>
     <ProjectReference Include="..\LibEd\LibEd.csproj" />
   </ItemGroup>
+
+  <Target Name="CleanBeforeBuild" BeforeTargets="Compile">
+    <RemoveDir
+      Directories="$(OutputPath)" />
+    <RemoveDir
+      Directories="$(PublishDir)" />
+  </Target>
+
+  <ItemGroup>
+      <DllFiles Include="$(PublishDir)\*.dll"/>
+  </ItemGroup>
+
+  <Target Name="MakingZip" AfterTargets="Publish">
+    <MakeDir Directories="$(ZipTargetDir)\$(AssemblyName)" />
+    <CreateItem Include="$(PublishDir)\*.dll">
+        <Output TaskParameter="Include" ItemName="DllFiles" />
+    </CreateItem>
+    <Copy
+      SourceFiles="@(DllFiles)"
+      DestinationFolder="$(ZipTargetDir)\$(AssemblyName)" />
+    <MakeDir Directories="bin\zip" />
+    <ZipDirectory
+      Overwrite="true"
+      SourceDirectory="$(ZipTargetDir)"
+      DestinationFile="bin\zip\$(AssemblyName)_$(Version)_$(RuntimeIdentifier).zip" />
+  </Target>
 
 </Project>
