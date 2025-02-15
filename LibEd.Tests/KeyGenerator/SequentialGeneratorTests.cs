@@ -15,7 +15,7 @@ public class SequentialGenerator_Tests
         var generator = new SequentialGenerator<byte[]>(converter, exampleValue);
         var list = generator.Generate(testCount);
         var previousValue = list[0];
-        foreach(var value in list[1..])
+        foreach(var value in list.GetRange(1, list.Count-1))
         {
             Assert.Equal(previousValue, value);
             previousValue = value;
@@ -33,7 +33,7 @@ public class SequentialGenerator_Tests
         var list = generator.Generate(testCount);
         var firstValue = list[0];
         int wrongCount = 0;
-        foreach(var value in list[1..])
+        foreach(var value in list.GetRange(1, list.Count-1))
         {
             if(!value.SequenceEqual(firstValue)) wrongCount++;
         }
