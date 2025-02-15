@@ -16,7 +16,7 @@ public class EdDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOperator
 {
     protected int InsertingFakeRowCount = 19;
-    protected IActionExecutor RandomExecutor => new RandomizedExecutor([1,InsertingFakeRowCount]);
+    protected IActionExecutor RandomExecutor => new RandomizedExecutor(new int[]{1,InsertingFakeRowCount});
     public FakeInsertionDatabaseOperator(string dbPath, bool createFlag) : base(dbPath, createFlag)
     {}
     public FakeInsertionDatabaseOperator(string dbPath, bool createFlag, int insertingFakeCount) : base(dbPath, createFlag)
@@ -57,14 +57,14 @@ public class FakeInsertionDatabaseOperator : DatabaseOperatorBase, IDatabaseOper
             {
                 var fakeInsertionVariables = CreateFakeInsertionVariables(_sqliteConnection, transaction);
                 // Execute commands
-                RandomExecutor.Run([
+                RandomExecutor.Run(new Action[]{
                     () => {
                         actionRealInsertion(_sqliteConnection, transaction);
                     },
                     () => {
                         ExecuteFakeInsertionCommand(fakeInsertionVariables.command, fakeInsertionVariables.paramIndex, fakeInsertionVariables.paramData, randomIndexBuffer, randomDataBuffer, rng);
                     }
-                ]);
+                });
                 transaction.Commit();
             }
         }
