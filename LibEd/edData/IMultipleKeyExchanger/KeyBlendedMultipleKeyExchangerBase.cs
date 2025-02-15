@@ -96,8 +96,7 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
         byte[] fakeKey = new byte[KEY_BYTES_LENGTH];
         rng.GetBytes(fakeKey);
-        List<byte[]> list =
-        [
+        List<byte[]> list = new (){
             BitConverter.GetBytes(_keySeed),
             BitConverter.GetBytes(_ivSeed),
             BitConverter.GetBytes(_algorithmSeed),
@@ -106,7 +105,7 @@ public abstract class KeyBlendedMultipleKeyExchangerBase : MultipleKeyExchangerB
             _iv,
             _salt,
             _lye,
-        ];
+        };
         var converter = new BytesListToCombinedBytesConverter();
         return converter.Convert(list);
     }

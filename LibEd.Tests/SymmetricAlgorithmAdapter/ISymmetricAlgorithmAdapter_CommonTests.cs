@@ -130,8 +130,8 @@ public class ISymmetricAlgorithmAdapterCommonTests
     public void MultiEncryptionStream_DecryptedIsInput(ISymmetricAlgorithmAdapter encryptAlgo, string className)
     {
         byte[] exampleKey = new byte[encryptAlgo.LegalKeySize];
-        byte[] encryptedBytes = [];
-        byte[] decryptedBytes = [];
+        byte[] encryptedBytes = new byte[0];
+        byte[] decryptedBytes = new byte[0];
         int multiple = 3;
         using(MemoryStream encryptedOutputStream = new())
         {
