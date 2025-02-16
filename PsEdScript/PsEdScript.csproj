@@ -35,6 +35,9 @@
     <CreateItem Include="$(PublishDir)\*.dll">
         <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
     </CreateItem>
+    <CreateItem Include="$(PublishDir)\*.psd1">
+        <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
+    </CreateItem>
     <Copy
       SourceFiles="@(MakingZipTargetFiles)"
       DestinationFolder="$(ZipTargetDir)\$(AssemblyName)" />
