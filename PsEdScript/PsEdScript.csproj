@@ -30,10 +30,6 @@
       Directories="$(PublishDir)" />
   </Target>
 
-  <ItemGroup>
-      <DllFiles Include="$(PublishDir)\*.dll"/>
-  </ItemGroup>
-
   <Target Name="MakingZip" AfterTargets="Publish">
     <MakeDir Directories="$(ZipTargetDir)\$(AssemblyName)" />
     <CreateItem Include="$(PublishDir)\*.dll">
