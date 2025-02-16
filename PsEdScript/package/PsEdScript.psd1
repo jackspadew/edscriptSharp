@@ -24,7 +24,7 @@ GUID = 'aeec0179-d21f-4287-a201-e19f253bb877'
 Author = 'Jack'
 
 # Company or vendor of this module
-CompanyName = 'Jack'
+# CompanyName = ''
 
 # Copyright statement for this module
 Copyright = '(c) 2025 Jack'
