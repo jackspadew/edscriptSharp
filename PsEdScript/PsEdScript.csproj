@@ -45,4 +45,11 @@
       DestinationFile="bin\zip\$(AssemblyName)_$(Version)_$(RuntimeIdentifier).zip" />
   </Target>
 
+  <ItemGroup>
+    <Content Include="PsEdScript.psd1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
