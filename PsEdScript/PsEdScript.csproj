@@ -49,7 +49,8 @@
   </Target>
 
   <ItemGroup>
-    <Content Include="PsEdScript.psd1">
+    <Content Include="package\PsEdScript.psd1">
+      <Link>PsEdScript.psd1</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
