@@ -30,17 +30,13 @@
       Directories="$(PublishDir)" />
   </Target>
 
-  <ItemGroup>
-      <DllFiles Include="$(PublishDir)\*.dll"/>
-  </ItemGroup>
-
   <Target Name="MakingZip" AfterTargets="Publish">
     <MakeDir Directories="$(ZipTargetDir)\$(AssemblyName)" />
     <CreateItem Include="$(PublishDir)\*.dll">
-        <Output TaskParameter="Include" ItemName="DllFiles" />
+        <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
     </CreateItem>
     <Copy
-      SourceFiles="@(DllFiles)"
+      SourceFiles="@(MakingZipTargetFiles)"
       DestinationFolder="$(ZipTargetDir)\$(AssemblyName)" />
     <MakeDir Directories="bin\zip" />
     <ZipDirectory
