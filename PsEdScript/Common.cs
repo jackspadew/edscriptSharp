@@ -34,10 +34,10 @@ public static class Common
             return specifiedLogicObj;
         }
         // Otherwise, use the global variable if it is set.
-        var globalAnyTypeObject = sessionState.PSVariable.GetValue(Common.ScriptScopeLogicObjectName);
-        if(globalAnyTypeObject is IEdDataLogicFactory globalLogicObj)
+        var globalScopeObject = LoadScriptScopeEdDataLogicObject(sessionState);
+        if(globalScopeObject != null)
         {
-            return globalLogicObj;
+            return globalScopeObject;
         }
         // Otherwise, use the one generated in the cmdlet.
         IEdDataLogicFactory generatedLogicObj = GenerateEdDataLogicObject(Path, password);
