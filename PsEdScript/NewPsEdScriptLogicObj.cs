@@ -9,7 +9,7 @@ namespace PsEdScript;
 public class NewPsEdScriptLogicObj : PSCmdlet
 {
     [Parameter(
-        Mandatory = true
+        Mandatory = false
         )]
     public string Path { get; set; }
 
