@@ -267,4 +267,36 @@ Describe 'PsEdScript_CmdletTests' {
             $resultInvoke | Should -Be $exampleContent -Because $valuesInfo
         }
     }
+    Context 'NewPsEdScriptLogicObj interface tests' -Tag "NewPsEdScriptLogicObj Interface"{
+        BeforeEach {
+            $env:PsEdScriptDatabasePath = $null
+            $script:PsEdScriptLogic = $null
+        }
+        It "Called without any arguments without env database Path then throw." {
+            {
+                New-PsEdScriptLogicObj
+            } | Should -Throw
+        }
+        It "Called without any arguments but with env database Path then not throw." {
+            $env:PsEdScriptDatabasePath = Join-Path $PSScriptRoot "example.db"
+            {
+                New-PsEdScriptLogicObj
+            } | Should -Not -Throw
+        }
+        It "Called with Password then not throw." {
+            $env:PsEdScriptDatabasePath = Join-Path $PSScriptRoot "example.db"
+            {
+                New-PsEdScriptLogicObj -Password $examplePassword
+            } | Should -Not -Throw
+        }
+        It "Called with logic values then not throw." {
+            $env:PsEdScriptDatabasePath = Join-Path $PSScriptRoot "example.db"
+            {
+                New-PsEdScriptLogicObj `
+                    -HashStretchingCount 10 `
+                    -MultipleEncryptionCount 10 `
+                    -FakeInsertionCount 10
+            } | Should -Not -Throw
+        }
+    }
 }
