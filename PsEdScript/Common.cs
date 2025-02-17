@@ -40,23 +40,7 @@ public static class Common
             return globalLogicObj;
         }
         // Otherwise, use the one generated in the cmdlet.
-        if(string.IsNullOrWhiteSpace(Path))
-        {
-            Path = Environment.GetEnvironmentVariable("PsEdScriptDatabasePath");
-            if(string.IsNullOrWhiteSpace(Path))
-            {
-                Common.ThrowArgumentNullOrEmptyException(nameof(Path));
-            }
-        }
-        if(string.IsNullOrWhiteSpace(password))
-        {
-            password = Common.ReadHostPassword();
-            if(string.IsNullOrWhiteSpace(password))
-            {
-                Common.ThrowArgumentNullOrEmptyException(nameof(password));
-            }
-        }
-        IEdDataLogicFactory generatedLogicObj = new BasicEdDataLogicFactory(Path, password);
+        IEdDataLogicFactory generatedLogicObj = GenerateEdDataLogicObject(Path, password);
         return generatedLogicObj;
     }
 
