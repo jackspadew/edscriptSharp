@@ -25,7 +25,7 @@ Describe 'PsEdScript_CmdletTests' {
             $multipleLineString = foreach($num in (0..10)){ "hello${num}" }
             return $multipleLineString
         }
-        $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
+        $logic = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword
         $script:PsEdScriptLogic = $null
     }
 
