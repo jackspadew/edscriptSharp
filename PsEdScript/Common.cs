@@ -8,6 +8,10 @@ using PsEdScript.Parser;
 
 public static class Common
 {
+    public const int DEFAULT_HASH_STRETCHING_COUNT = 1000;
+    public const int DEFAULT_MULTIPLE_ENCRYPTION_COUNT = 10;
+    public const int DEFAULT_FAKEINSERTION_COUNT = 0;
+
     public const string ScriptScopeLogicObjectName = "script:PsEdScriptLogic";
 
     public static void ThrowArgumentNullOrEmptyException(string Name)
@@ -30,12 +34,42 @@ public static class Common
             return specifiedLogicObj;
         }
         // Otherwise, use the global variable if it is set.
-        var globalAnyTypeObject = sessionState.PSVariable.GetValue(Common.ScriptScopeLogicObjectName);
-        if(globalAnyTypeObject is IEdDataLogicFactory globalLogicObj)
+        var globalScopeObject = LoadScriptScopeEdDataLogicObject(sessionState);
+        if(globalScopeObject != null)
         {
-            return globalLogicObj;
+            return globalScopeObject;
         }
         // Otherwise, use the one generated in the cmdlet.
+        IEdDataLogicFactory generatedLogicObj = GenerateEdDataLogicObject(Path, password);
+        return generatedLogicObj;
+    }
+
+    public static IEdDataLogicFactory LoadScriptScopeEdDataLogicObject(SessionState sessionState)
+    {
+        var globalAnyTypeObject = sessionState.PSVariable.GetValue(Common.ScriptScopeLogicObjectName);
+        // Type is PSObject : If set on powershell, it wat set as PSObject type
+        if (globalAnyTypeObject is PSObject psObject)
+        {
+            object baseObject = psObject.BaseObject;
+            if(baseObject is IEdDataLogicFactory powershellGlobalLogicObj)
+            {
+                return powershellGlobalLogicObj;
+            }
+        }
+        // Type is IEdDataLogicFactory : If set on PSCmdlet derived classes, it was set as IEdDataLogicFactory type
+        if(globalAnyTypeObject is IEdDataLogicFactory pscmdletGlobalLogicObj)
+        {
+            return pscmdletGlobalLogicObj;
+        }
+        return null;
+    }
+
+    public static IEdDataLogicFactory GenerateEdDataLogicObject(
+        string Path, string Password,
+        int HashStretchingCount = DEFAULT_HASH_STRETCHING_COUNT,
+        int MultipleEncryptionCount = DEFAULT_MULTIPLE_ENCRYPTION_COUNT,
+        int FakeInsertionCount = DEFAULT_FAKEINSERTION_COUNT)
+    {
         if(string.IsNullOrWhiteSpace(Path))
         {
             Path = Environment.GetEnvironmentVariable("PsEdScriptDatabasePath");
@@ -44,15 +78,22 @@ public static class Common
                 Common.ThrowArgumentNullOrEmptyException(nameof(Path));
             }
         }
-        if(string.IsNullOrWhiteSpace(password))
+        if(string.IsNullOrWhiteSpace(Password))
         {
-            password = Common.ReadHostPassword();
-            if(string.IsNullOrWhiteSpace(password))
+            Password = Common.ReadHostPassword();
+            if(string.IsNullOrWhiteSpace(Password))
             {
-                Common.ThrowArgumentNullOrEmptyException(nameof(password));
+                Common.ThrowArgumentNullOrEmptyException(nameof(Password));
             }
         }
-        IEdDataLogicFactory generatedLogicObj = new BasicEdDataLogicFactory(Path, password);
+        IEdDataLogicFactory generatedLogicObj = new BasicEdDataLogicFactory(
+            Path, Password,
+            chainZeroWorker_HashStretchingCount: HashStretchingCount,
+            middleWorker_HashStretchingCount: HashStretchingCount,
+            lastWorker_HashStretchingCount: HashStretchingCount,
+            lastWorker_MultipleEncryptCount: MultipleEncryptionCount,
+            default_FakeInsertionCount: FakeInsertionCount
+            );
         return generatedLogicObj;
     }
 

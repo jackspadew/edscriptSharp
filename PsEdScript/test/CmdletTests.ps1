@@ -25,7 +25,7 @@ Describe 'PsEdScript_CmdletTests' {
             $multipleLineString = foreach($num in (0..10)){ "hello${num}" }
             return $multipleLineString
         }
-        $logic = [LibEd.EdData.BasicEdDataLogicFactory]::new($dbPath, $examplePassword, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1)
+        $logic = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword
         $script:PsEdScriptLogic = $null
     }
 
@@ -191,6 +191,80 @@ Describe 'PsEdScript_CmdletTests' {
             "#! python`r`nimport sys`n`nif __name__ == ""__main__"":`n`tprint(sys.argv[2])" | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             $result = Invoke-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic $messageGivenToStashedScript_1 $messageGivenToStashedScript_2
             $result | Should -Be $messageGivenToStashedScript_2
+        }
+    }
+
+    Context 'NewPsEdScriptLogicObj with valid value' -ForEach @(
+            @{ hashCount = 10; multipleEncryptionCount=10; fakeInsertionCount=10 },
+            @{ hashCount = 1; multipleEncryptionCount=10; fakeInsertionCount=10 },
+            @{ hashCount = 10; multipleEncryptionCount=1; fakeInsertionCount=10 },
+            @{ hashCount = 10; multipleEncryptionCount=10; fakeInsertionCount=0 },
+            @{ hashCount = 1; multipleEncryptionCount=1; fakeInsertionCount=0 },
+            @{ hashCount = 1000000; multipleEncryptionCount=1000000; fakeInsertionCount=1000000 }
+            ) {
+        It "Create a logic object with specified HashStretchingCount value will not throw." -Tag "NewPsEdScriptLogicObj" {
+            {
+                $resultObj = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword -HashStretchingCount $hashCount
+            } | Should -Not -Throw -Because "Values(`$hashCount=${hashCount}, `$multipleEncryptionCount=${multipleEncryptionCount}, `$fakeInsertionCount=${fakeInsertionCount})"
+        }
+        It "Create a logic object with specified MultipleEncryptionCount value will not throw." -Tag "NewPsEdScriptLogicObj" {
+            {
+                $resultObj = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword -MultipleEncryptionCount $multipleEncryptionCount
+            } | Should -Not -Throw -Because "Values(`$hashCount=${hashCount}, `$multipleEncryptionCount=${multipleEncryptionCount}, `$fakeInsertionCount=${fakeInsertionCount})"
+        }
+        It "Create a logic object with specified FakeInsertionCount value will not throw." -Tag "NewPsEdScriptLogicObj" {
+            {
+                $resultObj = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword -FakeInsertionCount $fakeInsertionCount
+            } | Should -Not -Throw -Because "Values(`$hashCount=${hashCount}, `$multipleEncryptionCount=${multipleEncryptionCount}, `$fakeInsertionCount=${fakeInsertionCount})"
+        }
+        It "Create a logic object with specified all arguments value will not throw." -Tag "NewPsEdScriptLogicObj" {
+            {
+                $resultObj = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword `
+                    -HashStretchingCount $hashCount `
+                    -MultipleEncryptionCount $multipleEncryptionCount `
+                    -FakeInsertionCount $fakeInsertionCount
+            } | Should -Not -Throw -Because "Values(`$hashCount=${hashCount}, `$multipleEncryptionCount=${multipleEncryptionCount}, `$fakeInsertionCount=${fakeInsertionCount})"
+        }
+    }
+    Context 'NewPsEdScriptLogicObj with invalid value' -ForEach @(
+            @{ hashCount = -10; multipleEncryptionCount=-10; fakeInsertionCount=-10 },
+            @{ hashCount = 0; multipleEncryptionCount=10; fakeInsertionCount=10 },
+            @{ hashCount = 10; multipleEncryptionCount=0; fakeInsertionCount=10 },
+            @{ hashCount = 10; multipleEncryptionCount=10; fakeInsertionCount=-1 },
+            @{ hashCount = -1000000; multipleEncryptionCount=-1000000; fakeInsertionCount=-1000000 }
+            ) {
+        It "Create a logic object with invalid all arguments value will throw." -Tag "NewPsEdScriptLogicObj" {
+            {
+                $resultObj = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword `
+                    -HashStretchingCount $hashCount `
+                    -MultipleEncryptionCount $multipleEncryptionCount `
+                    -FakeInsertionCount $fakeInsertionCount
+            } | Should -Throw -Because "Values(`$hashCount=${hashCount}, `$multipleEncryptionCount=${multipleEncryptionCount}, `$fakeInsertionCount=${fakeInsertionCount})"
+        }
+    }
+    Context 'NewPsEdScriptLogicObj with lower limit value' -ForEach @(
+            @{ hashCount = 10; multipleEncryptionCount=10; fakeInsertionCount=10 },
+            @{ hashCount = 1; multipleEncryptionCount=10; fakeInsertionCount=10 },
+            @{ hashCount = 10; multipleEncryptionCount=1; fakeInsertionCount=10 },
+            @{ hashCount = 10; multipleEncryptionCount=10; fakeInsertionCount=0 },
+            @{ hashCount = 1; multipleEncryptionCount=1; fakeInsertionCount=0 }
+            ) {
+        It "Encrypt then Decrypt and Invoke with logic object that created by NewPsEdScriptLogicObj will not throw." -Tag "NewPsEdScriptLogicObj" {
+            $customLogic = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword `
+                    -HashStretchingCount $hashCount `
+                    -MultipleEncryptionCount $multipleEncryptionCount `
+                    -FakeInsertionCount $FakeInsertionCount
+            $valuesInfo = "Values(`$hashCount=${hashCount}, `$multipleEncryptionCount=${multipleEncryptionCount}, `$fakeInsertionCount=${fakeInsertionCount})"
+            $exampleContent = "message"
+            $indexOfExampleContent = "content"
+            $exampleScript = "#! pwsh`nWrite-Output `$(Get-PsEdScript -IndexName ""${indexOfExampleContent}"")"
+            $indexOfScript = "script"
+            $exampleContent | Set-PsEdScript -IndexName $indexOfExampleContent -EdDataLogicObject $customLogic
+            $exampleScript | Set-PsEdScript -IndexName $indexOfScript -EdDataLogicObject $customLogic
+            $resultGet = Get-PsEdScript -IndexName $indexOfExampleContent -EdDataLogicObject $customLogic
+            $resultInvoke = Invoke-PsEdScript -IndexName $indexOfScript -EdDataLogicObject $customLogic
+            $resultGet | Should -Be $exampleContent -Because $valuesInfo
+            $resultInvoke | Should -Be $exampleContent -Because $valuesInfo
         }
     }
 }

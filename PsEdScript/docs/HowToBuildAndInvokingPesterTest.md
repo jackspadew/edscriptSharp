@@ -11,7 +11,6 @@ cd ./ # move to the solution dir.
 dotnet build .\PsEdScript\ -c Debug -r win-x64
 pwsh -c {
   Import-Module ".\PsEdScript\bin\Debug\net6.0\win-x64\PsEdScript.dll"
-  Import-Module ".\PsEdScript\bin\Debug\net6.0\win-x64\LibEd.dll"
   Invoke-Pester ".\PsEdScript\test\CmdletTests.ps1"
 }
 ```
