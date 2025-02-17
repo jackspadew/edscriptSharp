@@ -35,6 +35,9 @@
     <CreateItem Include="$(PublishDir)\*.dll">
         <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
     </CreateItem>
+    <CreateItem Include="$(PublishDir)\*.psd1">
+        <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
+    </CreateItem>
     <Copy
       SourceFiles="@(MakingZipTargetFiles)"
       DestinationFolder="$(ZipTargetDir)\$(AssemblyName)" />
@@ -44,5 +47,13 @@
       SourceDirectory="$(ZipTargetDir)"
       DestinationFile="bin\zip\$(AssemblyName)_$(Version)_$(RuntimeIdentifier).zip" />
   </Target>
+
+  <ItemGroup>
+    <Content Include="package\PsEdScript.psd1">
+      <Link>PsEdScript.psd1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>
