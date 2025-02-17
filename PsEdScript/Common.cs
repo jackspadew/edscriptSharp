@@ -44,6 +44,26 @@ public static class Common
         return generatedLogicObj;
     }
 
+    public static IEdDataLogicFactory LoadScriptScopeEdDataLogicObject(SessionState sessionState)
+    {
+        var globalAnyTypeObject = sessionState.PSVariable.GetValue(Common.ScriptScopeLogicObjectName);
+        // Type is PSObject : If set on powershell, it wat set as PSObject type
+        if (globalAnyTypeObject is PSObject psObject)
+        {
+            object baseObject = psObject.BaseObject;
+            if(baseObject is IEdDataLogicFactory powershellGlobalLogicObj)
+            {
+                return powershellGlobalLogicObj;
+            }
+        }
+        // Type is IEdDataLogicFactory : If set on PSCmdlet derived classes, it was set as IEdDataLogicFactory type
+        if(globalAnyTypeObject is IEdDataLogicFactory pscmdletGlobalLogicObj)
+        {
+            return pscmdletGlobalLogicObj;
+        }
+        return null;
+    }
+
     public static IEdDataLogicFactory GenerateEdDataLogicObject(
         string Path, string Password,
         int HashStretchingCount = DEFAULT_HASH_STRETCHING_COUNT,
