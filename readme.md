@@ -14,6 +14,10 @@ In addition, when the encrypted data is registered in database, the hash from sp
 
 ## Usage
 
+### PowerShell 7.2 and later
+
+#### Simple encrypt/decrypt code
+
 ```pwsh
 # Simple example of encryption/decryption.
 
@@ -46,6 +50,8 @@ $result = Get-PsEdScript -IndexName "name for binary data" -Path $dbPath -AsByte
 #### > password: ********
 #### # $result is a byte[] type variable
 ```
+
+### C#
 
 ```C#
 ```
