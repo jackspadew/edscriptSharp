@@ -9,7 +9,9 @@ Describe 'PsEdScript_CmdletTests' {
         $exampleIndex = "hello"
         $exampleData = "world"
         $textPath = "hello.txt"
+        $binaryFilePath = "example.binary"
         [byte[]]$exampleByteArray = 0,1,2,3
+        [System.IO.File]::WriteAllBytes($binaryFilePath, $exampleByteArray)
         Mock -CommandName "Read-Host" -MockWith { return $examplePassword }
         function StashHello {
             $exampleData | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
@@ -37,6 +39,7 @@ Describe 'PsEdScript_CmdletTests' {
     AfterAll {
         Remove-Item $dbPath -ErrorAction SilentlyContinue
         Remove-Item $textPath -ErrorAction SilentlyContinue
+        Remove-Item $binaryFilePath -ErrorAction SilentlyContinue
     }
 
     Context 'SetPsEdScript' {
@@ -49,6 +52,10 @@ Describe 'PsEdScript_CmdletTests' {
         It 'Get-Content then execute, then it will not throw.' {
             CreateTextFile
             { Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
+        }
+        It 'Get-Content with "-AsByteStream" then execute, then it will not throw.' {
+            CreateTextFile
+            { Get-Content $binaryFilePath -AsByteStream | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic } | Should -Not -Throw
         }
         It 'Execute with default EdDataLogicFactory object then not throw.' {
             { $exampleData | Set-PsEdScript -IndexName $exampleIndex -Path $dbPath } | Should -Not -Throw
@@ -111,6 +118,11 @@ Describe 'PsEdScript_CmdletTests' {
             CreateTextFile
             Get-Content $textPath | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
             Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic | Should -Be $stringArray
+        }
+        It 'Set binary file then Get return correct data.' {
+            Get-Content $binaryFilePath -AsByteStream | Set-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic
+            $result = Get-PsEdScript -IndexName $exampleIndex -EdDataLogicObject $logic -AsByteStream
+            $result | Should -Be $exampleByteArray
         }
     }
 
