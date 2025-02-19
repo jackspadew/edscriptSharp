@@ -15,6 +15,36 @@ In addition, when the encrypted data is registered in database, the hash from sp
 ## Usage
 
 ```pwsh
+# Simple example of encryption/decryption.
+
+Import-Module PsEdScript
+$dbPath = "./path/of/database/file.db"
+
+# Encryption
+
+## Encrypt a text file
+Get-Content -Path "./plaintext.txt" | Set-PsEdScript -IndexName "example name" -Path $dbPath
+#### password: ********
+
+## Encrypt a string
+"plaintext" | Set-PsEdScript -IndexName "name for strnig data" -Path $dbPath
+#### password: ********
+
+## Encrypt a file as a binary data (byte[])
+Get-Content -Path "./binary.zip" -AsByteStream | Set-PsEdScript -IndexName "name for binary data" -Path $dbPath
+#### password: ********
+
+# Decryption
+
+# Decrypt a string data
+$result = Get-PsEdScript -IndexName "name for strnig data" -Path $dbPath
+#### password: ********
+#### # $result is a string type variable
+
+# Decrypt a byte[] data
+$result = Get-PsEdScript -IndexName "name for binary data" -Path $dbPath -AsByteStream
+#### > password: ********
+#### # $result is a byte[] type variable
 ```
 
 ```C#
