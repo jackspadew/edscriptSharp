@@ -107,26 +107,42 @@ Invoke-PsEdScript -IndexName "ScriptThatHasParam" "This is Message" 3
 ## > This is Message with integer 3
 ```
 
+----
+
 Invoking encrypted script that using encrypted data.
 
 ```pwsh
-# Example scripts
-## Need "Shebang" on the first line.
+Import-Module PsEdScript
+$dbPath = "./example.db"
+[string]$examplePassword = "password"
+$logicObj = New-PsEdScriptLogicObj -Path $dbPath -Password $examplePassword
+
 $ps1Text_UsingEncryptedData = @"
 #! pwsh
+if(`$script:PsEdScriptLogic -ne `$null){ Write-Host "```$script:PsEdScriptLogic is not ```$null." }
 `$secretMessage = Get-PsEdScript -IndexName "SecretMessage"
 Write-Output `$secretMessage
 "@
 
 # Build encrypted database.
-"secret message" | Set-PsEdScript -IndexName "SecretMessage"
-$ps1Text_UsingEncryptedData | Set-PsEdScript -IndexName "ScriptThatUsingEncryptedData"
+"secret message" | Set-PsEdScript -IndexName "SecretMessage" -EdDataLogicObject $logicObj
+$ps1Text_UsingEncryptedData | Set-PsEdScript -IndexName "ScriptThatUsingEncryptedData" -EdDataLogicObject $logicObj
 
-# Invoke encrypted script: "Invoke-PsEdScript"
-## Invoking
-Invoke-PsEdScript -IndexName "ScriptThatUsingEncryptedData"
+# Invoking
+## This line is For example, clearly stated that $script:PsEdScriptLogic is null.
+$script:PsEdScriptLogic = $null
+## Invoke encrypted script
+Invoke-PsEdScript -IndexName "ScriptThatUsingEncryptedData" -EdDataLogicObject $logicObj
+## > $script:PsEdScriptLogic is not $null.
 ## > secret message
+if($script:PsEdScriptLogic -eq $null){ Write-Host "`$script:PsEdScriptLogic is `$null." }
+## > $script:PsEdScriptLogic is $null.
 ```
+
+Explanation:
+- $script:PsEdScriptLogic is set to the logic object that used for decryption by "Invoke-PsEdScript".
+- Then "Invoke-PsEdScript" revert it back.
+- This allows to access the encrypted data in the encrypted script process without creating a logic object (it means no need re-entering the password).
 
 #### Advanced example: Invoking encrypted script
 
