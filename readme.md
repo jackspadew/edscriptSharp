@@ -128,6 +128,52 @@ Invoke-PsEdScript -IndexName "ScriptThatUsingEncryptedData"
 ## > secret message
 ```
 
+#### Advanced example: Invoking encrypted script
+
+Invoking the encrypted script from the encrypted script with another logic object.
+
+```pwsh
+Import-Module PsEdScript
+
+$env:PsEdScriptDatabasePath = "./example.db"
+[string]$examplePassword = "password"
+[string]$anotherPassword = "another password"
+$mainLogicObj = New-PsEdScriptLogicObj -Password $examplePassword
+$anotherLogicObj = New-PsEdScriptLogicObj -Password $anotherPassword
+
+# <-- Setup code
+
+## Encrypt script
+$ps1Text_MainScript = @"
+#! pwsh
+`$anotherPassword = Get-PsEdScript -IndexName "AnotherPassword"
+`$tmplogicObj = New-PsEdScriptLogicObj -Password `$anotherPassword
+
+Write-Output `$(Invoke-PsEdScript -IndexName "AnotherScript" -EdDataLogicObject `$tmplogicObj)
+"@
+$ps1Text_MainScript | Set-PsEdScript -IndexName "ScriptThatInvokingScriptWithAnotherLogicObj" -EdDataLogicObject $mainLogicObj
+## Encrypt the another password string
+$anotherPassword | Set-PsEdScript -IndexName "AnotherPassword" -EdDataLogicObject $mainLogicObj
+
+# Encrypt with $anotherLogicObj
+## Encrypt another script
+$ps1Text_AnotherScript = @"
+#! pwsh
+`$secretMessage = Get-PsEdScript -IndexName "SecretMessage"
+Write-Output `$secretMessage
+"@
+$ps1Text_AnotherScript | Set-PsEdScript -IndexName "AnotherScript" -EdDataLogicObject $anotherLogicObj
+## Encrypt the secret message
+"Secret Message" | Set-PsEdScript -IndexName "SecretMessage" -EdDataLogicObject $anotherLogicObj
+
+# Setup code -->
+
+# Invoke code
+$logicObj = New-PsEdScriptLogicObj -Password $examplePassword
+Invoke-PsEdScript -IndexName "ScriptThatInvokingScriptWithAnotherLogicObj" -EdDataLogicObject $logicObj
+## > Secret Message
+```
+
 ### C#
 
 ```C#
