@@ -192,7 +192,24 @@ Invoke-PsEdScript -IndexName "ScriptThatInvokingScriptWithAnotherLogicObj" -EdDa
 
 ### C#
 
+#### Simple example
+
 ```C#
+using LibEd.EdData;
+
+string exampleIndex = "example index";
+byte[] exampleBytes = new byte[]{0,1,2,3};
+
+// Create the "logic" object
+IEdDataLogicFactory logic = new BasicEdDataLogicFactory("example.db", "password");
+// Get the "worker" object
+var worker = logic.CreateWorker();
+
+// Stash
+worker.Stash("example index", exampleBytes);
+
+// Extract
+byte[] extractedBytes = worker.Extract(exampleIndex);
 ```
 
 ## License
