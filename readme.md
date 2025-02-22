@@ -194,3 +194,9 @@ Invoke-PsEdScript -IndexName "ScriptThatInvokingScriptWithAnotherLogicObj" -EdDa
 
 ```C#
 ```
+
+## License
+
+This repository is licensed under the MIT license.
+
+And the notices for third-party components are listed in "NOTICES.md".
