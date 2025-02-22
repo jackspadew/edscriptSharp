@@ -212,6 +212,35 @@ worker.Stash("example index", exampleBytes);
 byte[] extractedBytes = worker.Extract(exampleIndex);
 ```
 
+#### Custom Logic example
+
+Create a logic object with load and security adjustments.
+
+```C#
+IEdDataLogicFactory logic = new BasicEdDataLogicFactory(
+  "example.db", "password",
+  // Multiple Encryption Number
+  chainZeroWorker_MultipleEncryptCount: 100,
+  middleWorker_MultipleEncryptCount: 100,
+  lastWorker_MultipleEncryptCount: 100,
+  // Fake Insertion Number
+  default_FakeInsertionCount: 100,
+  // Hash Stretching Number
+  default_HashStretchingCount: 10000,
+  chainZeroWorker_HashStretchingCount: 1000,
+  middleWorker_HashStretchingCount: 1000,
+  lastWorker_HashStretchingCount: 1000,
+  );
+```
+
+Explanation
+- "Fake Insertion": Inserts meaningless rows to the database. (It's a cheap trick). If you increase this, the database will become bloated.
+- "chainZeroWorker_MultipleEncryptCount": The number of multiple encryptions for the randomly generated secret keys (small bytes).
+- "middleWorker_MultipleEncryptCount": The number of multiple encryptions for the randomly generated secret keys (small bytes).
+- "lastWorker_MultipleEncryptCount": The number of multiple encryptions for the target bytes data.
+- "Hash Stretching": There are various types of processing related to this. Generating index values ​​(databases) and creating private keys etc.
+- "default_HashStretchingCount": Related to hashing of password.
+
 ## License
 
 This repository is licensed under the MIT license.
