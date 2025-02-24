@@ -38,6 +38,12 @@
     <CreateItem Include="$(PublishDir)\*.psd1">
         <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
     </CreateItem>
+    <CreateItem Include="$(PublishDir)\LICENSE">
+        <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
+    </CreateItem>
+    <CreateItem Include="$(PublishDir)\NOTICES">
+        <Output TaskParameter="Include" ItemName="MakingZipTargetFiles" />
+    </CreateItem>
     <Copy
       SourceFiles="@(MakingZipTargetFiles)"
       DestinationFolder="$(ZipTargetDir)\$(AssemblyName)" />
@@ -51,6 +57,16 @@
   <ItemGroup>
     <Content Include="package\PsEdScript.psd1">
       <Link>PsEdScript.psd1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="package\LICENSE">
+      <Link>LICENSE</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="package\NOTICES">
+      <Link>NOTICES</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
