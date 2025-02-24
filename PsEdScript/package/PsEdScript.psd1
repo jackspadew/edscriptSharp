@@ -12,7 +12,7 @@
 RootModule = 'PsEdScript.dll'
 
 # Version number of this module.
-ModuleVersion = '1.0.0'
+ModuleVersion = '1.0.3'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

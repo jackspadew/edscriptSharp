@@ -5,7 +5,7 @@
     <AssemblyName>PsEdScript</AssemblyName>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <Version>1.0.0</Version>
+    <Version>1.0.3</Version>
     <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <PublishRootDir>bin\_publish</PublishRootDir>
